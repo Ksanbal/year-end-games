@@ -1,25 +1,10 @@
-import { copy } from "../../copy.ts";
-import { headerGameTitle } from "../catalog.ts";
 import type { GameModule } from "../types.ts";
-import { Header } from "../../ui/Header.tsx";
-import { PrimaryButton } from "../../ui/PrimaryButton.tsx";
+import { screenCode, timerFixture } from "../game4/fixtures.ts";
+import { TimerPlay } from "../game4/TimerPlay.tsx";
 
 export const game5: GameModule = {
   id: 5,
-  Play({ context, onFinish }) {
-    return (
-      <>
-        <Header
-          title={headerGameTitle(5)}
-          meta={copy.turnProgressWithTeam(context.turnIndex + 1, context.names[context.team])}
-        />
-        <PrimaryButton
-          label={copy.revealResults}
-          size="wideMd"
-          onClick={() => onFinish({ kind: "timeDiff", stoppedAtMs: 10000, autoStopped: false })}
-          style={{ left: 710, top: 860 }}
-        />
-      </>
-    );
+  Play(props) {
+    return <TimerPlay gameId={5} context={props.context} onFinish={props.onFinish} fixture={timerFixture(screenCode())} />;
   },
 };
