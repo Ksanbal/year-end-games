@@ -48,7 +48,8 @@ export const copy = {
   revealFinal: "최종 결과 공개",
   finalHeader: "최종 결과",
   finalChampion: (name: string) => `최종 1등 ${name}`,
-  finalTiedChampion: "최종 공동 1등",
+  /** Confirmed copy: "최종 공동 1등 " plus the tied first-place names joined by " · ". */
+  finalTiedChampion: (names: readonly string[]) => `최종 공동 1등 ${names.join(" · ")}`,
   prizeNote: "상품은 사회자가 현장에서 발표해요",
   colRound: (n: number) => `라운드 ${n}`,
   colFinalCoins: "최종 코인",

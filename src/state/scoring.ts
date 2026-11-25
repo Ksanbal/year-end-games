@@ -36,6 +36,13 @@ const COIN_FOR_RANK: Record<1 | 2 | 3, 50 | 30 | 10> = {
 };
 
 /**
+ * Teams that share a rank are listed by team number, low first.
+ */
+export function compareTiedTeams(a: TeamIndex, b: TeamIndex): number {
+  return a - b;
+}
+
+/**
  * Competition ranking with equal coins for a tie.
  * Joint 1st skips 2nd (the next team is 3rd). DECISIONS.md 1라운드·4라운드.
  */
@@ -45,7 +52,7 @@ export function rankTeams(
   const sorted = [...entries].sort((a, b) => {
     const cmp = compareResults(a.result, b.result);
     if (cmp !== 0) return cmp;
-    return a.team - b.team;
+    return compareTiedTeams(a.team, b.team);
   });
 
   const standings: Standing[] = [];
@@ -84,7 +91,7 @@ export function rankFinal(coins: readonly [number, number, number]): FinalStandi
     { team: 1, coins: coins[1] },
     { team: 2, coins: coins[2] },
   ];
-  entries.sort((a, b) => b.coins - a.coins || a.team - b.team);
+  entries.sort((a, b) => b.coins - a.coins || compareTiedTeams(a.team, b.team));
 
   const out: FinalStanding[] = [];
   let i = 0;

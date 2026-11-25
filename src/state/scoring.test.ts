@@ -66,11 +66,24 @@ describe("rankTeams", () => {
 });
 
 describe("rankFinal", () => {
-  it("ranks by remaining coins and ties when coins match", () => {
+  it("uses competition ranking 1,1,3 and lists tied teams by team number", () => {
+    expect(rankFinal([190, 60, 190]).map((r) => ({ team: r.team, rank: r.rank, tied: r.tied, coins: r.coins }))).toEqual([
+      { team: 0, rank: 1, tied: true, coins: 190 },
+      { team: 2, rank: 1, tied: true, coins: 190 },
+      { team: 1, rank: 3, tied: false, coins: 60 },
+    ]);
     expect(rankFinal([190, 190, 60]).map((r) => ({ team: r.team, rank: r.rank, tied: r.tied }))).toEqual([
       { team: 0, rank: 1, tied: true },
       { team: 1, rank: 1, tied: true },
       { team: 2, rank: 3, tied: false },
+    ]);
+  });
+
+  it("gives all three teams joint 1st when final coins match, in team-number order", () => {
+    expect(rankFinal([100, 100, 100]).map((r) => ({ team: r.team, rank: r.rank, tied: r.tied }))).toEqual([
+      { team: 0, rank: 1, tied: true },
+      { team: 1, rank: 1, tied: true },
+      { team: 2, rank: 1, tied: true },
     ]);
   });
 });
