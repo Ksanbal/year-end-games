@@ -6,6 +6,7 @@ import { Card } from "../ui/Card.tsx";
 import { Coin } from "../ui/Coin.tsx";
 import { FlatButton } from "../ui/FlatButton.tsx";
 import { Header } from "../ui/Header.tsx";
+import { useFinalTitleFit } from "./finalTitle.ts";
 
 export function FinalResult(props: {
   state: AppState;
@@ -16,22 +17,41 @@ export function FinalResult(props: {
 }) {
   const standings = rankFinal(props.state.coins);
   const winners = standings.filter((row) => row.rank === 1);
-  const title =
-    winners.length === 1
-      ? copy.finalChampion(props.state.teams[winners[0].team])
-      : `${copy.rank(1, true)} ${winners.map((row) => props.state.teams[row.team]).join(" ")}`;
+  const tiedFirst = winners.length > 1;
+  const title = tiedFirst
+    ? copy.finalTiedChampion(winners.map((row) => props.state.teams[row.team]))
+    : copy.finalChampion(props.state.teams[winners[0].team]);
+  // Figma 10-3 (188:73) moves the team column to x=340 for the wider "공동 1등" label.
+  const teamColX = tiedFirst ? 340 : 300;
+  const titleFit = useFinalTitleFit(title, tiedFirst);
 
   return (
     <>
       <Header title={copy.finalHeader} />
-      <div
-        className="text-display text-center"
-        style={{ position: "absolute", left: 0, top: 160, width: 1920, height: 96, fontSize: 80, lineHeight: "96px" }}
-      >
-        {title}
-      </div>
-      <Coin size={72} left={678} top={172} />
-      <Coin size={72} left={1170} top={172} />
+      {tiedFirst ? (
+        <div
+          className={titleFit.ready ? "final-title-row text-display" : "final-title-row text-display is-pending"}
+          data-final-title-ready={titleFit.ready ? "true" : "false"}
+          data-font-size={String(titleFit.fontSize)}
+          data-show-coins={titleFit.showCoins ? "true" : "false"}
+          style={{ fontSize: titleFit.fontSize, lineHeight: `${(titleFit.fontSize * 96) / 80}px` }}
+        >
+          {titleFit.showCoins ? <Coin size={72} left={0} top={0} /> : null}
+          <span className="final-title-text">{title}</span>
+          {titleFit.showCoins ? <Coin size={72} left={0} top={0} /> : null}
+        </div>
+      ) : (
+        <>
+          <div
+            className="text-display text-center"
+            style={{ position: "absolute", left: 0, top: 160, width: 1920, height: 96, fontSize: 80, lineHeight: "96px" }}
+          >
+            {title}
+          </div>
+          <Coin size={72} left={678} top={172} />
+          <Coin size={72} left={1170} top={172} />
+        </>
+      )}
       <div
         className="text-ui text-center"
         style={{
@@ -48,7 +68,7 @@ export function FinalResult(props: {
       >
         {copy.prizeNote}
       </div>
-      <div className="text-ui" style={{ position: "absolute", left: 300, top: 400, fontSize: 28, fontWeight: 700, lineHeight: "34px", color: "var(--color-text-secondary)" }}>
+      <div className="text-ui" style={{ position: "absolute", left: teamColX, top: 400, fontSize: 28, fontWeight: 700, lineHeight: "34px", color: "var(--color-text-secondary)" }}>
         {copy.colTeam}
       </div>
       {([1, 2, 3, 4, 5] as const).map((round) => (
@@ -75,7 +95,7 @@ export function FinalResult(props: {
         {copy.colFinalCoins}
       </div>
       {standings.map((row, i) => (
-        <FinalRow key={row.team} index={i} team={row.team} standing={row} state={props.state} />
+        <FinalRow key={row.team} index={i} team={row.team} standing={row} state={props.state} teamColX={teamColX} />
       ))}
       <div
         className="text-ui text-center"
@@ -113,6 +133,7 @@ function FinalRow(props: {
   team: TeamIndex;
   standing: ReturnType<typeof rankFinal>[number];
   state: AppState;
+  teamColX: number;
 }) {
   const y = 450 + props.index * 150;
   const highlight = props.standing.rank === 1;
@@ -122,7 +143,7 @@ function FinalRow(props: {
       <div className="text-display" style={{ position: "absolute", left: 30, top: 36, fontSize: 48, lineHeight: "58px" }}>
         {copy.rank(props.standing.rank, props.standing.tied)}
       </div>
-      <div className="text-display" style={{ position: "absolute", left: 180, top: 44, fontSize: 36, lineHeight: "43px" }}>
+      <div className="text-display" style={{ position: "absolute", left: props.teamColX - 120, top: 44, fontSize: 36, lineHeight: "43px" }}>
         {props.state.teams[props.team]}
       </div>
       {([1, 2, 3, 4, 5] as const).map((round) => (
