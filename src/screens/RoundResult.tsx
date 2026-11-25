@@ -1,4 +1,5 @@
 import { copy } from "../copy.ts";
+import { roundResultButtonLabel } from "./roundResultLabel.ts";
 import { headerGameTitle } from "../games/catalog.ts";
 import { formatTurnScore } from "../format.ts";
 import { rankTeams, type Standing } from "../state/scoring.ts";
@@ -46,7 +47,7 @@ export function RoundResultScreen(props: {
       {standings.map((row, i) => (
         <ResultRow key={row.team} index={i} standing={row} name={props.names[row.team]} coins={props.coins[row.team]} />
       ))}
-      <PrimaryButton label={copy.nextRound} size="md" onClick={props.onNext} style={{ left: 760, top: 900 }} />
+      <PrimaryButton label={roundResultButtonLabel(props.round)} size="md" onClick={props.onNext} style={{ left: 760, top: 900 }} />
     </>
   );
 }
