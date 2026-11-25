@@ -49,7 +49,8 @@ export function stateForScreen(code: string): Jump | null {
       return pack(code, recoveryExample(), true);
     default:
       if (/^0[2-6]-/.test(code)) {
-        const round = Number(code[1]) as RoundNumber;
+        // Screen codes 02–06 are games 1–5, so the round is the section number minus one.
+        const round = (Number(code.slice(0, 2)) - 1) as RoundNumber;
         return pack(code, {
           ...roundAt([null, null, null], 0, [1, 2, 0], round),
           phase: { kind: "playing", round, turnIndex: 0 },
