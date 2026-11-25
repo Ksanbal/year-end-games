@@ -24,3 +24,10 @@ export function formatStoppedCaption(stoppedAtMs: number): string {
 export function isAutoStop(ms: number): boolean {
   return clampStoppedAt(ms) >= AUTO_STOP_MS;
 }
+
+export type TimerPhase = "ready" | "running" | "stopped" | "autostop";
+
+/** Live play starts the clock immediately after the turn-ready [시작] tap. Fixtures may freeze 05-0. */
+export function initialTimerPhase(fixture?: { phase: TimerPhase } | null): TimerPhase {
+  return fixture?.phase ?? "running";
+}

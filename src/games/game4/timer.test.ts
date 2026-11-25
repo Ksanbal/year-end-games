@@ -4,6 +4,7 @@ import {
   formatClock,
   formatDiffLabel,
   formatStoppedCaption,
+  initialTimerPhase,
   isAutoStop,
   timeDiffMs,
 } from "./timer.ts";
@@ -31,5 +32,17 @@ describe("timer math", () => {
     expect(clampStoppedAt(-1)).toBe(0);
     expect(clampStoppedAt(Number.NaN)).toBe(0);
     expect(formatClock(0)).toBe("0.000");
+  });
+});
+
+describe("timer start phase", () => {
+  it("starts the clock as soon as play begins after the turn-ready start tap", () => {
+    expect(initialTimerPhase(null)).toBe("running");
+    expect(initialTimerPhase(undefined)).toBe("running");
+  });
+
+  it("keeps a fixture frozen on the designed 05-0 ready screen", () => {
+    expect(initialTimerPhase({ phase: "ready" })).toBe("ready");
+    expect(initialTimerPhase({ phase: "running" })).toBe("running");
   });
 });

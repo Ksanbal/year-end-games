@@ -88,10 +88,8 @@ await waitForTurnResult();
 await shot("game3-turn-result");
 console.log("ok game3");
 
-// Game 4: start, stop, reveal.
+// Game 4: the clock is already running after turn-ready [시작], so only stop and reveal.
 await open("05-play");
-await clickLabel("시작");
-await new Promise((r) => setTimeout(r, 400));
 await clickLabel("멈춤");
 if (!(await page.$(".game-overlay"))) throw new Error("game4 did not stop");
 await clickLabel("결과 공개");

@@ -8,7 +8,7 @@ import { Card } from "../../ui/Card.tsx";
 import { Header } from "../../ui/Header.tsx";
 import { PrimaryButton } from "../../ui/PrimaryButton.tsx";
 import { ResultOverlay } from "../game1/ResultOverlay.tsx";
-import { formatClock, formatDiffLabel, formatStoppedCaption, isAutoStop } from "./timer.ts";
+import { formatClock, formatDiffLabel, formatStoppedCaption, initialTimerPhase, isAutoStop } from "./timer.ts";
 import type { TimerFixture } from "./fixtures.ts";
 import "./timer.css";
 
@@ -29,7 +29,7 @@ export function TimerPlay(props: {
   const hidden = props.gameId === 5;
   const fixture = props.fixture;
   const [phase, setPhase] = useState<"ready" | "running" | "stopped" | "autostop">(
-    fixture?.phase ?? (hidden ? "running" : "ready"),
+    initialTimerPhase(fixture),
   );
   const [elapsedMs, setElapsedMs] = useState(fixture?.elapsedMs ?? 0);
   const startedAt = useRef<number | null>(null);
