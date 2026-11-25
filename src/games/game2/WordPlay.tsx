@@ -167,7 +167,7 @@ export function WordPlay(props: {
       {phase !== "timeup" ? <div className="word-limit">{gameCopy.limit}</div> : null}
       {problem.meaning ? (
         <>
-          <div className="word-meaning-label">{gameCopy.meaningLabel}</div>
+          <div className={meaningTight ? "word-meaning-label is-tight" : "word-meaning-label"}>{gameCopy.meaningLabel}</div>
           <div className={meaningTight ? "word-meaning is-tight" : "word-meaning"}>{problem.meaning}</div>
         </>
       ) : null}
@@ -221,7 +221,11 @@ export function WordPlay(props: {
           </button>
         );
       })}
-      {phase === "wrong" ? <div className="word-wrong">{gameCopy.wrong}</div> : null}
+      {phase === "wrong" ? (
+        <div className="word-wrong" style={{ top: layout.wrongY }}>
+          {gameCopy.wrong}
+        </div>
+      ) : null}
       {phase === "complete" || phase === "timeup" ? null : (
         <FlatButton
           label={gameCopy.skip}
