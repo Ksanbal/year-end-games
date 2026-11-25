@@ -51,10 +51,18 @@ export function stateForScreen(code: string): Jump | null {
       return pack(code, slotTurnExample(1));
     case "09-5":
       return pack(code, slotTurnExample(2));
+    case "09-7":
+      return pack(code, slotTurnExample(1));
     case "10-1":
       return pack(code, exampleCampaign("final", false));
     case "10-2":
       return pack(code, exampleCampaign("final", true));
+    case "10-3":
+      return pack(code, exampleCampaign("final", false, "tie"));
+    case "10-3all":
+      return pack(code, exampleCampaign("final", false, "allTie"));
+    case "10-3long":
+      return pack(code, longAllTieCampaign());
     case "11-1":
       return pack(code, recoveryExample(), true);
     default:
@@ -143,7 +151,11 @@ function recoveryExample(): AppState {
   };
 }
 
-function exampleCampaign(stage: "intro" | "final", confirmNewGame = false): AppState {
+function exampleCampaign(
+  stage: "intro" | "final",
+  confirmNewGame = false,
+  ending: "solo" | "tie" | "allTie" = "solo",
+): AppState {
   const order: [TeamIndex, TeamIndex, TeamIndex] = [0, 1, 2];
   const rounds: AppState["rounds"] = {
     1: rankedRound(order, [12, 7, 4]),
@@ -162,6 +174,34 @@ function exampleCampaign(stage: "intro" | "final", confirmNewGame = false): AppS
       phase: { kind: "slotIntro" },
     };
   }
+  if (ending === "tie") {
+    return {
+      ...initialState(),
+      coins: [170, 170, 60],
+      rounds,
+      slotOrder: [2, 0, 1],
+      slotOutcomes: [
+        { kind: "skip" },
+        { kind: "lose", bet: 20 },
+        { kind: "lose", bet: 30 },
+      ],
+      phase: { kind: "final", confirmNewGame },
+    };
+  }
+  if (ending === "allTie") {
+    return {
+      ...initialState(),
+      coins: [170, 170, 170],
+      rounds,
+      slotOrder: [2, 0, 1],
+      slotOutcomes: [
+        { kind: "skip" },
+        { kind: "skip" },
+        { kind: "skip" },
+      ],
+      phase: { kind: "final", confirmNewGame },
+    };
+  }
   return {
     ...initialState(),
     coins: [350, 190, 60],
@@ -176,6 +216,18 @@ function exampleCampaign(stage: "intro" | "final", confirmNewGame = false): AppS
   };
 }
 
+
+/** Three unique 8-character names, all tied for first. */
+export const LONG_TEAM_NAMES: [string, string, string] = [
+  "가나다라마바사아",
+  "가나다라마바사자",
+  "가나다라마바사차",
+];
+
+function longAllTieCampaign(): AppState {
+  const base = exampleCampaign("final", false, "allTie");
+  return { ...base, teams: LONG_TEAM_NAMES };
+}
 
 function slotTurnExample(orderIndex: 0 | 1 | 2): AppState {
   const base = exampleCampaign("intro");
