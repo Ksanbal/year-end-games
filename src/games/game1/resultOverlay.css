@@ -1,0 +1,51 @@
+.game-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+}
+
+.game-overlay-dim {
+  position: absolute;
+  inset: 0;
+  background: rgb(14 26 51 / 0.55);
+}
+
+.game-overlay .card-shadow,
+.game-overlay .card-face,
+.game-overlay .card-content {
+  z-index: 2;
+}
+
+.game-result-title,
+.game-result-label,
+.game-result-value,
+.game-result-caption {
+  position: absolute;
+  left: 0;
+}
+
+.game-result-title {
+  height: 77px;
+  font-size: 64px;
+  line-height: 77px;
+}
+
+.game-result-title .glyph {
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
+
+.game-result-label,
+.game-result-caption {
+  height: 43px;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 43px;
+  color: var(--color-text-secondary);
+}
+
+.game-result-value {
+  height: 144px;
+  font-size: 120px;
+  line-height: 144px;
+}
