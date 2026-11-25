@@ -18,7 +18,9 @@
   --color-surface-input: #F4F8FF;
   --color-surface-answer: #EAF4FF;
   --color-surface-highlight: #FFF3C4;
-  --color-stroke-highlight: #E0A21B;
+  --color-stroke-highlight: #9A6A08;
+  --color-surface-used: #EEF3FA;
+  --color-stroke-used: #9AA9C4;
   --color-surface-disabled: #E3ECFA;
   --color-stroke-disabled: #9AA9C4;
   --color-stroke-default: #1B2A4A;
