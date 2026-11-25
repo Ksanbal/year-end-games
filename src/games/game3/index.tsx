@@ -1,25 +1,21 @@
-import { copy } from "../../copy.ts";
-import { headerGameTitle } from "../catalog.ts";
 import type { GameModule } from "../types.ts";
-import { Header } from "../../ui/Header.tsx";
-import { PrimaryButton } from "../../ui/PrimaryButton.tsx";
+import { WordPlay } from "../game2/WordPlay.tsx";
+import { idiomFixture, screenCode } from "./fixtures.ts";
+import { IDIOMS } from "./idioms.ts";
 
 export const game3: GameModule = {
   id: 3,
-  Play({ context, onFinish }) {
+  Play(props) {
+    const fixture = idiomFixture(screenCode());
     return (
-      <>
-        <Header
-          title={headerGameTitle(3)}
-          meta={copy.turnProgressWithTeam(context.turnIndex + 1, context.names[context.team])}
-        />
-        <PrimaryButton
-          label={copy.revealResults}
-          size="wideMd"
-          onClick={() => onFinish({ kind: "score", score: 0 })}
-          style={{ left: 710, top: 860 }}
-        />
-      </>
+      <WordPlay
+        gameId={3}
+        context={props.context}
+        onFinish={props.onFinish}
+        problems={IDIOMS}
+        fixture={fixture}
+        persistUsed={!fixture && screenCode() === null}
+      />
     );
   },
 };
