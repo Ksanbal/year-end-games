@@ -4,6 +4,7 @@ import type { AppState } from "../state/types.ts";
 import { Card } from "../ui/Card.tsx";
 import { Header } from "../ui/Header.tsx";
 import { PrimaryButton } from "../ui/PrimaryButton.tsx";
+import { TeamName } from "./TeamName.tsx";
 
 export function Recovery({ state, onContinue }: { state: AppState; onContinue: () => void }) {
   const lines = recoveryLines(state);
@@ -21,8 +22,17 @@ export function Recovery({ state, onContinue }: { state: AppState; onContinue: (
           {lines[0]}
         </div>
         {lines[1] ? (
-          <div className="text-display text-center" style={{ paddingTop: 17, fontSize: 40, lineHeight: "48px" }}>
-            {lines[1]}
+          <div style={{ position: "relative", height: 96, marginTop: 17 }}>
+            <TeamName
+              name={lines[1]}
+              width={952}
+              startFontSize={40}
+              startLineHeight={48}
+              boxHeight={96}
+              align="center"
+              className="text-display"
+              style={{ left: 24, top: 0 }}
+            />
           </div>
         ) : null}
         <div

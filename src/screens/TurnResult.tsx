@@ -5,6 +5,8 @@ import type { RoundRecord, RoundNumber, TeamIndex, TurnIndex, TurnResult } from 
 import { Card } from "../ui/Card.tsx";
 import { Header } from "../ui/Header.tsx";
 import { PrimaryButton } from "../ui/PrimaryButton.tsx";
+import { TeamName } from "./TeamName.tsx";
+import { columnWidth } from "./teamName.ts";
 
 export function TurnResultScreen(props: {
   round: RoundNumber;
@@ -116,12 +118,15 @@ function TurnRow(props: {
       >
         {copy.turnLabel(props.turn)}
       </div>
-      <div
+      <TeamName
+        name={props.name}
+        width={columnWidth(300, 640)}
+        startFontSize={36}
+        startLineHeight={43}
+        boxHeight={90}
         className="text-display"
-        style={{ position: "absolute", left: 300, top, fontSize: 36, lineHeight: "43px" }}
-      >
-        {props.name}
-      </div>
+        style={{ left: 300, top }}
+      />
       <div
         className="text-display"
         style={{ position: "absolute", left: 640, top, width: 300, textAlign: "right", fontSize: 36, lineHeight: "43px" }}

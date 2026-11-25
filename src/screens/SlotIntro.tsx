@@ -4,6 +4,8 @@ import { Card } from "../ui/Card.tsx";
 import { Coin } from "../ui/Coin.tsx";
 import { Header } from "../ui/Header.tsx";
 import { PrimaryButton } from "../ui/PrimaryButton.tsx";
+import { TeamName } from "./TeamName.tsx";
+import { columnWidth } from "./teamName.ts";
 
 export function SlotIntro(props: {
   names: [string, string, string];
@@ -55,9 +57,15 @@ export function SlotIntro(props: {
             <div className="text-display" style={{ position: "absolute", left: 50, top: 28, fontSize: 40, lineHeight: "48px" }}>
               {copy.slotOrderLabel(i as 0 | 1 | 2)}
             </div>
-            <div className="text-display" style={{ position: "absolute", left: 240, top: 26, fontSize: 44, lineHeight: "53px" }}>
-              {props.names[team]}
-            </div>
+            <TeamName
+              name={props.names[team]}
+              width={columnWidth(240, 640)}
+              startFontSize={44}
+              startLineHeight={53}
+              boxHeight={110}
+              className="text-display"
+              style={{ left: 240, top: 0 }}
+            />
             <div
               className="text-display"
               style={{ position: "absolute", left: 640, top: 28, width: 300, textAlign: "right", fontSize: 40, lineHeight: "48px" }}

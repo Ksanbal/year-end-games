@@ -7,6 +7,8 @@ import { Coin } from "../ui/Coin.tsx";
 import { FlatButton } from "../ui/FlatButton.tsx";
 import { Header } from "../ui/Header.tsx";
 import { useFinalTitleFit } from "./finalTitle.ts";
+import { TeamName } from "./TeamName.tsx";
+import { columnWidth } from "./teamName.ts";
 
 export function FinalResult(props: {
   state: AppState;
@@ -23,35 +25,22 @@ export function FinalResult(props: {
     : copy.finalChampion(props.state.teams[winners[0].team]);
   // Figma 10-3 (188:73) moves the team column to x=340 for the wider "공동 1등" label.
   const teamColX = tiedFirst ? 340 : 300;
-  const titleFit = useFinalTitleFit(title, tiedFirst);
+  const titleFit = useFinalTitleFit(title, true);
 
   return (
     <>
       <Header title={copy.finalHeader} />
-      {tiedFirst ? (
-        <div
-          className={titleFit.ready ? "final-title-row text-display" : "final-title-row text-display is-pending"}
-          data-final-title-ready={titleFit.ready ? "true" : "false"}
-          data-font-size={String(titleFit.fontSize)}
-          data-show-coins={titleFit.showCoins ? "true" : "false"}
-          style={{ fontSize: titleFit.fontSize, lineHeight: `${(titleFit.fontSize * 96) / 80}px` }}
-        >
-          {titleFit.showCoins ? <Coin size={72} left={0} top={0} /> : null}
-          <span className="final-title-text">{title}</span>
-          {titleFit.showCoins ? <Coin size={72} left={0} top={0} /> : null}
-        </div>
-      ) : (
-        <>
-          <div
-            className="text-display text-center"
-            style={{ position: "absolute", left: 0, top: 160, width: 1920, height: 96, fontSize: 80, lineHeight: "96px" }}
-          >
-            {title}
-          </div>
-          <Coin size={72} left={678} top={172} />
-          <Coin size={72} left={1170} top={172} />
-        </>
-      )}
+      <div
+        className={titleFit.ready ? "final-title-row text-display" : "final-title-row text-display is-pending"}
+        data-final-title-ready={titleFit.ready ? "true" : "false"}
+        data-font-size={String(titleFit.fontSize)}
+        data-show-coins={titleFit.showCoins ? "true" : "false"}
+        style={{ fontSize: titleFit.fontSize, lineHeight: `${(titleFit.fontSize * 96) / 80}px` }}
+      >
+        {titleFit.showCoins ? <Coin size={72} left={0} top={0} /> : null}
+        <span className="final-title-text">{title}</span>
+        {titleFit.showCoins ? <Coin size={72} left={0} top={0} /> : null}
+      </div>
       <div
         className="text-ui text-center"
         style={{
@@ -143,9 +132,15 @@ function FinalRow(props: {
       <div className="text-display" style={{ position: "absolute", left: 30, top: 36, fontSize: 48, lineHeight: "58px" }}>
         {copy.rank(props.standing.rank, props.standing.tied)}
       </div>
-      <div className="text-display" style={{ position: "absolute", left: props.teamColX - 120, top: 44, fontSize: 36, lineHeight: "43px" }}>
-        {props.state.teams[props.team]}
-      </div>
+      <TeamName
+        name={props.state.teams[props.team]}
+        width={columnWidth(props.teamColX - 120, 420)}
+        startFontSize={36}
+        startLineHeight={43}
+        boxHeight={130}
+        className="text-display"
+        style={{ left: props.teamColX - 120, top: 0 }}
+      />
       {([1, 2, 3, 4, 5] as const).map((round) => (
         <div
           key={round}

@@ -4,6 +4,7 @@ import { minusSign } from "../../format.ts";
 import { Header } from "../../ui/Header.tsx";
 import { FlatButton } from "../../ui/FlatButton.tsx";
 import { PrimaryButton } from "../../ui/PrimaryButton.tsx";
+import { TeamName } from "../../screens/TeamName.tsx";
 import type { SlotModule } from "../types.ts";
 import { AllInButton } from "./AllInButton.tsx";
 import { Machine, useLeverReturn } from "./Machine.tsx";
@@ -173,7 +174,15 @@ function SlotPlay(props: {
   return (
     <>
       <Header title={copy.destinysLever} meta={slotCopy.teamTurn((props.context.orderIndex + 1) as 1 | 2 | 3)} />
-      <div className="slot-team">{props.context.names[props.context.team]}</div>
+      <TeamName
+        name={props.context.names[props.context.team]}
+        width={256}
+        startFontSize={48}
+        startLineHeight={58}
+        boxHeight={58}
+        className="text-display"
+        style={{ left: 80, top: 150, zIndex: 2 }}
+      />
       <div className="slot-owned">
         <span
           className={showEmptyCoin(shownCoins) ? "coin slot-owned-coin is-empty" : "coin slot-owned-coin"}

@@ -6,6 +6,8 @@ import type { RoundRecord, RoundNumber } from "../state/types.ts";
 import { Card } from "../ui/Card.tsx";
 import { Header } from "../ui/Header.tsx";
 import { PrimaryButton } from "../ui/PrimaryButton.tsx";
+import { TeamName } from "./TeamName.tsx";
+import { columnWidth } from "./teamName.ts";
 
 export function RoundResultScreen(props: {
   round: RoundNumber;
@@ -60,9 +62,15 @@ function ResultRow(props: { index: number; standing: Standing; name: string; coi
       <div className="text-display" style={{ position: "absolute", left: 40, top: 30, fontSize: 56, lineHeight: "67px" }}>
         {copy.rank(props.standing.rank, props.standing.tied)}
       </div>
-      <div className="text-display" style={{ position: "absolute", left: 260, top: 36, fontSize: 48, lineHeight: "58px" }}>
-        {props.name}
-      </div>
+      <TeamName
+        name={props.name}
+        width={columnWidth(260, 700)}
+        startFontSize={48}
+        startLineHeight={58}
+        boxHeight={130}
+        className="text-display"
+        style={{ left: 260, top: 0 }}
+      />
       <div className="text-display" style={{ position: "absolute", left: 700, top: 40, fontSize: 44, lineHeight: "53px" }}>
         {formatTurnScore(props.standing.result)}
       </div>

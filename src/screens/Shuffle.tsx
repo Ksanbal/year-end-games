@@ -5,6 +5,7 @@ import type { RoundNumber, TeamIndex } from "../state/types.ts";
 import { Card } from "../ui/Card.tsx";
 import { Header } from "../ui/Header.tsx";
 import { PrimaryButton } from "../ui/PrimaryButton.tsx";
+import { TeamName } from "./TeamName.tsx";
 
 const CARD_X = [180, 720, 1260];
 const LABELS = [copy.firstTurn, copy.secondTurn, copy.thirdTurn];
@@ -94,26 +95,50 @@ export function Shuffle(props: {
               fill={props.settled ? "var(--color-surface-highlight)" : "var(--color-shuffle-card)"}
             >
               {props.settled ? (
-                <div className="text-display text-center" style={{ paddingTop: 115, fontSize: 56, lineHeight: "67px" }}>
-                  {props.names[team]}
-                </div>
+                <TeamName
+                  name={props.names[team]}
+                  width={432}
+                  startFontSize={56}
+                  startLineHeight={67}
+                  boxHeight={300}
+                  align="center"
+                  className="text-display"
+                  style={{ left: 24, top: 0 }}
+                />
               ) : (
                 <>
-                  <div
-                    className="text-display text-center"
-                    style={{ paddingTop: 30, fontSize: 40, lineHeight: "48px", color: "var(--color-text-secondary)" }}
-                  >
-                    {props.names[above]}
-                  </div>
-                  <div className="text-display text-center" style={{ paddingTop: 19, fontSize: 56, lineHeight: "67px" }}>
-                    {props.names[team]}
-                  </div>
-                  <div
-                    className="text-display text-center"
-                    style={{ paddingTop: 18, fontSize: 40, lineHeight: "48px", color: "var(--color-text-secondary)" }}
-                  >
-                    {props.names[below]}
-                  </div>
+                  <TeamName
+                    name={props.names[above]}
+                    width={432}
+                    startFontSize={40}
+                    startLineHeight={48}
+                    boxHeight={100}
+                    align="center"
+                    color="var(--color-text-secondary)"
+                    className="text-display"
+                    style={{ left: 24, top: 0 }}
+                  />
+                  <TeamName
+                    name={props.names[team]}
+                    width={432}
+                    startFontSize={56}
+                    startLineHeight={67}
+                    boxHeight={100}
+                    align="center"
+                    className="text-display"
+                    style={{ left: 24, top: 100 }}
+                  />
+                  <TeamName
+                    name={props.names[below]}
+                    width={432}
+                    startFontSize={40}
+                    startLineHeight={48}
+                    boxHeight={100}
+                    align="center"
+                    color="var(--color-text-secondary)"
+                    className="text-display"
+                    style={{ left: 24, top: 200 }}
+                  />
                 </>
               )}
             </Card>

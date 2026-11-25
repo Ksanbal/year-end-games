@@ -3,6 +3,7 @@ import { headerGameTitle } from "../games/catalog.ts";
 import type { RoundNumber, TeamIndex, TurnIndex } from "../state/types.ts";
 import { Header } from "../ui/Header.tsx";
 import { PrimaryButton } from "../ui/PrimaryButton.tsx";
+import { TeamName } from "./TeamName.tsx";
 
 export function TurnReady(props: {
   round: RoundNumber;
@@ -29,12 +30,16 @@ export function TurnReady(props: {
       >
         {copy.turnLabel(props.turnIndex)}
       </div>
-      <div
-        className="text-display text-center"
-        style={{ position: "absolute", left: 0, top: 310, width: 1920, height: 125, fontSize: 104, lineHeight: "125px" }}
-      >
-        {props.names[props.team]}
-      </div>
+      <TeamName
+        name={props.names[props.team]}
+        width={1760}
+        startFontSize={104}
+        startLineHeight={125}
+        boxHeight={125}
+        align="center"
+        className="text-display"
+        style={{ left: 80, top: 310 }}
+      />
       <div
         className="text-display text-center"
         style={{

@@ -6,9 +6,14 @@ export type Jump = { code: string; state: AppState; recovery: boolean };
 
 export function readJump(): Jump | null {
   const params = new URLSearchParams(window.location.search);
-  const code = params.get("screen");
-  if (!code) return null;
-  return stateForScreen(code);
+  const raw = params.get("screen");
+  if (!raw) return null;
+  const long = params.has("long") || raw.startsWith("long-");
+  const code = raw.startsWith("long-") ? raw.slice(5) : raw;
+  const jump = stateForScreen(code);
+  if (!jump) return null;
+  if (!long) return jump;
+  return { ...jump, code: raw, state: { ...jump.state, teams: [...LONG_TEAM_NAMES] } };
 }
 
 export function stateForScreen(code: string): Jump | null {

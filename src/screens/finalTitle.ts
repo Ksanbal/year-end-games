@@ -1,4 +1,5 @@
 import { useLayoutEffect, useState } from "react";
+import { measureDisplayWidth, whenFontsReady } from "../textMeasure.ts";
 
 /** Do Hyeon title.final. */
 export const FINAL_TITLE_FONT_SIZE = 80;
@@ -44,23 +45,7 @@ export function fitFinalTitle(textWidthAtBase: number): FinalTitleFit {
 }
 
 export function measureTitleWidth(text: string, fontSize: number): number {
-  const el = document.createElement("span");
-  el.className = "text-display";
-  el.style.cssText = [
-    "position:absolute",
-    "left:-9999px",
-    "top:0",
-    "visibility:hidden",
-    "white-space:nowrap",
-    `font-size:${fontSize}px`,
-    `line-height:${FINAL_TITLE_LINE_HEIGHT}px`,
-  ].join(";");
-  el.textContent = text;
-  const host = document.querySelector(".canvas") ?? document.body;
-  host.appendChild(el);
-  const width = el.offsetWidth;
-  el.remove();
-  return width;
+  return measureDisplayWidth(text, fontSize, FINAL_TITLE_LINE_HEIGHT);
 }
 
 export function useFinalTitleFit(title: string, active: boolean): FinalTitleFit & { ready: boolean } {
@@ -79,7 +64,7 @@ export function useFinalTitleFit(title: string, active: boolean): FinalTitleFit 
     let cancelled = false;
     setReady(false);
     const run = async () => {
-      if (document.fonts?.ready) await document.fonts.ready;
+      await whenFontsReady();
       if (cancelled) return;
       setFit(fitFinalTitle(measureTitleWidth(title, FINAL_TITLE_FONT_SIZE)));
       setReady(true);

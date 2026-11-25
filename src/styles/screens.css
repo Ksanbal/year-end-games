@@ -49,3 +49,23 @@
   top: auto;
   flex: 0 0 72px;
 }
+
+.team-name {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.team-name.is-pending {
+  visibility: hidden;
+}
+
+.team-name-lines {
+  width: 100%;
+}
+
+.team-name-line {
+  white-space: nowrap;
+}
