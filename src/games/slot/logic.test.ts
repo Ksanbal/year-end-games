@@ -11,6 +11,9 @@ import {
   displayCoins,
   isAllIn,
   isJackpot,
+  isZeroCoinLoss,
+  openingView,
+  showEmptyCoin,
   knobCenterY,
   leverPullPx,
   leverShouldSpin,
@@ -150,5 +153,26 @@ describe("topicParticle", () => {
     expect(topicParticle("1팀")).toBe("은");
     expect(topicParticle("2팀")).toBe("은");
     expect(topicParticle("코리아")).toBe("는");
+  });
+});
+
+describe("zero-coin slot turn", () => {
+  it("opens on the skip result when the team already has 0 coins, with no betting UI", () => {
+    expect(openingView(0)).toEqual({
+      kind: "result",
+      outcome: { kind: "skip" },
+      stops: ["dash", "dash", "dash"],
+    });
+    expect(openingView(170)).toEqual({ kind: "betting", bet: 1, confirmAllIn: false });
+  });
+
+  it("treats an all-in loss as a zero-coin result and shows the empty coin at 0", () => {
+    expect(isZeroCoinLoss(170, { kind: "lose", bet: 170 })).toBe(true);
+    expect(isZeroCoinLoss(170, { kind: "lose", bet: 20 })).toBe(false);
+    expect(isZeroCoinLoss(170, { kind: "win", bet: 170 })).toBe(false);
+    expect(isZeroCoinLoss(170, { kind: "skip" })).toBe(false);
+    expect(displayCoins(170, { kind: "result", outcome: { kind: "lose", bet: 170 }, stops: ["seven", "cherry", "bell"] })).toBe(0);
+    expect(showEmptyCoin(0)).toBe(true);
+    expect(showEmptyCoin(1)).toBe(false);
   });
 });

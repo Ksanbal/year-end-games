@@ -175,6 +175,31 @@
   z-index: 1;
 }
 
+/* Empty coin uses the "used" surface colors (면 #EEF3FA, 두께 #9AA9C4, 테두리 #5B6A85 3px).
+   Unlike the gold coin, the face is a full circle and the thickness sits 6px below it. */
+.coin.is-empty::before {
+  top: 6px;
+  right: 0;
+  bottom: auto;
+  left: 0;
+  height: 100%;
+  background: var(--color-stroke-used);
+  box-shadow: 0 8px 10px rgb(27 42 74 / 0.3);
+}
+
+.coin.is-empty::after {
+  inset: 0;
+  background: var(--color-surface-used);
+  box-shadow: none;
+  border: 3px solid var(--color-text-used);
+  box-sizing: border-box;
+}
+
+.coin.is-empty .coin-inner {
+  inset: 22%;
+  border: 3px solid var(--color-text-used);
+}
+
 .card-face {
   position: absolute;
   z-index: 1;

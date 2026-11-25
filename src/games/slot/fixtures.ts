@@ -49,6 +49,8 @@ export function fixtureFor(code: string): SlotFixture | null {
       return { code, view: { kind: "result", outcome: { kind: "lose", bet: 20 }, stops: MISS } };
     case "09-5":
       return { code, view: DASH };
+    case "09-7":
+      return { code, view: { kind: "result", outcome: { kind: "lose", bet: 170 }, stops: MISS } };
     default:
       return null;
   }

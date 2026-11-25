@@ -63,6 +63,26 @@ export function defaultBet(coins: number): number {
   return clampBet(1, coins);
 }
 
+const ZERO_COIN_SKIP: SlotView = {
+  kind: "result",
+  outcome: { kind: "skip" },
+  stops: ["dash", "dash", "dash"],
+};
+
+/** A team that already has 0 coins when its turn starts is skipped with no betting UI. */
+export function openingView(coins: number): SlotView {
+  if (coins < 1) return ZERO_COIN_SKIP;
+  return { kind: "betting", bet: defaultBet(coins), confirmAllIn: false };
+}
+
+export function isZeroCoinLoss(start: number, outcome: SlotPlayOutcome): boolean {
+  return outcome.kind === "lose" && coinsAfter(start, outcome) === 0;
+}
+
+export function showEmptyCoin(coins: number): boolean {
+  return coins < 1;
+}
+
 /** Downward travel only, clamped to the 280px throw. */
 export function leverPullPx(startY: number, currentY: number): number {
   return Math.min(LEVER_MAX_PX, Math.max(0, currentY - startY));

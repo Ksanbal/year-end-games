@@ -18,12 +18,13 @@ import {
   allReelsSettledAt,
   clampBet,
   coinsAfter,
-  defaultBet,
   displayCoins,
   isAllIn,
   nudgeBet,
+  openingView,
   outcomeForStops,
   rollStops,
+  showEmptyCoin,
   topicParticle,
   type ReelStops,
   type ReelSymbol,
@@ -40,7 +41,7 @@ function prefersReducedMotion(): boolean {
 
 function initialView(coins: number, fixture: SlotFixture | null): SlotView {
   if (fixture) return fixture.view;
-  return { kind: "betting", bet: defaultBet(coins), confirmAllIn: false };
+  return openingView(coins);
 }
 
 export const slotGame: SlotModule = {
@@ -174,7 +175,10 @@ function SlotPlay(props: {
       <Header title={copy.destinysLever} meta={slotCopy.teamTurn((props.context.orderIndex + 1) as 1 | 2 | 3)} />
       <div className="slot-team">{props.context.names[props.context.team]}</div>
       <div className="slot-owned">
-        <span className="coin slot-owned-coin" style={{ position: "relative", left: "auto", top: "auto", width: 52, height: 52, ["--coin-depth" as string]: "6px" }}>
+        <span
+          className={showEmptyCoin(shownCoins) ? "coin slot-owned-coin is-empty" : "coin slot-owned-coin"}
+          style={{ position: "relative", left: "auto", top: "auto", width: 52, height: 52, ["--coin-depth" as string]: "6px" }}
+        >
           <span className="coin-inner" />
         </span>
         <span className="slot-owned-label">{slotCopy.ownedCoins(shownCoins)}</span>
