@@ -1,0 +1,63 @@
+:root {
+  --color-sky-top: #BFE3FF;
+  --color-sky-bottom: #E9F5FF;
+  --color-sky-frame: #BFE3FF;
+  --color-cloud: #FFFFFF;
+  --color-header-bar: #23396B;
+  --color-header-line: #162650;
+  --color-header-sub: #D5E2F7;
+  --color-text-primary: #1B2A4A;
+  --color-text-secondary: #4A5A7A;
+  --color-text-on-primary: #FFFFFF;
+  --color-text-accent: #2F5BC4;
+  --color-text-tile-2: #1E7A3C;
+  --color-text-reel-seven: #C7362B;
+  --color-text-allin: #3A1F00;
+  --color-text-used: #5B6A85;
+  --color-surface-card: #FFFFFF;
+  --color-surface-input: #F4F8FF;
+  --color-surface-answer: #EAF4FF;
+  --color-surface-highlight: #FFF3C4;
+  --color-stroke-highlight: #E0A21B;
+  --color-surface-disabled: #E3ECFA;
+  --color-stroke-disabled: #9AA9C4;
+  --color-stroke-default: #1B2A4A;
+  --color-stroke-error: #D7261E;
+  --color-shadow-on-sky: #9CC6EE;
+  --color-shadow-button: #1B2A4A;
+  --color-shadow-on-dim: #0B1430;
+  --color-dim: #0E1A33;
+  --color-primary-top: #C9392E;
+  --color-primary-bottom: #A92E25;
+  --color-primary-depth: #7E1F17;
+  --color-primary-text-shadow: #5A140F;
+  --color-shuffle-card: #F4F8FF;
+  --color-shuffle-stroke: #8FB3E0;
+
+  --font-display: "Do Hyeon", sans-serif;
+  --font-ui: "Pretendard Variable", Pretendard, sans-serif;
+  --font-timer: "IBM Plex Mono", monospace;
+
+  --radius-input: 24px;
+  --radius-card-24: 24px;
+  --radius-card-32: 32px;
+  --radius-card-36: 36px;
+  --radius-card-40: 40px;
+  --radius-button-100: 50px;
+  --radius-button-112: 56px;
+  --radius-button-120: 60px;
+
+  --layout-frame-w: 1920px;
+  --layout-frame-h: 1080px;
+  --layout-side: 80px;
+  --layout-header-h: 120px;
+  --layout-header-line: 8px;
+  --layout-header-title-x: 80px;
+  --layout-header-title-y: 36px;
+
+  --depth-primary: 16px;
+  --depth-card: 10px;
+  --depth-flat-button: 8px;
+
+  --dim-opacity: 0.55;
+}
