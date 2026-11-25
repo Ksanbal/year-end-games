@@ -41,6 +41,16 @@ export function stateForScreen(code: string): Jump | null {
       return pack(code, revealed([9, 9, 4], [2, 1, 0]));
     case "09-0":
       return pack(code, exampleCampaign("intro"));
+    case "09-1":
+    case "09-1b":
+    case "09-2":
+    case "09-2a":
+    case "09-3":
+    case "09-4":
+    case "09-6":
+      return pack(code, slotTurnExample(1));
+    case "09-5":
+      return pack(code, slotTurnExample(2));
     case "10-1":
       return pack(code, exampleCampaign("final", false));
     case "10-2":
@@ -164,6 +174,12 @@ function exampleCampaign(stage: "intro" | "final", confirmNewGame = false): AppS
     ],
     phase: { kind: "final", confirmNewGame },
   };
+}
+
+
+function slotTurnExample(orderIndex: 0 | 1 | 2): AppState {
+  const base = exampleCampaign("intro");
+  return { ...base, phase: { kind: "slotTurn", orderIndex } };
 }
 
 function rankedRound(

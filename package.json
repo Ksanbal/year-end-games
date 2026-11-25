@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "screenshots:foundation": "node scripts/screenshot-foundation.mjs"
+    "screenshots:foundation": "node scripts/screenshot-foundation.mjs",
+    "screenshots:slot": "node scripts/screenshot-slot.mjs",
+    "play:slot": "node scripts/play-slot.mjs"
   },
   "dependencies": {
     "react": "^19.3.1",

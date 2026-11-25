@@ -23,9 +23,8 @@ import { Sky } from "./ui/Sky.tsx";
 import "./ui/chrome.css";
 import "./styles/screens.css";
 
-const jump = typeof window !== "undefined" ? readJump() : null;
-
 export default function App() {
+  const jump = readJump();
   const { state, dispatch, recovery, dismissRecovery } = useSession(jump);
 
   const startRound = useCallback(() => {
