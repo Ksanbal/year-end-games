@@ -12,7 +12,9 @@
     "test:watch": "vitest",
     "screenshots:foundation": "node scripts/screenshot-foundation.mjs",
     "screenshots:slot": "node scripts/screenshot-slot.mjs",
-    "play:slot": "node scripts/play-slot.mjs"
+    "play:slot": "node scripts/play-slot.mjs",
+    "screenshots:games": "node scripts/screenshot-games.mjs",
+    "play:games": "node scripts/playthrough-games.mjs"
   },
   "dependencies": {
     "react": "^19.3.1",
