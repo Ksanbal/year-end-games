@@ -16,11 +16,11 @@ describe("explanation screens", () => {
 
   it("uses the confirmed explanation copy and uses the configured counts", () => {
     expect(copy.explainMine).toBe(`지뢰 ${MINE_COUNT}개 · 한 번 누를 때 타일 하나 · 열린 타일마다 1점`);
-    expect(copy.explainCountry).toBe("카드를 눌러 나라 이름을 완성하세요 (띄어쓰기 없이)");
+    expect(copy.explainCountry).toBe("40초 안에 나라 이름을 완성하세요 (띄어쓰기 없이)");
     expect(copy.explainIdiom).toBe("1분 동안 사자성어를 최대한 많이 맞혀요.");
     expect(copy.explainTimer).toBe("10초에 가장 가깝게 멈추면 이겨요.");
     expect(copy.explainHidden).toBe("시작부터 끝까지 숫자를 보여 주지 않아요");
-    expect(copy.explainSlot).toBe(`777이 나오면 코인 ${SLOT_PAYOUT_MULTIPLIER}배를 얻을 수 있어요`);
+    expect(copy.explainSlot).toBe(`팀당 3회 · 777은 ${SLOT_PAYOUT_MULTIPLIER}배 · 체리 셋이나 종 셋은 2배`);
     expect(copy.goPlayGame).toBe("게임하러 가기");
   });
 

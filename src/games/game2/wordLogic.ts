@@ -1,4 +1,5 @@
 export const TIME_LIMIT_MS = 60_000;
+export const wordTimeLimit = (id: 2 | 3) => id === 2 ? 40_000 : TIME_LIMIT_MS;
 export const MAX_QUESTIONS = 20;
 
 export type WordProblem = {

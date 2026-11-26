@@ -19,6 +19,7 @@ export type SlotContext = {
   coins: [number, number, number];
   team: TeamIndex;
   orderIndex: 0 | 1 | 2;
+  lap?: 0 | 1 | 2;
 };
 
 export type SlotModule = {

@@ -1,6 +1,6 @@
 
 import { ROUND_COINS, SLOT_PAYOUT_MULTIPLIER, TARGET_MS } from "../games/catalog.ts";
-import type { TeamIndex, TurnResult } from "./types.ts";
+import type { SlotOutcome, TeamIndex, TurnResult } from "./types.ts";
 
 export type Standing = {
   team: TeamIndex;
@@ -125,10 +125,10 @@ export function slotOrder(args: {
   return teams as [TeamIndex, TeamIndex, TeamIndex];
 }
 
-export function applySlotOutcome(coins: number, outcome: { kind: string; bet?: number }): number {
+export function applySlotOutcome(coins: number, outcome: SlotOutcome): number {
   if (outcome.kind === "skip") return coins;
-  const bet = outcome.bet ?? 0;
+  const bet = outcome.bet;
   if (outcome.kind === "lose") return coins - bet;
-  if (outcome.kind === "win") return coins - bet + bet * SLOT_PAYOUT_MULTIPLIER;
+  if (outcome.kind === "win") return coins - bet + bet * (outcome.multiplier ?? SLOT_PAYOUT_MULTIPLIER);
   return coins;
 }

@@ -127,7 +127,7 @@ function FinalRow(props: {
 }) {
   const y = 370 + props.index * 150;
   const highlight = props.standing.rank === 1;
-  const slot = formatSlotCell(props.state.slotOutcomes[props.team]);
+  const slot = formatSlotCell(props.state.slotOutcomes[props.team], props.state.previousSlotDelta?.[props.team]);
   return (
     <Card x={120} y={y} w={1680} h={130} radius={highlight ? 24 : 36} highlight={highlight} shadow>
       <div className="text-display" style={{ position: "absolute", left: 30, top: 36, fontSize: 48, lineHeight: "58px" }}>

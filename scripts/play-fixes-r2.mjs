@@ -107,7 +107,14 @@ await page.evaluate(() => {
 });
 await dragLever(220);
 await new Promise((r) => setTimeout(r, 5800));
-await clickLabel("최종 결과 공개");
+await clickLabel("다음 팀");
+for (let lap = 2; lap <= 3; lap++) {
+  // The bankrupt team advances automatically at the start of each lap.
+  for (let team = 1; team <= 2; team++) {
+    await page.locator('::-p-text(건너뛰기)').click();
+    await page.locator(lap === 3 && team === 2 ? '::-p-text(최종 결과 공개)' : '::-p-text(다음 팀)').click();
+  }
+}
 await new Promise((r) => setTimeout(r, 300));
 const finalText = await bodyText();
 if (!finalText.includes("최종 공동 1등 1팀 · 2팀")) {

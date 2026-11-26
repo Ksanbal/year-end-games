@@ -177,6 +177,14 @@ export function reduce(state: AppState, action: Action): AppState {
       const coins: [number, number, number] = [...state.coins];
       coins[team] = applySlotOutcome(state.coins[team], action.outcome);
       const nextIndex = state.phase.orderIndex + 1;
+      const lap = state.phase.lap ?? 0;
+      if (nextIndex === 3 && lap < 2) {
+        const previousSlotDelta: [number, number, number] = [...(state.previousSlotDelta ?? [0, 0, 0])];
+        outcomes.forEach((outcome, i) => {
+          if (outcome) previousSlotDelta[i] += applySlotOutcome(0, outcome);
+        });
+        return { ...state, coins, previousSlotDelta, slotOutcomes: [null, null, null], phase: { kind: "slotTurn", orderIndex: 0, lap: (lap + 1) as TurnIndex } };
+      }
       return {
         ...state,
         coins,
@@ -184,7 +192,7 @@ export function reduce(state: AppState, action: Action): AppState {
         phase:
           nextIndex > 2
             ? { kind: "slotDone" }
-            : { kind: "slotTurn", orderIndex: nextIndex as TurnIndex },
+            : { kind: "slotTurn", orderIndex: nextIndex as TurnIndex, lap },
       };
     }
     case "REVEAL_FINAL":

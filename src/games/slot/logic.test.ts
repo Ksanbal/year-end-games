@@ -71,7 +71,12 @@ describe("payout", () => {
   const sevens: ReelStops = ["seven", "seven", "seven"];
   const miss: ReelStops = ["seven", "cherry", "bell"];
 
-  it("treats only 777 as a win and pays 10× the bet including the stake", () => {
+  it("treats 777 as the jackpot and pays 10× the bet including the stake", () => {
+    for (const symbol of ["bell", "cherry"] as const) {
+      const outcome = outcomeForStops(20, [symbol, symbol, symbol]);
+      expect(outcome).toEqual({ kind: "win", bet: 20, multiplier: 2 });
+      expect(coinsAfter(170, outcome)).toBe(190);
+    }
     expect(isJackpot(sevens)).toBe(true);
     expect(isJackpot(miss)).toBe(false);
     expect(isJackpot(["seven", "seven", "cherry"])).toBe(false);

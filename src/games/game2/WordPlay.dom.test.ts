@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
 import { createElement } from "react";
-import { cleanup, render } from "@testing-library/react";
+import { act, cleanup, fireEvent, render } from "@testing-library/react";
 import { readFileSync } from "node:fs";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import type { GameContext } from "../types.ts";
 import { idiomFixture } from "../game3/fixtures.ts";
 import { wordFixture } from "./fixtures.ts";
@@ -45,7 +45,7 @@ describe("WordPlay HUD", () => {
     if (!fixture) throw new Error("Missing game 2 fixture");
     const view = render(play(2, fixture));
 
-    expect(view.getByText("남은 시간 0:52")).toBeTruthy();
+    expect(view.getByText("남은 시간 0:32")).toBeTruthy();
     expect(view.queryByText(/뜻풀이|맞힌 문제|제한/)).toBeNull();
   });
 
@@ -80,4 +80,21 @@ describe("WordPlay HUD", () => {
     expect(css).toMatch(/\.word-meaning[\s\S]*?white-space:\s*nowrap/);
     expect(css).not.toContain("is-tight");
   });
+});
+
+it.each([2, 3] as const)("holds game %i's correct answer for 100ms before advancing", gameId => {
+  vi.useFakeTimers();
+  try {
+    const fixture = { ...wordFixture("03-1")!, slots: [null, null, null, null] };
+    const view = render(play(gameId, fixture));
+    for (const glyph of fixture.problem.answer) fireEvent.click(view.getByRole("button", { name: glyph }));
+    expect(view.container.querySelector(".word-slots.is-correct")?.textContent).toBe(fixture.problem.answer);
+    act(() => vi.advanceTimersByTime(99));
+    expect(view.container.querySelector(".word-slots.is-correct")).toBeTruthy();
+    act(() => vi.advanceTimersByTime(1));
+    expect(view.container.querySelector(".word-slots.is-correct")).toBeNull();
+    expect(view.getByText("6")).toBeTruthy();
+  } finally {
+    vi.useRealTimers();
+  }
 });

@@ -9,7 +9,7 @@ import { ResultOverlay } from "../game1/ResultOverlay.tsx";
 import { answerLayout, CARD_GAP, SLOT_GAP } from "./layout.ts";
 import {
   MAX_QUESTIONS,
-  TIME_LIMIT_MS,
+  wordTimeLimit,
   dealCards,
   isCorrect,
   pickProblem,
@@ -46,6 +46,9 @@ export function WordPlay(props: {
   fixture?: WordFixture | null;
   persistUsed: boolean;
 }) {
+  const limit = wordTimeLimit(props.gameId);
+  const feedbackTimer = useRef(0);
+  useEffect(() => () => window.clearTimeout(feedbackTimer.current), []);
   const offsetY = props.gameId === 3 ? 70 : 0;
   const [session] = useState(() => startTurn(props));
   const [score, setScore] = useState(session.score);
@@ -54,20 +57,20 @@ export function WordPlay(props: {
   const [problem, setProblem] = useState<WordProblem>(session.problem);
   const [cards, setCards] = useState<string[]>(session.cards);
   const [slots, setSlots] = useState<(number | null)[]>(session.slots);
-  const [phase, setPhase] = useState<WordFixture["phase"]>(session.phase);
+  const [phase, setPhase] = useState<WordFixture["phase"] | "correct">(session.phase);
   const [remainMs, setRemainMs] = useState(session.remainMs);
   const startedAt = useRef<number | null>(null);
   const frozen = Boolean(props.fixture);
 
   useEffect(() => {
-    if (frozen || phase === "complete" || phase === "timeup") return;
+    if (frozen || phase === "correct" || phase === "complete" || phase === "timeup") return;
     if (startedAt.current === null) {
-      startedAt.current = performance.now() - (TIME_LIMIT_MS - session.remainMs);
+      startedAt.current = performance.now() - (limit - session.remainMs);
     }
     let frame = 0;
     const tick = () => {
       const origin = startedAt.current ?? performance.now();
-      const left = Math.max(0, TIME_LIMIT_MS - (performance.now() - origin));
+      const left = Math.max(0, limit - (performance.now() - origin));
       setRemainMs(left);
       if (left <= 0) {
         setPhase("timeup");
@@ -77,7 +80,7 @@ export function WordPlay(props: {
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [frozen, phase]);
+  }, [frozen, phase, limit, session.remainMs]);
 
   useEffect(() => {
     if (frozen || phase !== "wrong") return;
@@ -102,7 +105,14 @@ export function WordPlay(props: {
     if (next.every((slot) => slot !== null)) {
       const glyphs = next.map((index) => cards[index!]!);
       if (isCorrect(glyphs, problem.answer)) {
-        resolve("correct");
+        setScore(score + 1);
+        setPhase("correct");
+        feedbackTimer.current = window.setTimeout(() => {
+          if (!frozen && startedAt.current !== null && performance.now() - startedAt.current >= limit) {
+            setRemainMs(0);
+            setPhase("timeup");
+          } else advance();
+        }, 100);
       } else {
         setPhase("wrong");
       }
@@ -120,14 +130,12 @@ export function WordPlay(props: {
 
   function skip() {
     if (locked) return;
-    resolve("skip");
+    advance();
   }
 
-  function resolve(kind: "correct" | "skip") {
-    const nextScore = kind === "correct" ? score + 1 : score;
+  function advance() {
     const nextAsked = asked + 1;
     const nextSeen = seen;
-    setScore(nextScore);
     setAsked(nextAsked);
     if (nextAsked >= MAX_QUESTIONS) {
       setPhase("complete");
@@ -170,7 +178,7 @@ export function WordPlay(props: {
         shadow
         fill="var(--color-surface-answer)"
       />
-      <div className={phase === "wrong" ? "word-slots is-shake" : "word-slots"}>
+      <div className={phase === "wrong" ? "word-slots is-shake" : phase === "correct" ? "word-slots is-correct" : "word-slots"}>
         {cards.map((_, i) => {
           const cardIndex = slots[i];
           const glyph = cardIndex === null || cardIndex === undefined ? null : cards[cardIndex];
@@ -278,7 +286,7 @@ function startTurn(props: {
     cards,
     slots: cards.map(() => null),
     phase: "playing",
-    remainMs: TIME_LIMIT_MS,
+    remainMs: wordTimeLimit(props.gameId),
   };
 }
 
