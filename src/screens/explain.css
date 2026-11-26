@@ -1,6 +1,5 @@
 .explain-title { position:absolute; top:120px; left:0; width:1920px; height:77px; display:flex; align-items:center; justify-content:center; gap:48px; font: 64px/77px var(--font-display); color:var(--color-text-primary); }
 .explain-line { position:absolute; top:212px; width:1920px; text-align:center; font:500 36px/43px var(--font-ui); color:var(--color-text-secondary); }
-.explain-placeholder { display:inline-block; border:3px dashed #7e1f17; border-radius:30px; color:#7e1f17; background:white; padding:4px 28px; margin-top:-8px; font-weight:700; }
 .explain-window { position:absolute; left:40px; top:30px; width:920px; height:440px; overflow:hidden; pointer-events:none; }
 .demo-tap { position:absolute; width:66px; height:66px; border:6px solid #fff; outline:10px solid #1b2a4a; border-radius:50%; left:50%; top:50%; transform:translate(-50%,-50%); z-index:4; pointer-events:none; }
 .demo-mine { position:absolute; width:435px; height:435px; left:242px; top:0; }

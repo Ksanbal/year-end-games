@@ -13,6 +13,7 @@ export const copy = {
   threeTeamsPlayOnce: "세 팀이 한 번씩 플레이해요.",
   explainMine: "지뢰 5개 · 한 번 누를 때 타일 하나 · 열린 타일마다 1점",
   explainCountry: "카드를 눌러 나라 이름을 완성하세요 (띄어쓰기 없이)",
+  explainIdiom: "1분 동안 사자성어를 최대한 많이 맞혀요.",
   explainTimer: "10초에 가장 가깝게 멈추면 이겨요.",
   explainHidden: "시작부터 끝까지 숫자를 보여 주지 않아요",
   explainSlot: "777이 나오면 코인 10배를 얻을 수 있어요",
