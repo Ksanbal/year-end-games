@@ -1,0 +1,65 @@
+.timer-card-label {
+  position: absolute;
+  z-index: 2;
+  left: 360px;
+  top: 580px;
+  width: 1200px;
+  height: 43px;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 43px;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.timer-clock {
+  position: absolute;
+  z-index: 2;
+  left: 360px;
+  top: 330px;
+  width: 1200px;
+  height: 264px;
+  font-family: var(--font-timer);
+  font-weight: 700;
+  font-size: 200px;
+  line-height: 264px;
+  letter-spacing: -0.04em;
+  text-align: center;
+  color: var(--color-text-primary);
+}
+
+.timer-hidden-title {
+  position: absolute;
+  z-index: 2;
+  left: 360px;
+  top: 400px;
+  width: 1200px;
+  height: 77px;
+  font-family: var(--font-display);
+  font-size: 64px;
+  line-height: 77px;
+  text-align: center;
+  color: var(--color-text-on-primary);
+}
+
+.timer-hidden-caption {
+  position: absolute;
+  z-index: 2;
+  left: 360px;
+  top: 500px;
+  width: 1200px;
+  height: 38px;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 38px;
+  text-align: center;
+  color: var(--color-header-sub);
+}
+
+.timer-start-btn {
+  font-size: 64px !important;
+  line-height: 77px !important;
+  border-radius: 90px !important;
+}

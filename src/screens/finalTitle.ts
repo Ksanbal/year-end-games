@@ -1,0 +1,86 @@
+import { useLayoutEffect, useState } from "react";
+import { measureDisplayWidth, whenFontsReady } from "../textMeasure.ts";
+
+/** Do Hyeon title.final. */
+export const FINAL_TITLE_FONT_SIZE = 80;
+/** Do Hyeon title.page. The smallest size before decorative coins are hidden. */
+export const FINAL_TITLE_MIN_FONT_SIZE = 64;
+export const FINAL_TITLE_LINE_HEIGHT = 96;
+export const FINAL_TITLE_COIN_SIZE = 72;
+export const FINAL_TITLE_COIN_GAP = 36;
+/** Two 72px coins plus a 36px gap on each side of the title. */
+export const FINAL_TITLE_COIN_CLUSTER =
+  FINAL_TITLE_COIN_SIZE * 2 + FINAL_TITLE_COIN_GAP * 2;
+export const FRAME_WIDTH = 1920;
+/** Existing left/right page margin. */
+export const SIDE_MARGIN = 80;
+export const FINAL_TITLE_SAFE_WIDTH = FRAME_WIDTH - SIDE_MARGIN * 2;
+
+export type FinalTitleFit = {
+  fontSize: number;
+  showCoins: boolean;
+};
+
+/**
+ * Overflow treatment for a final title (open-item 18).
+ * Shrinks the 80px title so the title plus the fixed 72px coin cluster
+ * fits the safe width. Coins do not scale. If shrinking would go below
+ * 64px, lock to 64px and hide the coins when the cluster still overflows.
+ * Widths are measured, not hardcoded.
+ */
+export function fitFinalTitle(textWidthAtBase: number): FinalTitleFit {
+  const withCoins = textWidthAtBase + FINAL_TITLE_COIN_CLUSTER;
+  if (withCoins <= FINAL_TITLE_SAFE_WIDTH) {
+    return { fontSize: FINAL_TITLE_FONT_SIZE, showCoins: true };
+  }
+  const textBudget = FINAL_TITLE_SAFE_WIDTH - FINAL_TITLE_COIN_CLUSTER;
+  const scaled = FINAL_TITLE_FONT_SIZE * (textBudget / textWidthAtBase);
+  if (scaled >= FINAL_TITLE_MIN_FONT_SIZE) {
+    return { fontSize: scaled, showCoins: true };
+  }
+  const textAtMin = textWidthAtBase * (FINAL_TITLE_MIN_FONT_SIZE / FINAL_TITLE_FONT_SIZE);
+  return {
+    fontSize: FINAL_TITLE_MIN_FONT_SIZE,
+    showCoins: textAtMin + FINAL_TITLE_COIN_CLUSTER <= FINAL_TITLE_SAFE_WIDTH,
+  };
+}
+
+/** Fitted title width, including the coin cluster when the coins stay visible. */
+export function fittedTitleWidth(textWidthAtBase: number, fit: FinalTitleFit): number {
+  const textWidth = textWidthAtBase * (fit.fontSize / FINAL_TITLE_FONT_SIZE);
+  return fit.showCoins ? textWidth + FINAL_TITLE_COIN_CLUSTER : textWidth;
+}
+
+export function measureTitleWidth(text: string, fontSize: number): number {
+  return measureDisplayWidth(text, fontSize, FINAL_TITLE_LINE_HEIGHT);
+}
+
+export function useFinalTitleFit(title: string, active: boolean): FinalTitleFit & { ready: boolean } {
+  const [fit, setFit] = useState<FinalTitleFit>({
+    fontSize: FINAL_TITLE_FONT_SIZE,
+    showCoins: true,
+  });
+  const [ready, setReady] = useState(!active);
+
+  useLayoutEffect(() => {
+    if (!active) {
+      setFit({ fontSize: FINAL_TITLE_FONT_SIZE, showCoins: true });
+      setReady(true);
+      return;
+    }
+    let cancelled = false;
+    setReady(false);
+    const run = async () => {
+      await whenFontsReady();
+      if (cancelled) return;
+      setFit(fitFinalTitle(measureTitleWidth(title, FINAL_TITLE_FONT_SIZE)));
+      setReady(true);
+    };
+    void run();
+    return () => {
+      cancelled = true;
+    };
+  }, [title, active]);
+
+  return { ...fit, ready };
+}

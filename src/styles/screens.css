@@ -1,0 +1,71 @@
+.team-input {
+  position: absolute;
+  width: 660px;
+  height: 100px;
+  padding: 0 32px;
+  border-radius: 24px;
+  background: var(--color-surface-input);
+  border: 4px solid var(--color-stroke-default);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 38px;
+  color: var(--color-text-primary);
+}
+
+.team-input.is-error {
+  border-width: 6px;
+  border-color: var(--color-stroke-error);
+}
+
+.final-title-row {
+  position: absolute;
+  left: 0;
+  top: 160px;
+  width: 1920px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  font-size: 80px;
+  line-height: 96px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.final-title-row.is-pending {
+  visibility: hidden;
+}
+
+.final-title-row .final-title-text {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.final-title-row .coin {
+  position: relative;
+  left: auto;
+  top: auto;
+  flex: 0 0 72px;
+}
+
+.team-name {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.team-name.is-pending {
+  visibility: hidden;
+}
+
+.team-name-lines {
+  width: 100%;
+}
+
+.team-name-line {
+  white-space: nowrap;
+}
