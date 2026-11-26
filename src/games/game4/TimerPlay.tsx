@@ -86,13 +86,14 @@ export function TimerPlay(props: {
         fill={showClock ? "var(--color-surface-card)" : "var(--color-header-bar)"}
       />
       {showClock ? (
-        <div className="timer-clock">{formatClock(elapsedMs)}</div>
+        <div className={`timer-clock ${hidden && ended ? "is-revealing" : ""}`}>{formatClock(elapsedMs)}</div>
       ) : (
         <>
           <div className="timer-hidden-title">{gameCopy.hiddenTitle}</div>
           <div className="timer-hidden-caption">{gameCopy.hiddenCaption}</div>
         </>
       )}
+      {hidden && ended ? <div className="timer-reveal-cover"><div>{gameCopy.hiddenTitle}</div></div> : null}
       {backdropLabel ? <div className="timer-card-label">{backdropLabel}</div> : null}
       {phase === "ready" ? (
         <PrimaryButton

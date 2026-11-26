@@ -60,8 +60,11 @@ export function reduce(state: AppState, action: Action): AppState {
       if (state.phase.kind !== "teamSetup") return state;
       if (!nameReady(state.teams)) return state;
       return { ...state, phase: { kind: "roundIntro", round: 1 } };
-    case "START_ROUND": {
+    case "START_GAME_EXPLAIN":
       if (state.phase.kind !== "roundIntro") return state;
+      return { ...state, phase: { kind: "gameExplain", round: state.phase.round } };
+    case "START_ROUND": {
+      if (state.phase.kind !== "gameExplain") return state;
       if (!isPermutation(action.order)) return state;
       const round = state.phase.round;
       const record: RoundRecord = {
@@ -147,9 +150,12 @@ export function reduce(state: AppState, action: Action): AppState {
           coins: state.coins,
           lastRoundRank: (team) => lastRoundRank(state, team),
         }),
-        phase: { kind: "slotIntro" },
+        phase: { kind: "slotExplain" },
       };
     }
+    case "START_SLOT_INTRO":
+      if (state.phase.kind !== "slotExplain") return state;
+      return { ...state, phase: { kind: "slotIntro" } };
     case "START_SLOT": {
       if (state.phase.kind !== "slotIntro" || !state.slotOrder) return state;
       return {

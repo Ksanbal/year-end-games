@@ -164,10 +164,12 @@ function parsePhase(value: unknown): Phase | null {
     case "opening":
     case "gameIntro":
     case "teamSetup":
+    case "slotExplain":
     case "slotIntro":
     case "slotDone":
       return { kind: value.kind };
     case "roundIntro":
+    case "gameExplain":
     case "roundResult":
       return typeof value.round === "number" && isRoundNumber(value.round) ? { kind: value.kind, round: value.round } : null;
     case "shuffle":

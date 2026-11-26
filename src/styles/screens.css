@@ -174,3 +174,27 @@
     animation: none;
   }
 }
+
+.round-intro-line { position:absolute; left:0; top:590px; width:1920px; text-align:center; font-size:36px; line-height:43px; font-weight:500; color:var(--color-text-secondary); }
+.round-progress { position:absolute; top:676px; left:50%; transform:translateX(-50%); height:72px; display:flex; align-items:center; gap:56px; }
+.round-progress-line { position:absolute; left:36px; right:18px; top:34px; height:4px; background:#5b6a85; }
+.round-progress-dot { position:relative; flex:none; display:grid; place-items:center; width:72px; height:72px; border-radius:50%; background:white; font:40px/1 var(--font-display); }
+.round-progress-dot.is-past { color:white; background:#23396b; }
+.round-progress-dot.is-current { border:6px solid #9a6a08; color:#9a6a08; animation:round-dot-pulse var(--motion-progress-duration) var(--motion-progress-ease) var(--motion-progress-iterations); }
+.round-progress-dot.is-future { border:3px solid #5b6a85; color:#5b6a85; }
+.round-progress-ring { position:absolute; width:72px; height:72px; border:5px solid #9a6a08; border-radius:50%; opacity:0; animation:round-ring-pulse var(--motion-progress-duration) var(--motion-progress-ease) var(--motion-progress-iterations); }
+@keyframes round-dot-pulse { 0%,12.5%,100% { transform:scale(1); } 50% { transform:scale(var(--motion-progress-scale)); } 87.5% { transform:scale(1); } }
+@keyframes round-ring-pulse { 0%,12.5%,100% { transform:scale(1); opacity:0; } 13% { opacity:.6; } 50% { transform:scale(1.39); opacity:.6; } 87.5% { transform:scale(1.72); opacity:0; } }
+@media (prefers-reduced-motion: reduce) { .round-progress-dot.is-current, .round-progress-ring { animation:none; } }
+
+.result-row-reveal {
+  position: absolute;
+  inset: 0;
+  width: 1920px;
+  height: 1080px;
+  pointer-events: none;
+  animation: result-row-reveal var(--motion-result-reveal) var(--motion-result-ease) calc(var(--row-index) * var(--motion-result-stagger)) both;
+}
+@keyframes result-row-reveal { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .result-row-reveal { animation:result-table-fade var(--motion-result-reveal) ease-out both !important; } }
+@keyframes result-table-fade { from { opacity:0; } to { opacity:1; } }

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { copy } from "../copy.ts";
 import { roundResultButtonLabel, roundResultButtonStyle } from "./roundResultLabel.ts";
 import { headerGameTitle } from "../games/catalog.ts";
@@ -47,7 +48,7 @@ export function RoundResultScreen(props: {
         {copy.colCoinsTotal}
       </div>
       {standings.map((row, i) => (
-        <ResultRow key={row.team} index={i} standing={row} name={props.names[row.team]} coins={props.coins[row.team]} />
+        <div key={row.team} className="result-row-reveal" style={{ "--row-index": i } as CSSProperties}><ResultRow index={i} standing={row} name={props.names[row.team]} coins={props.coins[row.team]} /></div>
       ))}
       <PrimaryButton label={roundResultButtonLabel(props.round)} size="md" onClick={props.onNext} style={roundResultButtonStyle(props.round)} />
     </>

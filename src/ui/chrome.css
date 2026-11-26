@@ -120,12 +120,14 @@
 
 .btn-primary:active:not(:disabled),
 .btn-primary.is-pressed:not(:disabled) {
+  transition-duration: var(--motion-press-down-duration);
   transform: scale(var(--motion-press-scale));
   filter: drop-shadow(0 10px 14px rgb(27 42 74 / 0.28));
 }
 
 .btn-primary:active:not(:disabled) .btn-primary-face,
 .btn-primary.is-pressed:not(:disabled) .btn-primary-face {
+  transition-duration: var(--motion-press-down-duration);
   transform: translateY(6px);
   box-shadow: 0 10px 0 var(--color-primary-depth);
 }
@@ -166,6 +168,7 @@
 
 .btn-flat:active,
 .btn-flat.is-pressed {
+  transition-duration: var(--motion-press-down-duration);
   transform: translateY(4px) scale(var(--motion-press-scale));
   box-shadow: 0 4px 0 var(--color-shadow-button);
 }
@@ -236,4 +239,12 @@
 .card-content button,
 .card-content input {
   pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary:active:not(:disabled), .btn-primary.is-pressed:not(:disabled),
+  .btn-primary:active:not(:disabled) .btn-primary-face, .btn-primary.is-pressed:not(:disabled) .btn-primary-face,
+  .btn-flat:active, .btn-flat.is-pressed { transform:none; }
+  .btn-primary:active:not(:disabled) .btn-primary-face, .btn-primary.is-pressed:not(:disabled) .btn-primary-face { filter:brightness(.9); box-shadow:0 var(--btn-depth, 16px) 0 var(--color-primary-depth); }
+  .btn-flat:active, .btn-flat.is-pressed { filter:brightness(.9); box-shadow:0 8px 0 var(--color-shadow-button); }
 }

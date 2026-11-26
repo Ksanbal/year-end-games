@@ -63,9 +63,30 @@
 
   --dim-opacity: 0.55;
 
-  --motion-press-duration: 100ms;
+  --motion-press-duration: 120ms;
+  --motion-press-down-duration: 80ms;
   --motion-press-scale: 0.96;
-  --motion-press-ease: ease-out;
+  --motion-press-ease: cubic-bezier(0, 0, 0.2, 1);
+  --motion-allin-press: 100ms;
+  --motion-allin-release: 150ms;
+  --motion-allin-glow: 2400ms;
+  --motion-allin-iterations: 3;
+  --motion-allin-twinkle: 1200ms;
+  --motion-allin-twinkle-iterations: 6;
+  --motion-progress-duration: 1600ms;
+  --motion-progress-scale: 1.12;
+  --motion-progress-ease: cubic-bezier(0.42, 0, 0.58, 1);
+  --motion-progress-iterations: 3;
+  --motion-demo-transition: 350ms;
+  --motion-demo-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-demo-hold-1: 700ms;
+  --motion-demo-hold-2: 800ms;
+  --motion-demo-hold-3: 800ms;
+  --motion-demo-hold-4: 1200ms;
+  --motion-demo-dissolve: 300ms;
+  --motion-result-reveal: 250ms;
+  --motion-result-stagger: 120ms;
+  --motion-result-ease: cubic-bezier(0, 0, 0.2, 1);
   --motion-screen-duration: 250ms;
   --motion-screen-offset: 16px;
   --motion-screen-ease: ease-out;
@@ -77,6 +98,11 @@
 @media (prefers-reduced-motion: reduce) {
   :root {
     --motion-press-duration: 0ms;
+    --motion-press-down-duration: 0ms;
+    --motion-progress-duration: 0ms;
+    --motion-progress-iterations: 0;
+    --motion-demo-transition: 0ms;
+    --motion-demo-dissolve: 0ms;
     --motion-press-scale: 1;
     --motion-screen-duration: 0ms;
     --motion-screen-offset: 0px;

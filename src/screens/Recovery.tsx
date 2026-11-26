@@ -60,6 +60,7 @@ function recoveryLines(state: AppState): [string, string?] {
   const phase = state.phase;
   switch (phase.kind) {
     case "roundIntro":
+    case "gameExplain":
     case "shuffle":
       return [headerGameTitle(phase.round)];
     case "turnReady":
@@ -71,6 +72,7 @@ function recoveryLines(state: AppState): [string, string?] {
     }
     case "roundResult":
       return [headerGameTitle(phase.round), copy.headerRoundResult];
+    case "slotExplain":
     case "slotIntro":
     case "slotTurn":
     case "slotDone":

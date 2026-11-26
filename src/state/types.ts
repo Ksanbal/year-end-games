@@ -28,11 +28,13 @@ export type Phase =
   | { kind: "gameIntro" }
   | { kind: "teamSetup" }
   | { kind: "roundIntro"; round: RoundNumber }
+  | { kind: "gameExplain"; round: RoundNumber }
   | { kind: "shuffle"; round: RoundNumber; settled: boolean }
   | { kind: "turnReady"; round: RoundNumber; turnIndex: TurnIndex }
   | { kind: "playing"; round: RoundNumber; turnIndex: TurnIndex }
   | { kind: "turnResult"; round: RoundNumber; turnIndex: TurnIndex }
   | { kind: "roundResult"; round: RoundNumber }
+  | { kind: "slotExplain" }
   | { kind: "slotIntro" }
   | { kind: "slotTurn"; orderIndex: TurnIndex }
   | { kind: "slotDone" }
@@ -57,6 +59,7 @@ export type Action =
   | { type: "START_SETUP" }
   | { type: "SET_TEAM_NAME"; index: TeamIndex; name: string }
   | { type: "START_GAME" }
+  | { type: "START_GAME_EXPLAIN" }
   | {
       type: "START_ROUND";
       order: [TeamIndex, TeamIndex, TeamIndex];
@@ -68,6 +71,7 @@ export type Action =
   | { type: "ADVANCE_FROM_TURN_RESULT" }
   | { type: "REVEAL_ROUND" }
   | { type: "ADVANCE_FROM_ROUND_RESULT" }
+  | { type: "START_SLOT_INTRO" }
   | { type: "START_SLOT" }
   | { type: "FINISH_SLOT_TURN"; outcome: SlotOutcome }
   | { type: "REVEAL_FINAL" }

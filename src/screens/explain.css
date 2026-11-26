@@ -1,0 +1,41 @@
+.explain-title { position:absolute; top:120px; left:0; width:1920px; height:77px; display:flex; align-items:center; justify-content:center; gap:48px; font: 64px/77px var(--font-display); color:var(--color-text-primary); }
+.explain-line { position:absolute; top:212px; width:1920px; text-align:center; font:500 36px/43px var(--font-ui); color:var(--color-text-secondary); }
+.explain-placeholder { display:inline-block; border:3px dashed #7e1f17; border-radius:30px; color:#7e1f17; background:white; padding:4px 28px; margin-top:-8px; font-weight:700; }
+.explain-window { position:absolute; left:40px; top:30px; width:920px; height:440px; overflow:hidden; pointer-events:none; }
+.demo-tap { position:absolute; width:66px; height:66px; border:6px solid #fff; outline:10px solid #1b2a4a; border-radius:50%; left:50%; top:50%; transform:translate(-50%,-50%); z-index:4; pointer-events:none; }
+.demo-mine { position:absolute; width:435px; height:435px; left:242px; top:0; }
+.demo-mine .mine-tile { width:79px; height:79px; border:2px solid #1b2a4a; border-radius:11px; box-shadow:0 5px 0 #3a64c0; font-size:36px; line-height:43px; }
+.demo-mine .mine-tile.is-open { border:2px solid #c9d6ee; box-shadow:none; }
+.demo-mine .demo-tap { width:49px; height:49px; border-width:4px; outline-width:6px; }
+.demo-word { position:absolute; left:0; top:20px; width:920px; height:410px; }
+.demo-word-panel { position:absolute; left:0; top:0; width:920px; height:204px; background:#eaf4ff; border:4px solid #1b2a4a; border-radius:32px; box-shadow:0 8px 0 #9cc6ee; }
+.demo-word .word-slot, .demo-word .word-card { width:146px; height:146px; border-width:4px; border-style:solid; border-radius:23px; font-size:70px; line-height:1; }
+.demo-word .word-slot.is-empty { border-color:#1b2a4a; }
+.demo-word .word-card.is-used { border:3px solid #9aa9c4; }
+.demo-word .word-card.is-ready { box-shadow:0 8px 0 #9cc6ee; }
+.demo-word .word-strike { left:28px; top:69px; width:88px; }
+.demo-word .word-back { left:718px; top:42px; width:154px; height:116px; border-width:4px; }
+.demo-word-cards { position:absolute; left:126px; top:246px; }
+.demo-word .demo-tap { width:104px; height:104px; border-width:5px; outline-width:8px; }
+.demo-word.is-idiom { transform:scale(.8); transform-origin:top center; top:24px; }
+.demo-word.is-idiom .demo-word-panel { top:96px; }
+.demo-word.is-idiom .demo-word-cards { top:328px; }
+.demo-meaning { text-align:center; font: 700 30px/38px var(--font-display); color:var(--color-text-primary); }
+.demo-meaning small { font:700 24px/30px var(--font-ui); color:var(--color-text-secondary); }
+.demo-clock { position:absolute; left:64px; top:0; width:792px; height:224px; border:4px solid #1b2a4a; border-radius:24px; box-shadow:0 8px 0 #9cc6ee; display:grid; place-items:center; font:700 128px/1 var(--font-timer); color:#1b2a4a; }
+.demo-clock.is-hidden { background:#23396b; color:white; font:40px/1 var(--font-display); }
+.demo-timer-button { position:absolute; left:262px; top:315px; width:396px; height:120px; display:grid; place-items:center; color:white; font:44px/1 var(--font-display); background:linear-gradient(#c9392e,#a92e25); border-radius:60px; box-shadow:0 8px 0 #7e1f17, 0 18px 24px #1b2a4a59; }
+.demo-timer-button.is-pressed { transform:translateY(6px); box-shadow:0 2px 0 #7e1f17; }
+.demo-timer-gloss { position:absolute; left:10%; top:8px; width:80%; height:16%; border-radius:999px; background:linear-gradient(#ffffff80,#fff0); }
+.demo-timer-button .demo-tap { left:87%; }
+.demo-machine { position:absolute; left:0; top:82px; width:920px; height:300px; }
+.demo-machine .slot-machine { left:0; top:0; transform:scale(.69); transform-origin:top left; }
+.demo-machine .slot-tap { left:882px; top:52px; }
+
+.explain-window:not(.is-finished) .demo-tap { animation: demo-tap-out var(--motion-demo-transition) var(--motion-demo-ease) var(--tap-hold) forwards; }
+@keyframes demo-tap-out { to { transform:translate(-50%,-50%) scale(1.65); opacity:0; } }
+@media (prefers-reduced-motion: reduce) { .explain-window .demo-tap { animation:none !important; } }
+
+.explain-window { opacity:1; transition:opacity var(--motion-demo-dissolve) ease-out; }
+.explain-window.is-dissolving { opacity:0; }
+.demo-timer-button { transition:transform var(--motion-demo-transition) var(--motion-demo-ease); }

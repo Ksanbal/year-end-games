@@ -35,9 +35,10 @@ describe("design tokens", () => {
 
 describe("motion tokens", () => {
   it("keeps press, screen, and shuffle timings in one place", () => {
-    expect(firstToken(tokensCss, "--motion-press-duration")).toBe("100ms");
+    expect(firstToken(tokensCss, "--motion-press-duration")).toBe("120ms");
+    expect(firstToken(tokensCss, "--motion-press-down-duration")).toBe("80ms");
     expect(firstToken(tokensCss, "--motion-press-scale")).toBe("0.96");
-    expect(firstToken(tokensCss, "--motion-press-ease")).toBe("ease-out");
+    expect(firstToken(tokensCss, "--motion-press-ease")).toBe("cubic-bezier(0, 0, 0.2, 1)");
     expect(firstToken(tokensCss, "--motion-screen-duration")).toBe("250ms");
     expect(firstToken(tokensCss, "--motion-screen-offset")).toBe("16px");
     expect(firstToken(tokensCss, "--motion-screen-ease")).toBe("ease-out");
