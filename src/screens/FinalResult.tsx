@@ -81,7 +81,7 @@ export function FinalResult(props: {
       <div className="text-ui" style={{ position: "absolute", left: 1440, top: 320, fontSize: 28, fontWeight: 700, lineHeight: "34px", color: "var(--color-text-secondary)" }}>
         {copy.destinysLever}
       </div>
-      <div className="text-ui" style={{ position: "absolute", left: 1660, top: 320, fontSize: 28, fontWeight: 700, lineHeight: "34px", color: "var(--color-text-secondary)" }}>
+      <div className="text-ui" style={{ position: "absolute", right: 150, top: 320, fontSize: 28, fontWeight: 700, lineHeight: "34px", color: "var(--color-text-secondary)" }}>
         {copy.colFinalCoins}
       </div>
       {standings.map((row, i) => (
@@ -127,7 +127,7 @@ function FinalRow(props: {
 }) {
   const y = 370 + props.index * 150;
   const highlight = props.standing.rank === 1;
-  const slot = formatSlotCell(props.state.slotOutcomes[props.team]);
+  const slot = formatSlotCell(props.state.slotOutcomes[props.team], props.state.previousSlotDelta?.[props.team]);
   return (
     <Card x={120} y={y} w={1680} h={130} radius={highlight ? 24 : 36} highlight={highlight} shadow>
       <div className="text-display" style={{ position: "absolute", left: 30, top: 36, fontSize: 48, lineHeight: "58px" }}>
@@ -170,7 +170,7 @@ function FinalRow(props: {
       </div>
       <div
         className="text-display"
-        style={{ position: "absolute", left: 1540, top: 34, fontSize: 52, lineHeight: "62px", color: "var(--color-text-accent)" }}
+        style={{ position: "absolute", right: 30, top: 34, fontSize: 52, lineHeight: "62px", color: "var(--color-text-accent)" }}
       >
         {props.standing.coins}
       </div>

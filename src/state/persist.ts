@@ -63,7 +63,8 @@ function parseAppState(value: unknown): AppState | null {
   const phase = parsePhase(value.phase);
   if (!teams || !coins || !rounds || slotOutcomes === null || !phase) return null;
   if (value.slotOrder !== null && !slotOrder) return null;
-  return { teams, coins, rounds, slotOrder, slotOutcomes, phase };
+  const previousSlotDelta = parseCoins(value.previousSlotDelta);
+  return { teams, coins, rounds, slotOrder, slotOutcomes, phase, ...(previousSlotDelta && { previousSlotDelta }) };
 }
 
 function parseTeams(value: unknown): [string, string, string] | null {
@@ -153,6 +154,7 @@ function parseSlotOutcome(value: unknown): SlotOutcome | null {
     typeof value.bet === "number" &&
     Number.isInteger(value.bet)
   ) {
+    if (value.kind === "win" && value.multiplier === 2) return { kind: "win", bet: value.bet, multiplier: 2 };
     return { kind: value.kind, bet: value.bet };
   }
   return null;
@@ -183,7 +185,8 @@ function parsePhase(value: unknown): Phase | null {
         ? { kind: value.kind, round: value.round, turnIndex: value.turnIndex }
         : null;
     case "slotTurn":
-      return isTurn(value.orderIndex) ? { kind: "slotTurn", orderIndex: value.orderIndex } : null;
+      if (!isTurn(value.orderIndex) || (value.lap !== undefined && !isTurn(value.lap))) return null;
+      return { kind: "slotTurn", orderIndex: value.orderIndex, lap: value.lap ?? 0 };
     case "final":
       return typeof value.confirmNewGame === "boolean"
         ? { kind: "final", confirmNewGame: value.confirmNewGame }

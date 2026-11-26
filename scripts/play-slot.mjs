@@ -134,18 +134,13 @@ await page.evaluate(() => {
 });
 await new Promise((r) => setTimeout(r, 250));
 
-// Third team (2팀, 190). Skip, then 최종 결과 공개.
-await page.evaluate(() => {
-  const buttons = [...document.querySelectorAll("button")];
-  buttons.find((b) => b.textContent === "건너뛰기")?.click();
-});
-await new Promise((r) => setTimeout(r, 200));
-await shot("phase-team3-skip.png");
-await page.evaluate(() => {
-  const buttons = [...document.querySelectorAll("button")];
-  buttons.find((b) => b.textContent === "최종 결과 공개")?.click();
-});
-await new Promise((r) => setTimeout(r, 300));
+// Finish the seven remaining turns in team order.
+for (let turn = 3; turn <= 9; turn++) {
+  await page.locator('::-p-text(건너뛰기)').click();
+  if (turn === 3) await shot("phase-team3-skip.png");
+  await page.locator(turn === 9 ? '::-p-text(최종 결과 공개)' : '::-p-text(다음 팀)').click();
+}
+await page.waitForSelector(".final-title-row");
 const finalText = await page.evaluate(() => document.body.innerText);
 if (!finalText.includes("최종 결과") && !finalText.includes("최종 1등")) {
   throw new Error(`expected final result, got: ${finalText.slice(0, 200)}`);

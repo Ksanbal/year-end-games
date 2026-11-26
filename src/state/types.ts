@@ -21,7 +21,7 @@ export type TurnResult = ScoreResult | TimeResult;
 export type SlotOutcome =
   | { kind: "skip" }
   | { kind: "lose"; bet: number }
-  | { kind: "win"; bet: number };
+  | { kind: "win"; bet: number; multiplier?: 2 };
 
 export type Phase =
   | { kind: "opening" }
@@ -36,7 +36,7 @@ export type Phase =
   | { kind: "roundResult"; round: RoundNumber }
   | { kind: "slotExplain" }
   | { kind: "slotIntro" }
-  | { kind: "slotTurn"; orderIndex: TurnIndex }
+  | { kind: "slotTurn"; orderIndex: TurnIndex; lap?: TurnIndex }
   | { kind: "slotDone" }
   | { kind: "final"; confirmNewGame: boolean };
 
@@ -50,6 +50,7 @@ export type AppState = {
   coins: [number, number, number];
   rounds: Partial<Record<RoundNumber, RoundRecord>>;
   slotOrder: [TeamIndex, TeamIndex, TeamIndex] | null;
+  previousSlotDelta?: [number, number, number];
   slotOutcomes: [SlotOutcome | null, SlotOutcome | null, SlotOutcome | null];
   phase: Phase;
 };

@@ -14,8 +14,10 @@ import "../games/game2/word.css";
 import "../games/slot/slot.css";
 import "./explain.css";
 
+import { MineIcon } from "../games/game1/MineIcon.tsx";
+
 type Demo = RoundNumber | "slot";
-type Frame = 1 | 2 | 3 | 4;
+type Frame = 1 | 2 | 3 | 4 | 5 | 6;
 export function staticFrameFor(id: Demo): Frame {
   return id === "slot" ? 1 : id === 2 || id === 3 ? 2 : 3;
 }
@@ -41,15 +43,16 @@ function useDemoFrame(id: Demo): { frame: Frame; reduced: boolean; finished: boo
     const transition = ms("--motion-demo-transition", 350);
     const delays = [1, 2, 3].map((n, i) => ms(`--motion-demo-hold-${n}`, [700, 800, 800][i]) + transition);
     delays.push(ms("--motion-demo-hold-4", 1200));
+    if (id === 1) delays.push(delays[0], delays[3]);
     let inDissolve = false;
     const advance = () => {
-      if (step === 4 && !inDissolve) {
+      if (step === delays.length && !inDissolve) {
         inDissolve = true;
         setDissolving(true);
         timer = window.setTimeout(advance, ms("--motion-demo-dissolve", 300));
         return;
       }
-      if (step === 4) {
+      if (step === delays.length) {
         inDissolve = false;
         setDissolving(false);
         cycle += 1;
@@ -73,7 +76,7 @@ export function GameExplain({ round, onNext }: { round: Demo; onNext: () => void
     <div className="explain-title"><Coin size={58} style={{ position: "relative" }} /><span>{round === "slot" ? copy.destinysLever : introGameTitle(round)}</span><Coin size={58} style={{ position: "relative" }} /></div>
     <div className="explain-line">{line}</div>
     <Card x={460} y={290} w={1000} h={500} radius={36} shadow>
-      <div className={`explain-window ${finished ? "is-finished" : ""} ${dissolving ? "is-dissolving" : ""}`} aria-hidden="true" style={{ "--tap-hold": `var(--motion-demo-hold-${frame})` } as CSSProperties}>
+      <div className={`explain-window ${finished ? "is-finished" : ""} ${dissolving ? "is-dissolving" : ""}`} aria-hidden="true" style={{ "--tap-hold": `var(--motion-demo-hold-${frame === 5 ? 1 : frame === 6 ? 4 : frame})` } as CSSProperties}>
         {round === 1 ? <MineDemo frame={frame} /> : round === 2 || round === 3 ? <WordDemo id={round} frame={frame} /> : round === 4 || round === 5 ? <TimerDemo id={round} frame={frame} /> : <SlotDemo frame={frame} reduced={reduced} finished={finished} />}
         <span className="explain-demo-status" data-frame={frame} data-reduced={reduced} data-finished={finished} />
       </div>
@@ -85,8 +88,9 @@ export function GameExplain({ round, onNext }: { round: Demo; onNext: () => void
 function Tap({ className = "" }: { className?: string }) { return <span className={`demo-tap ${className}`} />; }
 function MineDemo({ frame }: { frame: Frame }) {
   return <div className="demo-mine">{Array.from({ length: 25 }, (_, i) => {
-    const open = (i === 7 && frame >= 2) || (i === 16 && frame === 4);
-    return <div key={i} className={`mine-tile ${open ? "is-open" : "is-closed"}`} style={{ left: (i % 5) * 89, top: Math.floor(i / 5) * 89 }}><Tap className={(frame === 1 && i === 7) || (frame === 3 && i === 16) ? "is-visible" : ""} /></div>;
+    const open = (i === 7 && frame >= 2) || (i === 16 && frame >= 4);
+    const exploded = i === 12 && frame === 6;
+    return <div key={i} className={`mine-tile ${exploded ? "is-exploded" : open ? "is-open" : "is-closed"}`} style={{ left: (i % 5) * 89, top: Math.floor(i / 5) * 89 }}>{exploded && <MineIcon />}<Tap className={(frame === 1 && i === 7) || (frame === 3 && i === 16) || (frame === 5 && i === 12) ? "is-visible" : ""} /></div>;
   })}</div>;
 }
 function WordDemo({ id, frame }: { id: 2 | 3; frame: Frame }) {
@@ -96,7 +100,7 @@ function WordDemo({ id, frame }: { id: 2 | 3; frame: Frame }) {
   const tapped = frame === 1 ? answer[0] : frame === 2 ? answer[1] : frame === 3 ? answer[2] : answer[3];
   return <div className={`demo-word ${id === 3 ? "is-idiom" : ""}`}>
     {id === 3 ? <div className="demo-meaning"><small>뜻풀이</small><br />{IDIOMS.find(item => item.answer === "고진감래")?.meaning}</div> : null}
-    <div className="demo-word-panel">{answer.map((glyph, i) => <div key={i} className={`word-slot ${i < filled ? "is-filled" : "is-empty"}`} style={{ left: 46 + i * 166, top: 27 }}><span className="demo-slot-glyph">{glyph}</span></div>)}<div className="word-back">←</div></div>
+    <div className="demo-word-panel">{answer.map((glyph, i) => <div key={i} className={`word-slot ${i < filled ? "is-filled" : "is-empty"}`} style={{ left: 46 + i * 166, top: 27 }}><span className="demo-slot-glyph">{glyph}</span></div>)}<div className="word-back"><svg viewBox="0 0 32 32" width="48" height="48" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M26 16H6m9-9-9 9 9 9" /></svg></div></div>
     <div className="demo-word-cards">{cards.map((glyph, i) => <div key={glyph} className={`word-card ${answer.slice(0, filled).includes(glyph) ? "is-used" : "is-ready"}`} style={{ left: i * 174, top: 0 }}>{glyph}<span className="word-strike" /><Tap className={glyph === tapped ? "is-visible" : ""} /></div>)}</div>
   </div>;
 }

@@ -268,7 +268,7 @@ function longAllTieCampaign(): AppState {
 
 function slotTurnExample(orderIndex: 0 | 1 | 2): AppState {
   const base = exampleCampaign("intro");
-  return { ...base, phase: { kind: "slotTurn", orderIndex } };
+  return { ...base, phase: { kind: "slotTurn", orderIndex, lap: orderIndex === 2 ? 2 : 0 } };
 }
 
 function rankedRound(

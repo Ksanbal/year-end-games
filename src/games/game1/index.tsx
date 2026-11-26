@@ -9,7 +9,7 @@ import { MixedTitle, ResultOverlay } from "./ResultOverlay.tsx";
 import "./game1.css";
 
 const PITCH = 168;
-const ORIGIN_X = 628;
+const ORIGIN_X = (1920 - ((SIZE - 1) * PITCH + 150)) / 2;
 const ORIGIN_Y = 170;
 
 const gameCopy = {

@@ -184,6 +184,7 @@ function GameScreen(props: {
           coins: state.coins,
           team,
           orderIndex: phase.orderIndex,
+          lap: phase.lap ?? 0,
         },
         onFinish: (outcome) => dispatch({ type: "FINISH_SLOT_TURN", outcome }),
       });

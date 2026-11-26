@@ -29,7 +29,7 @@ function record(name, data) {
   console.log(JSON.stringify({ name, ...data }, null, 2));
 }
 
-function slotState({ coins, order, idx, outcomes, teams }) {
+function slotState({ coins, order, idx, outcomes, teams, lap = 0 }) {
   return {
     version: 1,
     state: {
@@ -38,7 +38,7 @@ function slotState({ coins, order, idx, outcomes, teams }) {
       rounds: {},
       slotOrder: order,
       slotOutcomes: outcomes,
-      phase: { kind: "slotTurn", orderIndex: idx },
+      phase: { kind: "slotTurn", orderIndex: idx, lap },
     },
   };
 }
@@ -193,6 +193,7 @@ async function probeAutoSkip() {
   await seedAndContinue(
     slotState({
       coins: [120, 0, 80],
+      lap: 2,
       order: [2, 0, 1],
       idx: 2,
       outcomes: [{ kind: "skip" }, null, { kind: "skip" }],

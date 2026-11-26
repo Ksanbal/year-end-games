@@ -69,13 +69,11 @@ function SlotDone(props: { onRevealFinal: () => void }) {
   return null;
 }
 
-function SlotPlay(props: {
-  context: { names: [string, string, string]; coins: [number, number, number]; team: 0 | 1 | 2; orderIndex: 0 | 1 | 2 };
-  onFinish: (outcome: { kind: "skip" } | { kind: "lose"; bet: number } | { kind: "win"; bet: number }) => void;
-}) {
+function SlotPlay(props: Parameters<SlotModule["Play"]>[0]) {
   const fixture = useMemo(() => readSlotFixture(), []);
   const coins = props.context.coins[props.context.team];
-  const lastTeam = props.context.orderIndex === 2;
+  const lap = props.context.lap ?? 0;
+  const lastTeam = props.context.orderIndex === 2 && lap === 2;
   const [view, setView] = useState<SlotView>(() => initialView(coins, fixture));
   const [reducedMotion, setReducedMotion] = useState(prefersReducedMotion);
   const [leverPull, setLeverPull] = useState(() => (fixture?.leverDown ? LEVER_MAX_PX : 0));
@@ -182,7 +180,7 @@ function SlotPlay(props: {
   return (
     <>
       <div className="slot-kicker">{copy.destinysLever}</div>
-      <div className="slot-kicker-meta">{slotCopy.teamTurn((props.context.orderIndex + 1) as 1 | 2 | 3)}</div>
+      <div className="slot-kicker-meta">{slotCopy.teamTurn((props.context.orderIndex + 1) as 1 | 2 | 3)} · {lap + 1} / 3회</div>
       <TeamName
         name={props.context.names[props.context.team]}
         width={256}
@@ -393,7 +391,7 @@ function Result(props: {
   return (
     <>
       {outcome.kind === "win" ? (
-        <div className="slot-headline is-win">{slotCopy.jackpot(outcome.bet * 10)}</div>
+        <div className="slot-headline is-win">{outcome.multiplier === 2 ? `${props.view.stops[0] === "cherry" ? "체리" : "종"} 셋! ${outcome.bet * 2}코인을 받았어요` : slotCopy.jackpot(after - props.startCoins + outcome.bet)}</div>
       ) : null}
       {outcome.kind === "lose" ? <div className="slot-headline">{slotCopy.lost(outcome.bet)}</div> : null}
       {outcome.kind === "skip" ? (

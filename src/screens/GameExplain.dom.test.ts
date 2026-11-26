@@ -28,7 +28,7 @@ it("renders explanation counts from game constants", () => {
   const view = render(createElement(GameExplain, { round: 1, onNext: () => {} }));
   expect(view.container.querySelector(".explain-line")?.textContent).toBe(`지뢰 ${MINE_COUNT}개 · 한 번 누를 때 타일 하나 · 열린 타일마다 1점`);
   view.rerender(createElement(GameExplain, { round: "slot", onNext: () => {} }));
-  expect(view.container.querySelector(".explain-line")?.textContent).toBe(`777이 나오면 코인 ${SLOT_PAYOUT_MULTIPLIER}배를 얻을 수 있어요`);
+  expect(view.container.querySelector(".explain-line")?.textContent).toBe(`팀당 3회 · 777은 ${SLOT_PAYOUT_MULTIPLIER}배 · 체리 셋이나 종 셋은 2배`);
 });
 
 it("spins the demo reels during the loop and keeps the machine frame visible", () => {

@@ -1,5 +1,5 @@
 import { copy } from "./copy.ts";
-import { timeDeltaMs } from "./state/scoring.ts";
+import { applySlotOutcome, timeDeltaMs } from "./state/scoring.ts";
 import type { SlotOutcome, TurnResult } from "./state/types.ts";
 import type { Standing } from "./state/scoring.ts";
 
@@ -12,11 +12,12 @@ export function formatRoundCell(standing: Standing): string {
   return `${copy.rank(standing.rank, standing.tied)} ${standing.coins}`;
 }
 
-export function formatSlotCell(outcome: SlotOutcome | null): string {
+export function formatSlotCell(outcome: SlotOutcome | null, previousDelta?: number): string {
   if (!outcome) return "";
-  if (outcome.kind === "skip") return copy.slotSkip;
-  if (outcome.kind === "win") return copy.slotGain(outcome.bet * 9);
-  return copy.slotLoss(outcome.bet);
+  if (previousDelta === undefined && outcome.kind === "skip") return copy.slotSkip;
+  const delta = applySlotOutcome(previousDelta ?? 0, outcome);
+  if (delta === 0) return "0코인";
+  return delta > 0 ? copy.slotGain(delta) : copy.slotLoss(-delta);
 }
 
 export function minusSign(text: string): { font: "display" | "ui"; text: string }[] {

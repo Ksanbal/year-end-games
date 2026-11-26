@@ -1,3 +1,4 @@
+import { applySlotOutcome } from "../../state/scoring.ts";
 /** Pure rules for 운명의 레버: bets, lever threshold, reel odds, and payout. */
 
 export const SYMBOLS = ["seven", "cherry", "bell"] as const;
@@ -53,10 +54,7 @@ export type SlotView =
   | { kind: "spinning"; bet: number; stops: ReelStops }
   | { kind: "result"; outcome: SlotPlayOutcome; stops: [ReelSymbol | "dash", ReelSymbol | "dash", ReelSymbol | "dash"] };
 
-export type SlotPlayOutcome =
-  | { kind: "skip" }
-  | { kind: "lose"; bet: number }
-  | { kind: "win"; bet: number };
+export type SlotPlayOutcome = import("../../state/types.ts").SlotOutcome;
 
 export function clampBet(value: number, coins: number): number {
   if (coins < 1) return 0;
@@ -139,14 +137,11 @@ export function isJackpot(stops: ReelStops): boolean {
 
 export function outcomeForStops(bet: number, stops: ReelStops): SlotPlayOutcome {
   if (isJackpot(stops)) return { kind: "win", bet };
+  if (stops.every(symbol => symbol === stops[0])) return { kind: "win", bet, multiplier: 2 };
   return { kind: "lose", bet };
 }
 
-export function coinsAfter(start: number, outcome: SlotPlayOutcome): number {
-  if (outcome.kind === "skip") return start;
-  if (outcome.kind === "lose") return start - outcome.bet;
-  return start - outcome.bet + outcome.bet * WIN_PAYOUT_MULTIPLIER;
-}
+export const coinsAfter = applySlotOutcome;
 
 /** Coins shown in the top-right. The bet is deducted once the reels are spinning. */
 export function displayCoins(start: number, view: SlotView): number {

@@ -180,6 +180,12 @@ describe("slot and final", () => {
     const thirdCoins = state.coins[thirdTeam];
     state = reduce(state, { type: "FINISH_SLOT_TURN", outcome: { kind: "skip" } });
     expect(state.coins[thirdTeam]).toBe(thirdCoins);
+    for (const lap of [1, 2]) {
+      for (const orderIndex of [0, 1, 2]) {
+        expect(state.phase).toEqual({ kind: "slotTurn", orderIndex, lap });
+        state = reduce(state, { type: "FINISH_SLOT_TURN", outcome: { kind: "skip" } });
+      }
+    }
     expect(state.phase).toEqual({ kind: "slotDone" });
 
     state = reduce(state, { type: "REVEAL_FINAL" });

@@ -13,7 +13,9 @@
 .demo-word .word-card.is-used { border:3px solid #9aa9c4; }
 .demo-word .word-card.is-ready { box-shadow:0 8px 0 #9cc6ee; }
 .demo-word .word-strike { left:28px; top:69px; width:88px; }
-.demo-word .word-back { left:718px; top:42px; width:154px; height:115px; border-radius:57.5px; border-width:4px; }
+.demo-mine .mine-tile.is-exploded { box-shadow:none; }
+.demo-mine .is-exploded svg { width:48px; height:48px; }
+.demo-word .word-back { display:grid; place-items:center; left:718px; top:42px; width:154px; height:115px; border-radius:57.5px; border-width:4px; }
 .demo-word-cards { position:absolute; left:126px; top:246px; }
 .demo-word .demo-tap { width:104px; height:104px; border-width:5px; outline-width:8px; }
 .demo-word.is-idiom { transform:scale(.8); transform-origin:top center; top:24px; }
