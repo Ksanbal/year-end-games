@@ -22,6 +22,7 @@ import type { TeamIndex } from "./state/types.ts";
 import { Canvas } from "./ui/Canvas.tsx";
 import { Clouds } from "./ui/Clouds.tsx";
 import { Sky } from "./ui/Sky.tsx";
+import { ScreenTransition } from "./ui/ScreenTransition.tsx";
 import "./ui/chrome.css";
 import "./styles/screens.css";
 
@@ -53,9 +54,9 @@ export default function App() {
     <Canvas>
       <Sky />
       <Clouds />
-      <div className="screen" key={recovery ? "recovery" : phaseKey(phase)}>
+      <ScreenTransition screenKey={recovery ? "recovery" : phaseKey(phase)}>
         {body}
-      </div>
+      </ScreenTransition>
     </Canvas>
   );
 }

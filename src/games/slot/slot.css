@@ -647,3 +647,10 @@
     animation: none !important;
   }
 }
+
+.slot-owned > .coin.coin-gain { animation:slot-coin-gain var(--motion-coin-gain) var(--motion-coin-gain-ease); }
+.slot-owned > .coin.coin-loss { animation:slot-coin-loss var(--motion-coin-loss) var(--motion-coin-loss-ease); }
+@keyframes slot-coin-gain { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+@keyframes slot-coin-loss { from { opacity:1; transform:translateY(0); } to { opacity:0; transform:translateY(8px); } }
+@media (prefers-reduced-motion: reduce) { .slot-owned > .coin.coin-gain, .slot-owned > .coin.coin-loss, .slot-sub.coin-change { animation:slot-coin-fade var(--motion-coin-reduced) ease-out; } }
+@keyframes slot-coin-fade { from { opacity:0; } to { opacity:1; } }

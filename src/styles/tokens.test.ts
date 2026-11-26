@@ -39,9 +39,8 @@ describe("motion tokens", () => {
     expect(firstToken(tokensCss, "--motion-press-down-duration")).toBe("80ms");
     expect(firstToken(tokensCss, "--motion-press-scale")).toBe("0.96");
     expect(firstToken(tokensCss, "--motion-press-ease")).toBe("cubic-bezier(0, 0, 0.2, 1)");
-    expect(firstToken(tokensCss, "--motion-screen-duration")).toBe("250ms");
-    expect(firstToken(tokensCss, "--motion-screen-offset")).toBe("16px");
-    expect(firstToken(tokensCss, "--motion-screen-ease")).toBe("ease-out");
+    expect(firstToken(tokensCss, "--motion-screen-crossfade")).toBe("150ms");
+    expect(firstToken(tokensCss, "--motion-screen-ease")).toBe("cubic-bezier(0, 0, 0.58, 1)");
     expect(firstToken(tokensCss, "--motion-shuffle-duration")).toBe("120ms");
     expect(firstToken(tokensCss, "--motion-shuffle-stagger")).toBe("80ms");
     expect(firstToken(tokensCss, "--motion-shuffle-ease")).toBe("ease-in-out");
@@ -51,12 +50,11 @@ describe("motion tokens", () => {
     const reduced = reducedBlock(tokensCss);
     expect(firstToken(reduced, "--motion-press-duration")).toBe("0ms");
     expect(firstToken(reduced, "--motion-press-scale")).toBe("1");
-    expect(firstToken(reduced, "--motion-screen-duration")).toBe("0ms");
-    expect(firstToken(reduced, "--motion-screen-offset")).toBe("0px");
+    expect(firstToken(reduced, "--motion-screen-crossfade")).toBe("0ms");
     expect(firstToken(reduced, "--motion-shuffle-duration")).toBe("0ms");
     expect(firstToken(reduced, "--motion-shuffle-stagger")).toBe("0ms");
 
-    expect(reducedBlock(canvasCss)).toMatch(/\.screen\s*\{[^}]*animation:\s*none/);
+    expect(canvasCss).toContain("var(--motion-screen-crossfade)");
     expect(reducedBlock(screensCss)).toMatch(/animation:\s*none/);
     expect(chromeCss).toContain("var(--motion-press-duration)");
     expect(chromeCss).toContain("var(--motion-press-scale)");

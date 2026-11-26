@@ -74,7 +74,7 @@ export function GameExplain({ round, onNext }: { round: Demo; onNext: () => void
     <div className="explain-line">{line}</div>
     <Card x={460} y={290} w={1000} h={500} radius={36} shadow>
       <div className={`explain-window ${finished ? "is-finished" : ""} ${dissolving ? "is-dissolving" : ""}`} aria-hidden="true" style={{ "--tap-hold": `var(--motion-demo-hold-${frame})` } as CSSProperties}>
-        {round === 1 ? <MineDemo frame={frame} /> : round === 2 || round === 3 ? <WordDemo id={round} frame={frame} /> : round === 4 || round === 5 ? <TimerDemo id={round} frame={frame} /> : <SlotDemo frame={frame} />}
+        {round === 1 ? <MineDemo frame={frame} /> : round === 2 || round === 3 ? <WordDemo id={round} frame={frame} /> : round === 4 || round === 5 ? <TimerDemo id={round} frame={frame} /> : <SlotDemo frame={frame} reduced={reduced} finished={finished} />}
         <span className="explain-demo-status" data-frame={frame} data-reduced={reduced} data-finished={finished} />
       </div>
     </Card>
@@ -86,7 +86,7 @@ function Tap({ className = "" }: { className?: string }) { return <span classNam
 function MineDemo({ frame }: { frame: Frame }) {
   return <div className="demo-mine">{Array.from({ length: 25 }, (_, i) => {
     const open = (i === 7 && frame >= 2) || (i === 16 && frame === 4);
-    return <div key={i} className={`mine-tile ${open ? "is-open is-n1" : "is-closed"}`} style={{ left: (i % 5) * 89, top: Math.floor(i / 5) * 89 }}>{open ? "1" : null}{(frame === 1 && i === 7) || (frame === 3 && i === 16) ? <Tap /> : null}</div>;
+    return <div key={i} className={`mine-tile ${open ? "is-open is-n1" : "is-closed"}`} style={{ left: (i % 5) * 89, top: Math.floor(i / 5) * 89 }}><span className="demo-mine-number">1</span><Tap className={(frame === 1 && i === 7) || (frame === 3 && i === 16) ? "is-visible" : ""} /></div>;
   })}</div>;
 }
 function WordDemo({ id, frame }: { id: 2 | 3; frame: Frame }) {
@@ -96,8 +96,8 @@ function WordDemo({ id, frame }: { id: 2 | 3; frame: Frame }) {
   const tapped = frame === 1 ? answer[0] : frame === 2 ? answer[1] : frame === 3 ? answer[2] : answer[3];
   return <div className={`demo-word ${id === 3 ? "is-idiom" : ""}`}>
     {id === 3 ? <div className="demo-meaning"><small>뜻풀이</small><br />{IDIOMS.find(item => item.answer === "고진감래")?.meaning}</div> : null}
-    <div className="demo-word-panel">{answer.map((glyph, i) => <div key={i} className={`word-slot ${i < filled ? "is-filled" : "is-empty"}`} style={{ left: 46 + i * 166, top: 27 }}>{i < filled ? glyph : null}</div>)}<div className="word-back">←</div></div>
-    <div className="demo-word-cards">{cards.map((glyph, i) => <div key={glyph} className={`word-card ${answer.slice(0, filled).includes(glyph) ? "is-used" : "is-ready"}`} style={{ left: i * 174, top: 0 }}>{glyph}{answer.slice(0, filled).includes(glyph) ? <span className="word-strike" /> : null}{glyph === tapped ? <Tap /> : null}</div>)}</div>
+    <div className="demo-word-panel">{answer.map((glyph, i) => <div key={i} className={`word-slot ${i < filled ? "is-filled" : "is-empty"}`} style={{ left: 46 + i * 166, top: 27 }}><span className="demo-slot-glyph">{glyph}</span></div>)}<div className="word-back">←</div></div>
+    <div className="demo-word-cards">{cards.map((glyph, i) => <div key={glyph} className={`word-card ${answer.slice(0, filled).includes(glyph) ? "is-used" : "is-ready"}`} style={{ left: i * 174, top: 0 }}>{glyph}<span className="word-strike" /><Tap className={glyph === tapped ? "is-visible" : ""} /></div>)}</div>
   </div>;
 }
 function TimerDemo({ id, frame }: { id: 4 | 5; frame: Frame }) {
@@ -109,9 +109,9 @@ function TimerDemo({ id, frame }: { id: 4 | 5; frame: Frame }) {
     return () => window.clearInterval(interval);
   }, [frame]);
   const hidden = id === 5 && frame !== 4;
-  return <><div className={`demo-clock ${hidden ? "is-hidden" : ""}`}>{hidden ? "숫자는 가려져 있어요" : frame === 1 ? "0.000" : frame === 2 ? count.toFixed(3) : "10.137"}</div><div className={`demo-timer-button ${frame === 3 ? "is-pressed" : ""}`}><PrimaryButton label={frame === 1 ? copy.start : "멈춤"} onClick={() => {}} style={{ left: 0, top: 0, width: 396, height: 120, fontSize: 44 }} />{frame === 1 || frame === 3 ? <Tap /> : null}</div></>;
+  return <><div className={`demo-clock ${hidden ? "is-hidden" : ""}`}>{hidden ? "숫자는 가려져 있어요" : frame === 1 ? "0.000" : frame === 2 ? count.toFixed(3) : "10.137"}</div><div className={`demo-timer-button ${frame === 3 ? "is-pressed" : ""}`}><PrimaryButton label={frame === 1 ? copy.start : "멈춤"} onClick={() => {}} style={{ left: 0, top: 0, width: 396, height: 120, fontSize: 44 }} /><Tap className={frame === 1 || frame === 3 ? "is-visible" : ""} /></div></>;
 }
-function SlotDemo({ frame }: { frame: Frame }) {
+function SlotDemo({ frame, reduced, finished }: { frame: Frame; reduced: boolean; finished: boolean }) {
   const noop = () => {};
-  return <div className="demo-machine"><Machine stops={["seven", "cherry", "bell"]} mode={frame === 2 || frame === 3 ? "spinning" : "idle"} frozenSpin={frame === 2 ? "all" : frame === 3 ? "left" : undefined} reducedMotion leverPull={frame === 2 ? 168 : 0} leverLive={false} showHints hintsAnimated={false} onLeverSpin={noop} onLeverPullChange={noop} onLeverPress={noop} onFailedPull={noop} />{frame === 1 ? <Tap className="slot-tap" /> : null}</div>;
+  return <div className="demo-machine"><Machine stops={["seven", "cherry", "bell"]} mode={!reduced && !finished && (frame === 2 || frame === 3) ? "spinning" : "idle"} reducedMotion={reduced} leverPull={frame === 2 ? 168 : 0} leverLive={false} showHints hintsAnimated={false} onLeverSpin={noop} onLeverPullChange={noop} onLeverPress={noop} onFailedPull={noop} /><Tap className={`slot-tap ${frame === 1 ? "is-visible" : ""}`} /></div>;
 }

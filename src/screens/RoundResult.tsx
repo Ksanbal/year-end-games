@@ -5,6 +5,7 @@ import { headerGameTitle } from "../games/catalog.ts";
 import { formatTurnScore } from "../format.ts";
 import { rankTeams, type Standing } from "../state/scoring.ts";
 import type { RoundRecord, RoundNumber } from "../state/types.ts";
+import { AnimatedCoins } from "../ui/AnimatedCoins.tsx";
 import { Card } from "../ui/Card.tsx";
 import { Header } from "../ui/Header.tsx";
 import { PrimaryButton } from "../ui/PrimaryButton.tsx";
@@ -77,10 +78,10 @@ function ResultRow(props: { index: number; standing: Standing; name: string; coi
         {formatTurnScore(props.standing.result)}
       </div>
       <div className="text-display" style={{ position: "absolute", left: 920, top: 36, fontSize: 48, lineHeight: "58px", color: "var(--color-text-accent)" }}>
-        {copy.coinsDelta(props.standing.coins)}
+        <AnimatedCoins from={0} to={props.standing.coins} prefix="+" />
       </div>
       <div className="text-display" style={{ position: "absolute", left: 1180, top: 40, fontSize: 44, lineHeight: "53px" }}>
-        {props.coins}
+        <AnimatedCoins from={props.coins - props.standing.coins} to={props.coins} />
       </div>
     </Card>
   );

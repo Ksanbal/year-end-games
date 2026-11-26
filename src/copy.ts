@@ -1,3 +1,6 @@
+import { MINE_COUNT } from "./games/game1/board.ts";
+import { SLOT_PAYOUT_MULTIPLIER } from "./games/catalog.ts";
+
 /** On-screen Korean copy taken from the final design frames. Do not invent strings. */
 export const copy = {
   appTitle: "연말간담회 게임",
@@ -11,12 +14,12 @@ export const copy = {
   roundOfFive: (n: number) => `라운드 ${n} / 5`,
   startRound: "라운드 시작",
   threeTeamsPlayOnce: "세 팀이 한 번씩 플레이해요.",
-  explainMine: "지뢰 5개 · 한 번 누를 때 타일 하나 · 열린 타일마다 1점",
+  explainMine: `지뢰 ${MINE_COUNT}개 · 한 번 누를 때 타일 하나 · 열린 타일마다 1점`,
   explainCountry: "카드를 눌러 나라 이름을 완성하세요 (띄어쓰기 없이)",
   explainIdiom: "1분 동안 사자성어를 최대한 많이 맞혀요.",
   explainTimer: "10초에 가장 가깝게 멈추면 이겨요.",
   explainHidden: "시작부터 끝까지 숫자를 보여 주지 않아요",
-  explainSlot: "777이 나오면 코인 10배를 얻을 수 있어요",
+  explainSlot: `777이 나오면 코인 ${SLOT_PAYOUT_MULTIPLIER}배를 얻을 수 있어요`,
   goPlayGame: "게임하러 가기",
   shuffling: "차례를 섞고 있어요",
   shuffleDone: "차례가 정해졌어요",

@@ -198,3 +198,10 @@
 @keyframes result-row-reveal { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
 @media (prefers-reduced-motion: reduce) { .result-row-reveal { animation:result-table-fade var(--motion-result-reveal) ease-out both !important; } }
 @keyframes result-table-fade { from { opacity:0; } to { opacity:1; } }
+
+.animated-coins { display:inline-block; animation:coin-gain var(--motion-coin-gain) var(--motion-coin-gain-ease) both; }
+.animated-coins.is-loss { animation:coin-loss var(--motion-coin-loss) var(--motion-coin-loss-ease) both; }
+@keyframes coin-gain { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+@keyframes coin-loss { from { opacity:1; transform:translateY(0); } to { opacity:0; transform:translateY(8px); } }
+@keyframes coin-fade { from { opacity:0; } to { opacity:1; } }
+@media (prefers-reduced-motion: reduce) { .animated-coins, .animated-coins.is-loss { animation:coin-fade var(--motion-coin-reduced) ease-out both; } }

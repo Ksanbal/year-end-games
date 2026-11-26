@@ -13,7 +13,7 @@
 .demo-word .word-card.is-used { border:3px solid #9aa9c4; }
 .demo-word .word-card.is-ready { box-shadow:0 8px 0 #9cc6ee; }
 .demo-word .word-strike { left:28px; top:69px; width:88px; }
-.demo-word .word-back { left:718px; top:42px; width:154px; height:116px; border-width:4px; }
+.demo-word .word-back { left:718px; top:42px; width:154px; height:115px; border-radius:57.5px; border-width:4px; }
 .demo-word-cards { position:absolute; left:126px; top:246px; }
 .demo-word .demo-tap { width:104px; height:104px; border-width:5px; outline-width:8px; }
 .demo-word.is-idiom { transform:scale(.8); transform-origin:top center; top:24px; }
@@ -31,10 +31,22 @@
 .demo-machine .slot-machine { left:0; top:0; transform:scale(.69); transform-origin:top left; }
 .demo-machine .slot-tap { left:882px; top:52px; }
 
-.explain-window:not(.is-finished) .demo-tap { animation: demo-tap-out var(--motion-demo-transition) var(--motion-demo-ease) var(--tap-hold) forwards; }
+.explain-window:not(.is-finished) .demo-tap.is-visible { animation: demo-tap-out var(--motion-demo-transition) var(--motion-demo-ease) var(--tap-hold) forwards; }
 @keyframes demo-tap-out { to { transform:translate(-50%,-50%) scale(1.65); opacity:0; } }
 @media (prefers-reduced-motion: reduce) { .explain-window .demo-tap { animation:none !important; } }
 
 .explain-window { opacity:1; transition:opacity var(--motion-demo-dissolve) ease-out; }
 .explain-window.is-dissolving { opacity:0; }
 .demo-timer-button { transition:transform var(--motion-demo-transition) var(--motion-demo-ease); }
+
+.explain-window .demo-tap { opacity:0; transition:opacity var(--motion-demo-transition) var(--motion-demo-ease), transform var(--motion-demo-transition) var(--motion-demo-ease); }
+.explain-window .demo-tap.is-visible { opacity:1; }
+.demo-mine .mine-tile, .demo-word .word-slot, .demo-word .word-card { transition:background-color var(--motion-demo-transition) var(--motion-demo-ease), border-color var(--motion-demo-transition) var(--motion-demo-ease), color var(--motion-demo-transition) var(--motion-demo-ease), box-shadow var(--motion-demo-transition) var(--motion-demo-ease), transform var(--motion-demo-transition) var(--motion-demo-ease); }
+.demo-mine-number, .demo-slot-glyph { opacity:0; transform:scale(.75); transition:opacity var(--motion-demo-transition) var(--motion-demo-ease), transform var(--motion-demo-transition) var(--motion-demo-ease); }
+.is-open .demo-mine-number, .is-filled .demo-slot-glyph { opacity:1; transform:scale(1); }
+.demo-word .word-strike { position:absolute; left:28px; top:69px; width:88px; height:6px; border-radius:3px; background:#9aa9c4; opacity:0; transform:scaleX(0); transition:opacity var(--motion-demo-transition) var(--motion-demo-ease), transform var(--motion-demo-transition) var(--motion-demo-ease); }
+.demo-word .is-used .word-strike { opacity:1; transform:scaleX(1); }
+.demo-machine .slot-lever-rod, .demo-machine .slot-lever-knob { transition:top var(--motion-demo-transition) var(--motion-demo-ease), height var(--motion-demo-transition) var(--motion-demo-ease); }
+
+.demo-mine .mine-tile.is-open { transform:scale(.96); }
+.demo-word .word-card.is-used { transform:scale(.96); }
