@@ -7,11 +7,11 @@ import {
   LEVER_MAX_PX,
   LEVER_RETURN_AFTER_SPIN_MS,
   LEVER_SPRING_MS,
-  REEL_SPIN_PX_PER_SEC,
+  SYMBOLS,
+  reelOffset,
   REEL_STOP_EASE_MS,
   REEL_STRIP_LOOP,
   REEL_STRIP_PITCH,
-  wrapReelOffset,
   allReelsSettledAt,
   knobCenterY,
   leverPullPx,
@@ -28,8 +28,7 @@ const SYMBOL_SRC: Record<ReelSymbol, string> = {
   bell: "/assets/reel-symbol-bell.svg",
 };
 
-const STRIP_SYMBOLS: ReelSymbol[] = ["seven", "cherry", "bell", "seven", "cherry", "bell", "seven", "cherry", "bell"];
-const LOOP = REEL_STRIP_LOOP;
+const STRIP_SYMBOLS = [...SYMBOLS, ...SYMBOLS];
 
 export function toCanvasPoint(event: { clientX: number; clientY: number }): { x: number; y: number } | null {
   const canvas = document.querySelector(".canvas");
@@ -42,43 +41,11 @@ export function toCanvasPoint(event: { clientX: number; clientY: number }): { x:
   };
 }
 
-function easeOutOvershoot(progress: number): number {
-  if (progress <= 0) return 0;
-  if (progress >= 1) return 1;
-  // Solve the curve's x coordinate before evaluating y.
-  let low = 0;
-  let high = 1;
-  for (let i = 0; i < 20; i++) {
-    const t = (low + high) / 2;
-    const x = 3 * (1 - t) ** 2 * t * 0.34 + 3 * (1 - t) * t ** 2 * 0.64 + t ** 3;
-    if (x < progress) low = t;
-    else high = t;
-  }
-  const t = (low + high) / 2;
-  return 3 * (1 - t) ** 2 * t * 1.56 + 3 * (1 - t) * t ** 2 + t ** 3;
-}
-
-function targetOffset(from: number, symbol: ReelSymbol): number {
-  const base = (["seven", "cherry", "bell"] as const).indexOf(symbol) * REEL_STRIP_PITCH;
-  let next = Math.floor(from / LOOP) * LOOP + base;
-  if (next < from + 120) next += LOOP;
-  return next;
-}
-
-function spinOffset(elapsed: number, index: 0 | 1 | 2, symbol: ReelSymbol, reduced: boolean): number {
-  const stopAt = reelStopAt(index);
-  if (reduced) return (["seven", "cherry", "bell"] as const).indexOf(symbol) * REEL_STRIP_PITCH;
-  if (elapsed < stopAt) return (elapsed / 1000) * REEL_SPIN_PX_PER_SEC;
-  const start = (stopAt / 1000) * REEL_SPIN_PX_PER_SEC;
-  const dest = targetOffset(start, symbol);
-  const progress = Math.min(1, (elapsed - stopAt) / REEL_STOP_EASE_MS);
-  return start + (dest - start) * easeOutOvershoot(progress);
-}
-
 export function Machine(props: {
   stops: [ReelSymbol | "dash", ReelSymbol | "dash", ReelSymbol | "dash"];
   mode: "idle" | "spinning" | "result";
   frozenSpin?: FrozenSpin;
+  spinDurationMs?: number;
   win?: boolean;
   showWinEffect?: boolean;
   reducedMotion: boolean;
@@ -94,9 +61,9 @@ export function Machine(props: {
   return (
     <div className={props.showWinEffect && props.win ? "slot-machine is-win-pulse" : "slot-machine"}>
       <img className="slot-frame" src="/assets/slot-frame-with-bulbs.svg" alt="" />
-      <Reel x={60} symbol={props.stops[0]} index={0} mode={props.mode} frozen={props.frozenSpin} win={props.win} reduced={props.reducedMotion} />
-      <Reel x={440} symbol={props.stops[1]} index={1} mode={props.mode} frozen={props.frozenSpin} win={props.win} reduced={props.reducedMotion} />
-      <Reel x={820} symbol={props.stops[2]} index={2} mode={props.mode} frozen={props.frozenSpin} win={props.win} reduced={props.reducedMotion} />
+      <Reel x={60} symbol={props.stops[0]} index={0} mode={props.mode} durationMs={props.spinDurationMs} frozen={props.frozenSpin} win={props.win} reduced={props.reducedMotion} />
+      <Reel x={440} symbol={props.stops[1]} index={1} mode={props.mode} durationMs={props.spinDurationMs} frozen={props.frozenSpin} win={props.win} reduced={props.reducedMotion} />
+      <Reel x={820} symbol={props.stops[2]} index={2} mode={props.mode} durationMs={props.spinDurationMs} frozen={props.frozenSpin} win={props.win} reduced={props.reducedMotion} />
       <Lever
         pull={props.leverPull}
         live={props.leverLive}
@@ -119,12 +86,13 @@ function Reel(props: {
   index: 0 | 1 | 2;
   mode: "idle" | "spinning" | "result";
   frozen?: FrozenSpin;
+  durationMs?: number;
   win?: boolean;
   reduced: boolean;
 }) {
   const showStack =
-    props.frozen === "all" || (props.frozen === "left" && props.index > 0) || (props.mode === "spinning" && props.reduced);
-  const stopped = props.mode !== "spinning" || (props.frozen === "left" && props.index === 0);
+    props.frozen === "all" || (props.frozen === "left" && props.index > 0);
+  const stopped = props.reduced || props.mode !== "spinning" || (props.frozen === "left" && props.index === 0);
   const liveSpin = props.mode === "spinning" && !props.frozen && !props.reduced;
 
   return (
@@ -139,7 +107,7 @@ function Reel(props: {
           />
         ) : null}
         {showStack && props.symbol !== "dash" ? <StackedSymbols /> : null}
-        {liveSpin && props.symbol !== "dash" ? <SpinningStrip index={props.index} target={props.symbol} /> : null}
+        {liveSpin && props.symbol !== "dash" ? <SpinningStrip index={props.index} target={props.symbol} durationMs={props.durationMs} /> : null}
       </div>
     </div>
   );
@@ -155,7 +123,7 @@ function StackedSymbols() {
   );
 }
 
-function SpinningStrip(props: { index: 0 | 1 | 2; target: ReelSymbol }) {
+function SpinningStrip(props: { index: 0 | 1 | 2; target: ReelSymbol; durationMs?: number }) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -164,23 +132,23 @@ function SpinningStrip(props: { index: 0 | 1 | 2; target: ReelSymbol }) {
     const tick = (now: number) => {
       const node = ref.current;
       if (!node) return;
-      const offset = spinOffset(now - start, props.index, props.target, false);
-      node.style.transform = `translateY(${wrapReelOffset(offset)}px)`;
-      if (now - start < allReelsSettledAt()) frame = requestAnimationFrame(tick);
+      const elapsed = (now - start) * allReelsSettledAt() / (props.durationMs ?? allReelsSettledAt());
+      const offset = reelOffset(elapsed, props.index, props.target);
+      node.style.transform = `translateY(${offset}px)`;
+      if (elapsed < reelStopAt(props.index) + REEL_STOP_EASE_MS) frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [props.index, props.target]);
+  }, [props.index, props.target, props.durationMs]);
 
   const cells = STRIP_SYMBOLS.map((symbol, i) => (
-    <div className="slot-strip-cell" key={`${symbol}-${i}`}>
-      <img className={`slot-sym-${symbol}`} src={SYMBOL_SRC[symbol]} alt="" />
+    <div className="slot-strip-cell" key={i} style={{ height: REEL_STRIP_PITCH }}>
+      <img className={`slot-sym slot-sym-${symbol === "seven" ? "7" : symbol} is-full`} src={SYMBOL_SRC[symbol]} alt="" />
     </div>
   ));
 
   return (
-    <div ref={ref} className="slot-strip" style={{ top: -LOOP + 90 }}>
-      {cells}
+    <div ref={ref} className="slot-strip" style={{ top: -REEL_STRIP_LOOP, transform: `translateY(${reelOffset(0, props.index, props.target)}px)` }}>
       {cells}
     </div>
   );

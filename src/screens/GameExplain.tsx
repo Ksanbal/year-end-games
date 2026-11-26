@@ -113,5 +113,6 @@ function TimerDemo({ id, frame }: { id: 4 | 5; frame: Frame }) {
 }
 function SlotDemo({ frame, reduced, finished }: { frame: Frame; reduced: boolean; finished: boolean }) {
   const noop = () => {};
-  return <div className="demo-machine"><Machine stops={["seven", "cherry", "bell"]} mode={!reduced && !finished && (frame === 2 || frame === 3) ? "spinning" : "idle"} reducedMotion={reduced} leverPull={frame === 2 ? 168 : 0} leverLive={false} showHints hintsAnimated={false} onLeverSpin={noop} onLeverPullChange={noop} onLeverPress={noop} onFailedPull={noop} /><Tap className={`slot-tap ${frame === 1 ? "is-visible" : ""}`} /></div>;
+  const spinDurationMs = tokenDurationMs("--motion-demo-hold-2", 800) + tokenDurationMs("--motion-demo-hold-3", 800) + 2 * tokenDurationMs("--motion-demo-transition", 350);
+  return <div className="demo-machine"><Machine spinDurationMs={spinDurationMs} stops={["seven", "cherry", "bell"]} mode={!reduced && !finished && (frame === 2 || frame === 3) ? "spinning" : "idle"} reducedMotion={reduced} leverPull={frame === 2 ? 168 : 0} leverLive={false} showHints hintsAnimated={false} onLeverSpin={noop} onLeverPullChange={noop} onLeverPress={noop} onFailedPull={noop} /><Tap className={`slot-tap ${frame === 1 ? "is-visible" : ""}`} /></div>;
 }
