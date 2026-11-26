@@ -68,7 +68,7 @@ type TurnResult =
 The slot module is `src/games/slot/`, `getSlot()` in the registry:
 
 ```ts
-type SlotOutcome = { kind: "skip" } | { kind: "lose"; bet: number } | { kind: "win"; bet: number };
+type SlotOutcome = { kind: "skip" } | { kind: "lose"; bet: number } | { kind: "win"; bet: number; multiplier?: 2 };
 
 type SlotModule = {
   id: "slot";
@@ -81,7 +81,7 @@ Call `onFinish` once per turn. The reducer records the result, awards nothing ye
 
 `stoppedAtMs` is milliseconds from the start of the timer, 0–20000. Auto-stop at 20000.
 
-A 777 win is `{ kind: "win", bet }`. The reducer pays 10× the bet including the stake (net +9×). A miss is `{ kind: "lose", bet }`. A skip is `{ kind: "skip" }`. Bet must be an integer from 1 through the team's current coins.
+A 777 win is `{ kind: "win", bet }`. The reducer pays 10× the bet including the stake (net +9×). Three cherries or three bells return `{ kind: "win", bet, multiplier: 2 }` and pay 2× including the stake (net +1×). A mixed line is `{ kind: "lose", bet }`. A skip is `{ kind: "skip" }`. Bet must be an integer from 1 through the team's current coins.
 
 ## State shape
 
@@ -90,7 +90,7 @@ A 777 win is `{ kind: "win", bet }`. The reducer pays 10× the bet including the
 - `teams: [string, string, string]` — defaults `1팀`, `2팀`, `3팀`, max 8 characters
 - `coins: [number, number, number]` — 0 until a round result is revealed
 - `rounds[1..5]`: `{ order: [TeamIndex, TeamIndex, TeamIndex], results: [TurnResult | null, ...] }`
-- `slotOrder`, `slotOutcomes`
+- `slotOrder` gives the fixed team order for all three laps. `slotOutcomes` holds the current lap and `previousSlotDelta` accumulates net coin changes from completed laps.
 - `phase`: discriminated union (`opening`, `teamSetup`, `roundIntro`, `shuffle`, `turnReady`, `playing`, `turnResult`, `roundResult`, `slotIntro`, `slotTurn`, `slotDone`, `final`)
 
 The reducer is a pure function. Shuffle order is supplied by the `START_ROUND` action (the UI calls `randomOrder()`). Slot order is computed when entering `slotIntro`.
@@ -123,7 +123,7 @@ All from `DECISIONS.md`. Later-dated lines win.
 - Coins are awarded only when 08 라운드 결과 is revealed, not after each turn (4라운드 "결과 공개… 라운드 끝에 다시 눌러 라운드 순위를 보여준다"; 4라운드 "팀별 코인 현황은 라운드 결과와 슬롯머신 화면에서만").
 - Games 4–5: closer `abs(stoppedAtMs - 10000)` ranks higher. 20s auto-stop is recorded as a 10s difference (2라운드, 4라운드). A fully equal difference is the same rank.
 - Slot order: fewest coins first; if coins are equal, the lower last-round rank goes first (4라운드).
-- 777 pays 10× the bet including the stake (net +9×); otherwise the bet is lost; cherry and bell have no payout (개발용 메모). Skip does not change coins (3라운드).
+- Each team gets one turn per lap for three laps. The gross payout is 10× for 777, 2× for three cherries or three bells, and zero for mixed symbols. Skipping consumes the turn and preserves the balance.
 - Final rank is by remaining coins; equal coins share a rank (4라운드). Final screen also shows coins and per-round ranks (5라운드).
 
 ## Deviations and missing copy

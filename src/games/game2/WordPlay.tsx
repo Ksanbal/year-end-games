@@ -94,8 +94,15 @@ export function WordPlay(props: {
   const layout = answerLayout(cards.length, offsetY);
   const locked = phase !== "playing";
 
+  function checkTimeUp(): boolean {
+    if (frozen || startedAt.current === null || performance.now() - startedAt.current < limit) return false;
+    setRemainMs(0);
+    setPhase("timeup");
+    return true;
+  }
+
   function place(cardIndex: number) {
-    if (locked) return;
+    if (locked || checkTimeUp()) return;
     if (slots.includes(cardIndex)) return;
     const empty = slots.findIndex((slot) => slot === null);
     if (empty < 0) return;
@@ -108,10 +115,7 @@ export function WordPlay(props: {
         setScore(score + 1);
         setPhase("correct");
         feedbackTimer.current = window.setTimeout(() => {
-          if (!frozen && startedAt.current !== null && performance.now() - startedAt.current >= limit) {
-            setRemainMs(0);
-            setPhase("timeup");
-          } else advance();
+          if (!checkTimeUp()) advance();
         }, 100);
       } else {
         setPhase("wrong");
@@ -120,7 +124,7 @@ export function WordPlay(props: {
   }
 
   function backspace() {
-    if (locked) return;
+    if (locked || checkTimeUp()) return;
     const last = findLastFilled(slots);
     if (last < 0) return;
     const next = slots.slice();
@@ -129,7 +133,7 @@ export function WordPlay(props: {
   }
 
   function skip() {
-    if (locked) return;
+    if (locked || checkTimeUp()) return;
     advance();
   }
 

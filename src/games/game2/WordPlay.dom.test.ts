@@ -98,3 +98,33 @@ it.each([2, 3] as const)("holds game %i's correct answer for 100ms before advanc
     vi.useRealTimers();
   }
 });
+
+describe.each([{ gameId: 2, limit: 40_000 }, { gameId: 3, limit: 60_000 }] as const)(
+  "game $gameId answer deadline",
+  ({ gameId, limit }) => {
+    it.each([{ offset: -1, score: "1" }, { offset: 0, score: "0" }, { offset: 1, score: "0" }])(
+      "scores $score when the last letter arrives at deadline + $offset ms",
+      ({ offset, score }) => {
+        vi.useFakeTimers();
+        let now = 0;
+        const clock = vi.spyOn(performance, "now").mockImplementation(() => now);
+        try {
+          const view = render(createElement(WordPlay, {
+            gameId, context, problems: [{ answer: "가나" }], onFinish: () => {}, persistUsed: false,
+          }));
+          fireEvent.click(view.getByRole("button", { name: "가" }));
+          // Move the game clock without rendering a new countdown frame.
+          now = limit + offset;
+          fireEvent.click(view.getByRole("button", { name: "나" }));
+          expect(Boolean(view.container.querySelector(".is-correct"))).toBe(offset < 0);
+          now += 100;
+          act(() => vi.advanceTimersByTime(100));
+          expect(view.container.querySelector(".game-result-value")?.textContent).toBe(score);
+        } finally {
+          clock.mockRestore();
+          vi.useRealTimers();
+        }
+      },
+    );
+  },
+);
