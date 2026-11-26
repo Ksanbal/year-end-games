@@ -8,7 +8,7 @@ import { Card } from "../ui/Card.tsx";
 import { Coin } from "../ui/Coin.tsx";
 import { Header } from "../ui/Header.tsx";
 import { PrimaryButton } from "../ui/PrimaryButton.tsx";
-import { EXPLAIN_LINE_SLOT_TODO } from "./explainCopy.ts";
+import { EXPLAIN_LINE_GAME3_TODO } from "./explainCopy.ts";
 import "../games/game1/game1.css";
 import "../games/game2/word.css";
 import "../games/slot/slot.css";
@@ -68,18 +68,18 @@ function useDemoFrame(id: Demo): { frame: Frame; reduced: boolean; finished: boo
 
 export function GameExplain({ round, onNext }: { round: Demo; onNext: () => void }) {
   const { frame, reduced, finished, dissolving } = useDemoFrame(round);
-  const line = round === "slot" ? EXPLAIN_LINE_SLOT_TODO : [copy.explainMine, copy.explainCountry, copy.explainGame3, copy.explainTimer, copy.explainHidden][round - 1];
+  const line = round === "slot" ? copy.explainSlot : [copy.explainMine, copy.explainCountry, EXPLAIN_LINE_GAME3_TODO, copy.explainTimer, copy.explainHidden][round - 1];
   return <>
     <Header variant="plain" title={round === "slot" ? copy.afterFiveRounds : copy.roundOfFive(round)} />
     <div className="explain-title"><Coin size={58} style={{ position: "relative" }} /><span>{round === "slot" ? copy.destinysLever : introGameTitle(round)}</span><Coin size={58} style={{ position: "relative" }} /></div>
-    <div className="explain-line"><span className={round === "slot" ? "explain-placeholder" : undefined}>{line}</span></div>
+    <div className="explain-line"><span className={round === 3 ? "explain-placeholder" : undefined}>{line}</span></div>
     <Card x={460} y={290} w={1000} h={500} radius={36} shadow>
       <div className={`explain-window ${finished ? "is-finished" : ""} ${dissolving ? "is-dissolving" : ""}`} aria-hidden="true" style={{ "--tap-hold": `var(--motion-demo-hold-${frame})` } as CSSProperties}>
         {round === 1 ? <MineDemo frame={frame} /> : round === 2 || round === 3 ? <WordDemo id={round} frame={frame} /> : round === 4 || round === 5 ? <TimerDemo id={round} frame={frame} /> : <SlotDemo frame={frame} />}
         <span className="explain-demo-status" data-frame={frame} data-reduced={reduced} data-finished={finished} />
       </div>
     </Card>
-    <PrimaryButton label={copy.goPlayGame} onClick={onNext} style={{ left: 630, top: 860, width: 660 }} />
+    <PrimaryButton label={copy.goPlayGame} onClick={onNext} style={{ left: 660, top: 860, width: 600, height: 120, fontSize: 50, lineHeight: "60px" }} />
   </>;
 }
 
