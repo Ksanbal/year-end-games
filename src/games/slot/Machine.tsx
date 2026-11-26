@@ -43,7 +43,17 @@ export function toCanvasPoint(event: { clientX: number; clientY: number }): { x:
 function easeOutOvershoot(progress: number): number {
   if (progress <= 0) return 0;
   if (progress >= 1) return 1;
-  return 1 - Math.exp(-6 * progress) * Math.cos(3.5 * Math.PI * progress);
+  // Solve the curve's x coordinate before evaluating y.
+  let low = 0;
+  let high = 1;
+  for (let i = 0; i < 20; i++) {
+    const t = (low + high) / 2;
+    const x = 3 * (1 - t) ** 2 * t * 0.34 + 3 * (1 - t) * t ** 2 * 0.64 + t ** 3;
+    if (x < progress) low = t;
+    else high = t;
+  }
+  const t = (low + high) / 2;
+  return 3 * (1 - t) ** 2 * t * 1.56 + 3 * (1 - t) * t ** 2 + t ** 3;
 }
 
 function targetOffset(from: number, symbol: ReelSymbol): number {

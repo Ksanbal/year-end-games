@@ -5,6 +5,7 @@ import {
   TEAM_NAME_WRAP_LINE_HEIGHT,
   columnWidth,
   fitTeamName,
+  teamNameAlignItems,
   wrapTeamName,
 } from "./teamName.ts";
 
@@ -57,5 +58,17 @@ describe("wrapTeamName", () => {
     const narrow = (text: string, size: number) => text.length * 30.75;
     expect(wrapTeamName("가나다라마바사아", 216, 40, narrow)).toEqual(["가나다라", "마바사아"]);
     expect(wrapTeamName("ABC", 100, 40, em)).toEqual(["AB", "C"]);
+  });
+});
+
+describe("teamNameAlignItems", () => {
+  it("top-aligns a single line in a table row so it shares the label and score line", () => {
+    expect(teamNameAlignItems("row", 1)).toBe("flex-start");
+  });
+
+  it("centers a wrapped name in the row and keeps other placements centered", () => {
+    expect(teamNameAlignItems("row", 2)).toBe("center");
+    expect(teamNameAlignItems("center", 1)).toBe("center");
+    expect(teamNameAlignItems("center", 2)).toBe("center");
   });
 });

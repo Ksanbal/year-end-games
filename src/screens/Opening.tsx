@@ -13,7 +13,7 @@ export function Opening({ onPickTeams }: { onPickTeams: () => void }) {
       >
         {copy.appTitle}
       </div>
-      <PrimaryButton label={copy.pickTeams} onClick={onPickTeams} style={{ left: 760, top: 860 }} />
+      <PrimaryButton label={copy.start} onClick={onPickTeams} style={{ left: 760, top: 860 }} />
     </>
   );
 }

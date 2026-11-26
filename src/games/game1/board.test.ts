@@ -27,7 +27,9 @@ const FIGMA_OPEN = [
 ];
 
 describe("placeMines", () => {
-  it("places exactly 5 unique cells on a 5x5 board", () => {
+  it("places exactly 2 unique cells on a 5x5 board", () => {
+    expect(MINE_COUNT).toBe(2);
+    expect(SAFE_COUNT).toBe(23);
     const mines = placeMines(() => 0.3);
     expect(mines).toHaveLength(MINE_COUNT);
     expect(new Set(mines).size).toBe(MINE_COUNT);
@@ -84,11 +86,12 @@ describe("reveal", () => {
     expect(boom.cleared).toBe(false);
   });
 
-  it("marks the board cleared when all 20 safe tiles are open", () => {
+  it("marks a fixture board cleared when every safe tile on that board is open", () => {
     const mines = new Set(FIGMA_MINES);
     const safe = Array.from({ length: 25 }, (_, i) => i).filter((i) => !mines.has(i));
+    expect(safe).toHaveLength(20);
     const opened = openMany(boardFromMines(FIGMA_MINES), safe);
-    expect(openedScore(opened)).toBe(SAFE_COUNT);
+    expect(openedScore(opened)).toBe(20);
     expect(allSafeOpened(opened)).toBe(true);
     const last = safe[safe.length - 1]!;
     const almost = openMany(boardFromMines(FIGMA_MINES), safe.slice(0, -1));
@@ -96,6 +99,19 @@ describe("reveal", () => {
     expect(done.cleared).toBe(true);
     expect(done.hitMine).toBe(false);
     expect(done.score).toBe(20);
+  });
+
+  it("marks a live board cleared after 23 safe tiles, with two mines left closed", () => {
+    const liveMines = [0, 1];
+    const safe = Array.from({ length: 25 }, (_, i) => i).filter((i) => !liveMines.includes(i));
+    expect(safe).toHaveLength(SAFE_COUNT);
+    const last = safe[safe.length - 1]!;
+    const almost = openMany(boardFromMines(liveMines), safe.slice(0, -1));
+    const done = reveal(almost, last);
+    expect(done.cleared).toBe(true);
+    expect(done.hitMine).toBe(false);
+    expect(done.score).toBe(23);
+    expect(done.board.filter((c) => c.mine && !c.opened)).toHaveLength(2);
   });
 
   it("matches the adjacent numbers on the 02-1 frame", () => {

@@ -75,10 +75,7 @@ export function TimerPlay(props: {
 
   return (
     <>
-      <Header
-        title={headerGameTitle(props.gameId)}
-        meta={copy.turnProgressWithTeam(props.context.turnIndex + 1, props.context.names[props.context.team])}
-      />
+      <Header title={headerGameTitle(props.gameId)} variant="plain" />
       <Card
         x={360}
         y={290}
@@ -89,13 +86,14 @@ export function TimerPlay(props: {
         fill={showClock ? "var(--color-surface-card)" : "var(--color-header-bar)"}
       />
       {showClock ? (
-        <div className="timer-clock">{formatClock(elapsedMs)}</div>
+        <div className={`timer-clock ${hidden && ended ? "is-revealing" : ""}`}>{formatClock(elapsedMs)}</div>
       ) : (
         <>
           <div className="timer-hidden-title">{gameCopy.hiddenTitle}</div>
           <div className="timer-hidden-caption">{gameCopy.hiddenCaption}</div>
         </>
       )}
+      {hidden && ended ? <div className="timer-reveal-cover"><div>{gameCopy.hiddenTitle}</div></div> : null}
       {backdropLabel ? <div className="timer-card-label">{backdropLabel}</div> : null}
       {phase === "ready" ? (
         <PrimaryButton

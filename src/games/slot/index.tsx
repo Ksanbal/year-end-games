@@ -1,3 +1,4 @@
+import { useAnimatedCoins } from "../../ui/AnimatedCoins.tsx";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { copy } from "../../copy.ts";
 import { minusSign } from "../../format.ts";
@@ -195,7 +196,7 @@ function SlotPlay(props: {
         <Coin
           size={52}
           empty={showEmptyCoin(shownCoins)}
-          className="slot-owned-coin"
+          className={`slot-owned-coin${view.kind === "result" && view.outcome.kind !== "skip" ? ` coin-${view.outcome.kind === "win" ? "gain" : "loss"}` : ""}`}
           style={{ position: "relative", left: "auto", top: "auto" }}
         />
         <span className="slot-owned-label">{slotCopy.ownedCoins(shownCoins)}</span>
@@ -370,6 +371,7 @@ function Result(props: {
 }) {
   const outcome = props.view.outcome;
   const after = coinsAfter(props.startCoins, outcome);
+  const animatedAfter = useAnimatedCoins(props.startCoins, after);
   const button = props.lastTeam ? slotCopy.revealFinal : slotCopy.nextTeam;
   const width = props.lastTeam ? 500 : 400;
   const left = props.lastTeam ? 710 : 760;
@@ -397,21 +399,10 @@ function Result(props: {
       {outcome.kind === "skip" ? (
         <div className="slot-headline">{slotCopy.skipped(props.name, topicParticle(props.name))}</div>
       ) : null}
-      {outcome.kind === "win" ? (
-        <div className="slot-sub">
-          {minusSign(slotCopy.coinsChanged(props.startCoins, after)).map((part, i) => (
-            <span key={i} className={part.font === "ui" ? "text-ui" : "text-display"}>
-              {part.text}
-            </span>
-          ))}
-        </div>
-      ) : null}
-      {outcome.kind === "lose" ? (
-        <div className="slot-sub is-muted">
-          {minusSign(slotCopy.coinsChanged(props.startCoins, after)).map((part, i) => (
-            <span key={i} className={part.font === "ui" ? "text-ui" : "text-display"}>
-              {part.text}
-            </span>
+      {outcome.kind !== "skip" ? (
+        <div className={`slot-sub coin-change${outcome.kind === "lose" ? " is-muted" : ""}`}>
+          {minusSign(slotCopy.coinsChanged(props.startCoins, animatedAfter)).map((part, i) => (
+            <span key={i} className={part.font === "ui" ? "text-ui" : "text-display"}>{part.text}</span>
           ))}
         </div>
       ) : null}

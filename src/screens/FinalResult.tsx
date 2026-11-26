@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { copy } from "../copy.ts";
 import { formatRoundCell, formatSlotCell, minusSign } from "../format.ts";
 import { rankFinal, rankTeams } from "../state/scoring.ts";
@@ -84,7 +85,7 @@ export function FinalResult(props: {
         {copy.colFinalCoins}
       </div>
       {standings.map((row, i) => (
-        <FinalRow key={row.team} index={i} team={row.team} standing={row} state={props.state} teamColX={teamColX} />
+        <div key={row.team} className="result-row-reveal" style={{ "--row-index": i } as CSSProperties}><FinalRow index={i} team={row.team} standing={row} state={props.state} teamColX={teamColX} /></div>
       ))}
       <div
         className="text-ui text-center"

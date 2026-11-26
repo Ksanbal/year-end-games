@@ -3,6 +3,8 @@ import { gameByRound } from "./games/catalog.ts";
 import { getGame, getSlot } from "./games/registry.ts";
 import { readJump } from "./jump.ts";
 import { FinalResult } from "./screens/FinalResult.tsx";
+import { GameExplain } from "./screens/GameExplain.tsx";
+import { GameIntro } from "./screens/GameIntro.tsx";
 import { Opening } from "./screens/Opening.tsx";
 import { Recovery } from "./screens/Recovery.tsx";
 import { RoundIntro } from "./screens/RoundIntro.tsx";
@@ -20,6 +22,7 @@ import type { TeamIndex } from "./state/types.ts";
 import { Canvas } from "./ui/Canvas.tsx";
 import { Clouds } from "./ui/Clouds.tsx";
 import { Sky } from "./ui/Sky.tsx";
+import { ScreenTransition } from "./ui/ScreenTransition.tsx";
 import "./ui/chrome.css";
 import "./styles/screens.css";
 
@@ -51,9 +54,9 @@ export default function App() {
     <Canvas>
       <Sky />
       <Clouds />
-      <div className="screen" key={recovery ? "recovery" : phaseKey(phase)}>
+      <ScreenTransition screenKey={recovery ? "recovery" : phaseKey(phase)}>
         {body}
-      </div>
+      </ScreenTransition>
     </Canvas>
   );
 }
@@ -69,7 +72,9 @@ function GameScreen(props: {
 
   switch (phase.kind) {
     case "opening":
-      return <Opening onPickTeams={() => dispatch({ type: "START_SETUP" })} />;
+      return <Opening onPickTeams={() => dispatch({ type: "START_INTRO" })} />;
+    case "gameIntro":
+      return <GameIntro onPickTeams={() => dispatch({ type: "START_SETUP" })} />;
     case "teamSetup":
       return (
         <TeamSetup
@@ -81,7 +86,9 @@ function GameScreen(props: {
         />
       );
     case "roundIntro":
-      return <RoundIntro round={phase.round} onStart={props.startRound} />;
+      return <RoundIntro round={phase.round} onStart={() => dispatch({ type: "START_GAME_EXPLAIN" })} />;
+    case "gameExplain":
+      return <GameExplain round={phase.round} onNext={props.startRound} />;
     case "shuffle": {
       const record = state.rounds[phase.round];
       if (!record) return null;
@@ -150,6 +157,8 @@ function GameScreen(props: {
         />
       );
     }
+    case "slotExplain":
+      return <GameExplain round="slot" onNext={() => dispatch({ type: "START_SLOT_INTRO" })} />;
     case "slotIntro": {
       const order =
         state.slotOrder ??
@@ -201,6 +210,7 @@ function GameScreen(props: {
 function phaseKey(phase: ReturnType<typeof useSession>["state"]["phase"]): string {
   switch (phase.kind) {
     case "roundIntro":
+    case "gameExplain":
     case "roundResult":
       return `${phase.kind}-${phase.round}`;
     case "shuffle":

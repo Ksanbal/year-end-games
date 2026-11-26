@@ -20,6 +20,8 @@ export function stateForScreen(code: string): Jump | null {
   switch (code) {
     case "00-0":
       return pack(code, initialState());
+    case "00-0a":
+      return pack(code, { ...initialState(), phase: { kind: "gameIntro" } });
     case "00-1":
       return pack(code, { ...initialState(), phase: { kind: "teamSetup" } });
     case "00-2":
@@ -30,6 +32,14 @@ export function stateForScreen(code: string): Jump | null {
     case "05-i":
     case "06-i":
       return pack(code, { ...initialState(), phase: { kind: "roundIntro", round: introRound(code) } });
+    case "01-E":
+    case "03-E":
+    case "04-E":
+    case "05-E":
+    case "06-E":
+      return pack(code, { ...initialState(), phase: { kind: "gameExplain", round: introRound(code) } });
+    case "09-E":
+      return pack(code, { ...exampleCampaign("intro"), phase: { kind: "slotExplain" } });
     case "01-1":
       return pack(code, shuffle(false));
     case "01-2":
@@ -94,10 +104,10 @@ function pack(code: string, state: AppState, recovery = false): Jump {
 }
 
 function introRound(code: string): RoundNumber {
-  if (code === "03-0") return 2;
-  if (code === "04-0") return 3;
-  if (code === "05-i") return 4;
-  if (code === "06-i") return 5;
+  if (code === "03-0" || code === "03-E") return 2;
+  if (code === "04-0" || code === "04-E") return 3;
+  if (code === "05-i" || code === "05-E") return 4;
+  if (code === "06-i" || code === "06-E") return 5;
   return 1;
 }
 

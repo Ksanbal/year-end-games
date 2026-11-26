@@ -1,5 +1,5 @@
 export const SIZE = 5;
-export const MINE_COUNT = 5;
+export const MINE_COUNT = 2;
 export const SAFE_COUNT = SIZE * SIZE - MINE_COUNT;
 
 export type Cell = {
@@ -60,7 +60,7 @@ export function openedScore(board: Board): number {
 }
 
 export function allSafeOpened(board: Board): boolean {
-  return openedScore(board) === SAFE_COUNT;
+  return board.every((cell) => cell.mine || cell.opened);
 }
 
 export type RevealResult = {
@@ -81,7 +81,7 @@ export function reveal(board: Board, at: number): RevealResult {
   }
   const next = board.map((c, i) => (i === at ? { ...c, opened: true } : c));
   const score = openedScore(next);
-  return { board: next, hitMine: false, cleared: score === SAFE_COUNT, score };
+  return { board: next, hitMine: false, cleared: allSafeOpened(next), score };
 }
 
 export function openMany(board: Board, cells: readonly number[]): Board {

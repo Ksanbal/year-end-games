@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { copy } from "../../copy.ts";
 import { headerGameTitle } from "../catalog.ts";
 import type { GameContext } from "../types.ts";
 import type { TurnResult } from "../../state/types.ts";
@@ -17,13 +16,11 @@ import {
   readUsedAnswers,
   recordUsedAnswers,
   remainLabel,
-  scoreLabel,
   type WordProblem,
 } from "./wordLogic.ts";
 import "./word.css";
 
 const gameCopy = {
-  limit: "제한 1:30",
   skip: "스킵",
   back: "←",
   wrong: "틀렸어요. 카드가 처음 자리로 돌아가요",
@@ -154,21 +151,14 @@ export function WordPlay(props: {
     props.onFinish({ kind: "score", score });
   }
 
-  const meaningTight = (problem.meaning?.length ?? 0) > 40;
-
   return (
     <>
-      <Header
-        title={headerGameTitle(props.gameId)}
-        meta={copy.turnProgressWithTeam(props.context.turnIndex + 1, props.context.names[props.context.team])}
-      />
-      <div className="word-score">{scoreLabel(score)}</div>
+      <Header title={headerGameTitle(props.gameId)} variant="plain" />
       <div className="word-remain">{remainLabel(remainMs)}</div>
-      {phase !== "timeup" ? <div className="word-limit">{gameCopy.limit}</div> : null}
       {problem.meaning ? (
         <>
-          <div className={meaningTight ? "word-meaning-label is-tight" : "word-meaning-label"}>{gameCopy.meaningLabel}</div>
-          <div className={meaningTight ? "word-meaning is-tight" : "word-meaning"}>{problem.meaning}</div>
+          <div className="word-meaning-label">{gameCopy.meaningLabel}</div>
+          <div className="word-meaning">{problem.meaning}</div>
         </>
       ) : null}
       <Card

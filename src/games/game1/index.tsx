@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { copy } from "../../copy.ts";
 import { headerGameTitle } from "../catalog.ts";
 import type { GameModule } from "../types.ts";
 import { Header } from "../../ui/Header.tsx";
@@ -26,7 +25,7 @@ export const game1: GameModule = {
   },
 };
 
-function Game1Play({ context, onFinish }: { context: Parameters<GameModule["Play"]>[0]["context"]; onFinish: Parameters<GameModule["Play"]>[0]["onFinish"] }) {
+function Game1Play({ onFinish }: Parameters<GameModule["Play"]>[0]) {
     const fixture = useMemo(() => fixtureBoard(screenCode()), []);
     const [board, setBoard] = useState<Board>(() => fixture?.board ?? createBoard());
     const [explodedAt, setExplodedAt] = useState<number | null>(fixture?.explodedAt ?? null);
@@ -48,10 +47,7 @@ function Game1Play({ context, onFinish }: { context: Parameters<GameModule["Play
 
     return (
       <>
-        <Header
-          title={headerGameTitle(1)}
-          meta={copy.turnProgressWithTeam(context.turnIndex + 1, context.names[context.team])}
-        />
+        <Header title={headerGameTitle(1)} variant="plain" />
         {Array.from({ length: SIZE * SIZE }, (_, i) => {
           const col = i % SIZE;
           const row = Math.floor(i / SIZE);

@@ -440,16 +440,16 @@
   font-family: var(--font-display);
   color: var(--color-text-allin);
   transform-origin: 50% 50%;
-  transition: transform 100ms ease-out;
+  transition: transform var(--motion-allin-press) var(--motion-press-ease);
 }
 
 .slot-allin.is-pressed:not(.is-reduce) {
   transform: scale(0.96);
-  transition-duration: 100ms;
+  transition-duration: var(--motion-allin-press);
 }
 
 .slot-allin:not(.is-pressed) {
-  transition-duration: 150ms;
+  transition-duration: var(--motion-allin-release);
 }
 
 .slot-allin-glow {
@@ -467,8 +467,9 @@
 }
 
 .slot-allin:not(.is-static) .slot-allin-glow {
-  animation: slot-allin-glow 2400ms ease-in-out infinite;
-  animation-delay: -850ms;
+  animation:
+    slot-allin-glow var(--motion-allin-glow) ease-in-out var(--motion-allin-iterations),
+    slot-allin-glow-rest 0ms calc(var(--motion-allin-glow) * var(--motion-allin-iterations)) forwards;
 }
 
 .slot-allin-depth {
@@ -481,16 +482,16 @@
   background: #a8660a;
   border: 4px solid #5a3300;
   z-index: 1;
-  transition: top 100ms ease-out;
+  transition: top var(--motion-allin-press) var(--motion-press-ease);
 }
 
 .slot-allin.is-pressed .slot-allin-depth {
   top: 4px;
-  transition-duration: 100ms;
+  transition-duration: var(--motion-allin-press);
 }
 
 .slot-allin:not(.is-pressed) .slot-allin-depth {
-  transition-duration: 150ms;
+  transition-duration: var(--motion-allin-release);
 }
 
 .slot-allin-body {
@@ -529,7 +530,9 @@
 }
 
 .slot-allin:not(.is-static) .slot-allin-shine {
-  animation: slot-allin-shine 2400ms linear infinite;
+  animation:
+    slot-allin-shine var(--motion-allin-glow) linear var(--motion-allin-iterations),
+    slot-allin-shine-rest 0ms calc(var(--motion-allin-glow) * var(--motion-allin-iterations)) forwards;
 }
 
 .slot-allin-label {
@@ -562,13 +565,16 @@
 
 .slot-allin:not(.is-static) .slot-allin-star.is-1,
 .slot-allin:not(.is-static) .slot-allin-star.is-3 {
-  animation: slot-twinkle 1200ms ease-in-out infinite;
+  animation:
+    slot-twinkle var(--motion-allin-twinkle) ease-in-out var(--motion-allin-twinkle-iterations),
+    slot-twinkle-rest 0ms calc(var(--motion-allin-twinkle) * var(--motion-allin-twinkle-iterations)) forwards;
 }
 
 .slot-allin:not(.is-static) .slot-allin-star.is-2,
 .slot-allin:not(.is-static) .slot-allin-star.is-4 {
-  animation: slot-twinkle 1200ms ease-in-out infinite;
-  animation-delay: -600ms;
+  animation:
+    slot-twinkle var(--motion-allin-twinkle) ease-in-out var(--motion-allin-twinkle-iterations) -600ms,
+    slot-twinkle-rest 0ms calc(var(--motion-allin-twinkle) * var(--motion-allin-twinkle-iterations)) forwards;
 }
 
 @keyframes slot-allin-shine {
@@ -582,9 +588,17 @@
   50% { opacity: 0.75; }
 }
 
+@keyframes slot-allin-glow-rest {
+  to { opacity: 0.6; }
+}
+
 @keyframes slot-twinkle {
   0%, 100% { transform: scale(0.6); opacity: 0.4; }
   50% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slot-twinkle-rest {
+  to { transform: scale(1); opacity: 1; }
 }
 
 .slot-burst {
@@ -633,3 +647,10 @@
     animation: none !important;
   }
 }
+
+.slot-owned > .coin.coin-gain { animation:slot-coin-gain var(--motion-coin-gain) var(--motion-coin-gain-ease); }
+.slot-owned > .coin.coin-loss { animation:slot-coin-loss var(--motion-coin-loss) var(--motion-coin-loss-ease); }
+@keyframes slot-coin-gain { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+@keyframes slot-coin-loss { from { opacity:1; transform:translateY(0); } to { opacity:0; transform:translateY(8px); } }
+@media (prefers-reduced-motion: reduce) { .slot-owned > .coin.coin-gain, .slot-owned > .coin.coin-loss, .slot-sub.coin-change { animation:slot-coin-fade var(--motion-coin-reduced) ease-out; } }
+@keyframes slot-coin-fade { from { opacity:0; } to { opacity:1; } }

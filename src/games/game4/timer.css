@@ -63,3 +63,10 @@
   line-height: 77px !important;
   border-radius: 90px !important;
 }
+
+.timer-clock.is-revealing { animation:timer-reveal-in var(--motion-result-reveal) ease-out both; }
+.timer-reveal-cover { position:absolute; z-index:2; left:360px; top:290px; width:1200px; height:340px; border:5px solid #1b2a4a; border-radius:40px; background:#23396b; text-align:center; color:white; font:64px/77px var(--font-display); padding-top:105px; pointer-events:none; animation:timer-reveal-out var(--motion-result-reveal) ease-out both; }
+.timer-reveal-cover span { display:block; margin-top:23px; font:500 32px/38px var(--font-ui); color:var(--color-header-sub); }
+@keyframes timer-reveal-in { from { opacity:0; } to { opacity:1; } }
+@keyframes timer-reveal-out { from { opacity:1; } to { opacity:0; } }
+@media (prefers-reduced-motion: reduce) { .timer-clock.is-revealing, .timer-reveal-cover { animation-duration:var(--motion-result-reveal) !important; } }

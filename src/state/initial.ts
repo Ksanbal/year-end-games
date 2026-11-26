@@ -14,7 +14,7 @@ export function initialState(): AppState {
 }
 
 export function isSessionInProgress(state: AppState): boolean {
-  return state.phase.kind !== "opening" && state.phase.kind !== "teamSetup";
+  return state.phase.kind !== "opening" && state.phase.kind !== "gameIntro" && state.phase.kind !== "teamSetup";
 }
 
 /** Mid-turn refresh restarts that turn. Finished turns and coins stay. */

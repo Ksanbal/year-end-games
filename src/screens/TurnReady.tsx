@@ -14,7 +14,7 @@ export function TurnReady(props: {
 }) {
   return (
     <>
-      <Header title={headerGameTitle(props.round)} meta={copy.turnProgress(props.turnIndex + 1)} />
+      <Header title={headerGameTitle(props.round)} variant="plain" />
       <div
         className="text-display text-center"
         style={{
