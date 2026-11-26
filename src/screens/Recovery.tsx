@@ -2,7 +2,6 @@ import { copy } from "../copy.ts";
 import { headerGameTitle } from "../games/catalog.ts";
 import type { AppState } from "../state/types.ts";
 import { Card } from "../ui/Card.tsx";
-import { Header } from "../ui/Header.tsx";
 import { PrimaryButton } from "../ui/PrimaryButton.tsx";
 import { TeamName } from "./TeamName.tsx";
 
@@ -10,14 +9,13 @@ export function Recovery({ state, onContinue }: { state: AppState; onContinue: (
   const lines = recoveryLines(state);
   return (
     <>
-      <Header title={copy.appTitle} />
       <div
         className="text-display text-center"
-        style={{ position: "absolute", left: 0, top: 220, width: 1920, height: 86, fontSize: 72, lineHeight: "86px" }}
+        style={{ position: "absolute", left: 0, top: 140, width: 1920, height: 86, fontSize: 72, lineHeight: "86px" }}
       >
         {copy.recoveredTitle}
       </div>
-      <Card x={460} y={350} w={1000} h={330} radius={36} shadow>
+      <Card x={460} y={270} w={1000} h={330} radius={36} shadow>
         <div className="text-display text-center" style={{ paddingTop: 40, fontSize: 44, lineHeight: "53px" }}>
           {lines[0]}
         </div>

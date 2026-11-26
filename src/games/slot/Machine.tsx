@@ -9,7 +9,9 @@ import {
   LEVER_SPRING_MS,
   REEL_SPIN_PX_PER_SEC,
   REEL_STOP_EASE_MS,
+  REEL_STRIP_LOOP,
   REEL_STRIP_PITCH,
+  wrapReelOffset,
   allReelsSettledAt,
   knobCenterY,
   leverPullPx,
@@ -27,7 +29,7 @@ const SYMBOL_SRC: Record<ReelSymbol, string> = {
 };
 
 const STRIP_SYMBOLS: ReelSymbol[] = ["seven", "cherry", "bell", "seven", "cherry", "bell", "seven", "cherry", "bell"];
-const LOOP = REEL_STRIP_PITCH * 3;
+const LOOP = REEL_STRIP_LOOP;
 
 export function toCanvasPoint(event: { clientX: number; clientY: number }): { x: number; y: number } | null {
   const canvas = document.querySelector(".canvas");
@@ -163,7 +165,7 @@ function SpinningStrip(props: { index: 0 | 1 | 2; target: ReelSymbol }) {
       const node = ref.current;
       if (!node) return;
       const offset = spinOffset(now - start, props.index, props.target, false);
-      node.style.transform = `translateY(${offset}px)`;
+      node.style.transform = `translateY(${wrapReelOffset(offset)}px)`;
       if (now - start < allReelsSettledAt()) frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);

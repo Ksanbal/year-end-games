@@ -1,0 +1,8 @@
+.confetti-layer {
+  position: absolute;
+  inset: 0;
+  width: 1920px;
+  height: 1080px;
+  pointer-events: none;
+  z-index: 4;
+}

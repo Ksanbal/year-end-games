@@ -44,6 +44,7 @@ describe("motion tokens", () => {
     expect(firstToken(tokensCss, "--motion-shuffle-duration")).toBe("120ms");
     expect(firstToken(tokensCss, "--motion-shuffle-stagger")).toBe("80ms");
     expect(firstToken(tokensCss, "--motion-shuffle-ease")).toBe("ease-in-out");
+    expect(firstToken(tokensCss, "--motion-confetti-duration")).toBe("1600ms");
   });
 
   it("disables the new motion when the user prefers reduced motion", () => {

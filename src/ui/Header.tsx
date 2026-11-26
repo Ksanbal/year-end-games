@@ -1,23 +1,7 @@
-export function Header({
-  title,
-  meta,
-  variant = "bar",
-}: {
-  title: string;
-  meta?: string;
-  variant?: "bar" | "plain";
-}) {
-  const plain = variant === "plain";
+export function Header({ title }: { title: string }) {
   return (
-    <header className={plain ? "app-header is-plain" : "app-header"}>
-      {plain ? null : (
-        <>
-          <div className="app-header-bar" />
-          <div className="app-header-line" />
-        </>
-      )}
+    <header className="app-header">
       <div className="app-header-title">{title}</div>
-      {!plain && meta ? <div className="app-header-meta">{meta}</div> : null}
     </header>
   );
 }

@@ -19,25 +19,9 @@
 .app-header {
   position: absolute;
   inset: 0 0 auto 0;
-  height: 128px;
+  height: 84px;
   z-index: 2;
   pointer-events: none;
-}
-
-.app-header-bar {
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 120px;
-  background: var(--color-header-bar);
-}
-
-.app-header-line {
-  position: absolute;
-  top: 120px;
-  left: 0;
-  right: 0;
-  height: 8px;
-  background: var(--color-header-line);
 }
 
 .app-header-title {
@@ -47,29 +31,7 @@
   font-family: var(--font-display);
   font-size: 40px;
   line-height: 48px;
-  color: var(--color-text-on-primary);
-  white-space: nowrap;
-}
-
-.app-header.is-plain {
-  height: 84px;
-}
-
-.app-header.is-plain .app-header-title {
   color: var(--color-text-primary);
-}
-
-.app-header-meta {
-  position: absolute;
-  left: 1040px;
-  top: 40px;
-  width: 800px;
-  font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: 36px;
-  line-height: 43px;
-  color: var(--color-header-sub);
-  text-align: right;
   white-space: nowrap;
 }
 

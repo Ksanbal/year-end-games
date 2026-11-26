@@ -69,7 +69,7 @@ export function GameExplain({ round, onNext }: { round: Demo; onNext: () => void
   const { frame, reduced, finished, dissolving } = useDemoFrame(round);
   const line = round === "slot" ? copy.explainSlot : [copy.explainMine, copy.explainCountry, copy.explainIdiom, copy.explainTimer, copy.explainHidden][round - 1];
   return <>
-    <Header variant="plain" title={round === "slot" ? copy.afterFiveRounds : copy.roundOfFive(round)} />
+    <Header title={round === "slot" ? copy.afterFiveRounds : copy.roundOfFive(round)} />
     <div className="explain-title"><Coin size={58} style={{ position: "relative" }} /><span>{round === "slot" ? copy.destinysLever : introGameTitle(round)}</span><Coin size={58} style={{ position: "relative" }} /></div>
     <div className="explain-line">{line}</div>
     <Card x={460} y={290} w={1000} h={500} radius={36} shadow>

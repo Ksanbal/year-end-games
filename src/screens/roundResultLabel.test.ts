@@ -3,16 +3,11 @@ import { copy } from "../copy.ts";
 import { roundResultButtonLabel, roundResultButtonStyle } from "./roundResultLabel.ts";
 
 describe("round result button", () => {
-  it("keeps 다음 라운드 on rounds 1–4", () => {
-    expect(roundResultButtonLabel(1)).toBe(copy.nextRound);
-    expect(roundResultButtonLabel(4)).toBe(copy.nextRound);
+  it("uses 다음 라운드 at the same size and position after every round, including the last", () => {
     expect(copy.nextRound).toBe("다음 라운드");
-    expect(roundResultButtonStyle(1)).toEqual({ left: 760, top: 900 });
-  });
-
-  it("uses 운명의 레버 시작 at 450px on the last round", () => {
-    expect(roundResultButtonLabel(5)).toBe(copy.startDestinysLever);
-    expect(copy.startDestinysLever).toBe("운명의 레버 시작");
-    expect(roundResultButtonStyle(5)).toEqual({ left: 735, top: 900, width: 450 });
+    for (const round of [1, 2, 3, 4, 5] as const) {
+      expect(roundResultButtonLabel(round)).toBe(copy.nextRound);
+      expect(roundResultButtonStyle(round)).toEqual({ left: 760, top: 900 });
+    }
   });
 });

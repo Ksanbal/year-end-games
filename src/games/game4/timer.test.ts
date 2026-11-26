@@ -36,13 +36,14 @@ describe("timer math", () => {
 });
 
 describe("timer start phase", () => {
-  it("starts the clock as soon as play begins after the turn-ready start tap", () => {
-    expect(initialTimerPhase(null)).toBe("running");
-    expect(initialTimerPhase(undefined)).toBe("running");
+  it("waits on the ready phase until the count-start press", () => {
+    expect(initialTimerPhase(null)).toBe("ready");
+    expect(initialTimerPhase(undefined)).toBe("ready");
   });
 
-  it("keeps a fixture frozen on the designed 05-0 ready screen", () => {
+  it("keeps a fixture frozen on its designed phase, including 05-0 ready", () => {
     expect(initialTimerPhase({ phase: "ready" })).toBe("ready");
     expect(initialTimerPhase({ phase: "running" })).toBe("running");
+    expect(initialTimerPhase({ phase: "stopped" })).toBe("stopped");
   });
 });

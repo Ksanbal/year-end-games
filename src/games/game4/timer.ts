@@ -27,7 +27,7 @@ export function isAutoStop(ms: number): boolean {
 
 export type TimerPhase = "ready" | "running" | "stopped" | "autostop";
 
-/** Live play starts the clock immediately after the turn-ready [시작] tap. Fixtures may freeze 05-0. */
+/** Live play waits on [카운트 시작]. Fixtures may still freeze a later phase. */
 export function initialTimerPhase(fixture?: { phase: TimerPhase } | null): TimerPhase {
-  return fixture?.phase ?? "running";
+  return fixture?.phase ?? "ready";
 }

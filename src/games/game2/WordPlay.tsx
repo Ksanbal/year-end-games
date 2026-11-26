@@ -138,7 +138,7 @@ export function WordPlay(props: {
       setPhase("complete");
       return;
     }
-    const dealt = dealCards(nextProblem.answer);
+    const dealt = dealCards(nextProblem.answer).cards;
     setProblem(nextProblem);
     setCards(dealt);
     setSlots(dealt.map(() => null));
@@ -153,7 +153,7 @@ export function WordPlay(props: {
 
   return (
     <>
-      <Header title={headerGameTitle(props.gameId)} variant="plain" />
+      <Header title={headerGameTitle(props.gameId)} />
       <div className="word-remain">{remainLabel(remainMs)}</div>
       {problem.meaning ? (
         <>
@@ -269,7 +269,7 @@ function startTurn(props: {
   }
   const prior = props.persistUsed ? readUsedAnswers(props.gameId) : [];
   const problem = pickProblem(props.problems, new Set(prior)) ?? props.problems[0]!;
-  const cards = dealCards(problem.answer);
+  const cards = dealCards(problem.answer).cards;
   return {
     score: 0,
     asked: 0,

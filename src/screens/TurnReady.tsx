@@ -14,7 +14,7 @@ export function TurnReady(props: {
 }) {
   return (
     <>
-      <Header title={headerGameTitle(props.round)} variant="plain" />
+      <Header title={headerGameTitle(props.round)} />
       <div
         className="text-display text-center"
         style={{

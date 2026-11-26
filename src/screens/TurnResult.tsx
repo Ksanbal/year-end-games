@@ -23,7 +23,7 @@ export function TurnResultScreen(props: {
 
   return (
     <>
-      <Header title={headerGameTitle(props.round)} variant="plain" />
+      <Header title={headerGameTitle(props.round)} />
       <div
         className="text-display text-center"
         style={{
@@ -106,7 +106,7 @@ function TurnRow(props: {
   result: TurnResult | null;
 }) {
   return (
-    <div className="turn-row" style={{ top: 35 + props.turn * 90 }}>
+    <div className="turn-row" style={{ top: 15 + props.turn * 90 }}>
       <div
         className="text-ui"
         style={{

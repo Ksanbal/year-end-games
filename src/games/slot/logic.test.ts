@@ -22,8 +22,12 @@ import {
   nudgeBet,
   outcomeForStops,
   pickSymbol,
+  REEL_SPIN_PX_PER_SEC,
+  REEL_STRIP_LOOP,
+  REEL_STRIP_PITCH,
   reelStopAt,
   rollStops,
+  wrapReelOffset,
   topicParticle,
   type ReelStops,
   type SlotView,
@@ -147,6 +151,30 @@ describe("reel odds", () => {
     expect(reelStopAt(1)).toBe(4000);
     expect(reelStopAt(2)).toBe(5000);
     expect(allReelsSettledAt()).toBe(5400);
+  });
+});
+
+describe("reel strip wrap", () => {
+  const stripTop = -REEL_STRIP_LOOP + 90;
+  const stripHeight = REEL_STRIP_PITCH * 18;
+  const windowHeight = 280;
+
+  it("keeps the spinning strip overlapping the reel window at mid-spin times", () => {
+    for (const elapsed of [0, 150, 300, 500, 800, 1500, 2500, 4000]) {
+      const raw = (elapsed / 1000) * REEL_SPIN_PX_PER_SEC;
+      const visualTop = stripTop + wrapReelOffset(raw);
+      expect(visualTop).toBeLessThan(windowHeight);
+      expect(visualTop + stripHeight).toBeGreaterThan(0);
+      expect(wrapReelOffset(raw)).toBeGreaterThanOrEqual(0);
+      expect(wrapReelOffset(raw)).toBeLessThan(REEL_STRIP_LOOP);
+    }
+  });
+
+  it("would leave the window after ~490ms if the offset were not wrapped", () => {
+    const raw = (500 / 1000) * REEL_SPIN_PX_PER_SEC;
+    expect(raw).toBe(600);
+    expect(stripTop + raw).toBeGreaterThanOrEqual(windowHeight);
+    expect(stripTop + wrapReelOffset(raw)).toBeLessThan(windowHeight);
   });
 });
 

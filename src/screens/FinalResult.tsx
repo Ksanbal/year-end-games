@@ -6,7 +6,7 @@ import type { AppState, RoundNumber, TeamIndex } from "../state/types.ts";
 import { Card } from "../ui/Card.tsx";
 import { Coin } from "../ui/Coin.tsx";
 import { FlatButton } from "../ui/FlatButton.tsx";
-import { Header } from "../ui/Header.tsx";
+import { ConfettiBurst } from "../ui/Confetti.tsx";
 import { useFinalTitleFit } from "./finalTitle.ts";
 import { TeamName } from "./TeamName.tsx";
 import { columnWidth } from "./teamName.ts";
@@ -30,7 +30,7 @@ export function FinalResult(props: {
 
   return (
     <>
-      <Header title={copy.finalHeader} />
+      <ConfettiBurst />
       <div
         className={titleFit.ready ? "final-title-row text-display" : "final-title-row text-display is-pending"}
         data-final-title-ready={titleFit.ready ? "true" : "false"}
@@ -47,7 +47,7 @@ export function FinalResult(props: {
         style={{
           position: "absolute",
           left: 0,
-          top: 270,
+          top: 190,
           width: 1920,
           height: 38,
           fontSize: 32,
@@ -58,7 +58,7 @@ export function FinalResult(props: {
       >
         {copy.prizeNote}
       </div>
-      <div className="text-ui" style={{ position: "absolute", left: teamColX, top: 400, fontSize: 28, fontWeight: 700, lineHeight: "34px", color: "var(--color-text-secondary)" }}>
+      <div className="text-ui" style={{ position: "absolute", left: teamColX, top: 320, fontSize: 28, fontWeight: 700, lineHeight: "34px", color: "var(--color-text-secondary)" }}>
         {copy.colTeam}
       </div>
       {([1, 2, 3, 4, 5] as const).map((round) => (
@@ -68,7 +68,7 @@ export function FinalResult(props: {
           style={{
             position: "absolute",
             left: 360 + round * 180,
-            top: 400,
+            top: 320,
             fontSize: 28,
             fontWeight: 700,
             lineHeight: "34px",
@@ -78,10 +78,10 @@ export function FinalResult(props: {
           {copy.colRound(round)}
         </div>
       ))}
-      <div className="text-ui" style={{ position: "absolute", left: 1440, top: 400, fontSize: 28, fontWeight: 700, lineHeight: "34px", color: "var(--color-text-secondary)" }}>
+      <div className="text-ui" style={{ position: "absolute", left: 1440, top: 320, fontSize: 28, fontWeight: 700, lineHeight: "34px", color: "var(--color-text-secondary)" }}>
         {copy.destinysLever}
       </div>
-      <div className="text-ui" style={{ position: "absolute", left: 1660, top: 400, fontSize: 28, fontWeight: 700, lineHeight: "34px", color: "var(--color-text-secondary)" }}>
+      <div className="text-ui" style={{ position: "absolute", left: 1660, top: 320, fontSize: 28, fontWeight: 700, lineHeight: "34px", color: "var(--color-text-secondary)" }}>
         {copy.colFinalCoins}
       </div>
       {standings.map((row, i) => (
@@ -92,7 +92,7 @@ export function FinalResult(props: {
         style={{
           position: "absolute",
           left: 0,
-          top: 930,
+          top: 850,
           width: 1920,
           height: 34,
           fontSize: 28,
@@ -109,7 +109,7 @@ export function FinalResult(props: {
         height={100}
         fontSize={40}
         onClick={props.onRequestNew}
-        style={{ left: 80, top: 950 }}
+        style={{ left: 80, top: 870 }}
       />
       {props.confirm ? (
         <ConfirmNewGame onCancel={props.onCancel} onConfirm={props.onConfirm} />
@@ -125,7 +125,7 @@ function FinalRow(props: {
   state: AppState;
   teamColX: number;
 }) {
-  const y = 450 + props.index * 150;
+  const y = 370 + props.index * 150;
   const highlight = props.standing.rank === 1;
   const slot = formatSlotCell(props.state.slotOutcomes[props.team]);
   return (
