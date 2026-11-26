@@ -5,6 +5,7 @@ import { Header } from "../../ui/Header.tsx";
 import { FlatButton } from "../../ui/FlatButton.tsx";
 import { PrimaryButton } from "../../ui/PrimaryButton.tsx";
 import { TeamName } from "../../screens/TeamName.tsx";
+import { Coin } from "../../ui/Coin.tsx";
 import type { SlotModule } from "../types.ts";
 import { AllInButton } from "./AllInButton.tsx";
 import { Machine, useLeverReturn } from "./Machine.tsx";
@@ -38,6 +39,10 @@ const IDLE_STOPS: [ReelSymbol, ReelSymbol, ReelSymbol] = ["seven", "cherry", "be
 
 function prefersReducedMotion(): boolean {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function burstRequested(): boolean {
+  return typeof window !== "undefined" && new URLSearchParams(window.location.search).has("burst");
 }
 
 function initialView(coins: number, fixture: SlotFixture | null): SlotView {
@@ -92,7 +97,8 @@ function SlotPlay(props: {
     if (!fixture?.leverDown) setLeverPull(0);
     setHintsArmed(true);
     setHintsHidden(false);
-    setWinEffect(false);
+    const showBurst = burstRequested() && fixture?.view.kind === "result" && fixture.view.outcome.kind === "win";
+    setWinEffect(showBurst);
   }, [props.context.team, props.context.orderIndex, fixture]);
 
   const spinning = view.kind === "spinning" && !fixture?.frozenSpin;
@@ -184,12 +190,12 @@ function SlotPlay(props: {
         style={{ left: 80, top: 150, zIndex: 2 }}
       />
       <div className="slot-owned">
-        <span
-          className={showEmptyCoin(shownCoins) ? "coin slot-owned-coin is-empty" : "coin slot-owned-coin"}
-          style={{ position: "relative", left: "auto", top: "auto", width: 52, height: 52, ["--coin-depth" as string]: "6px" }}
-        >
-          <span className="coin-inner" />
-        </span>
+        <Coin
+          size={52}
+          empty={showEmptyCoin(shownCoins)}
+          className="slot-owned-coin"
+          style={{ position: "relative", left: "auto", top: "auto" }}
+        />
         <span className="slot-owned-label">{slotCopy.ownedCoins(shownCoins)}</span>
       </div>
       <Machine
@@ -419,9 +425,12 @@ function CoinBurst() {
   return (
     <div className="slot-burst" aria-hidden="true">
       {coins.map(([dx, dy], i) => (
-        <span key={i} className="slot-burst-coin coin" style={{ ["--dx" as string]: `${dx}px`, ["--dy" as string]: `${dy}px`, animationDelay: `${i * 40}ms` }}>
-          <span className="coin-inner" />
-        </span>
+        <Coin
+          key={i}
+          size={52}
+          className="slot-burst-coin"
+          style={{ ["--dx" as string]: `${dx}px`, ["--dy" as string]: `${dy}px`, animationDelay: `${i * 40}ms` }}
+        />
       ))}
     </div>
   );
