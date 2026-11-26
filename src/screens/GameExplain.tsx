@@ -1,4 +1,5 @@
 import { useEffect, useState, type CSSProperties } from "react";
+import { tokenDurationMs } from "../ui/cssDuration.ts";
 import { copy } from "../copy.ts";
 import { introGameTitle } from "../games/catalog.ts";
 import { IDIOMS } from "../games/game3/idioms.ts";
@@ -36,17 +37,16 @@ function useDemoFrame(id: Demo): { frame: Frame; reduced: boolean; finished: boo
     let cycle = 0;
     let step: Frame = 1;
     let timer = 0;
-    const tokens = getComputedStyle(document.documentElement);
-    const ms = (name: string) => parseFloat(tokens.getPropertyValue(name));
-    const transition = ms("--motion-demo-transition");
-    const delays = [1, 2, 3].map(n => ms(`--motion-demo-hold-${n}`) + transition);
-    delays.push(ms("--motion-demo-hold-4"));
+    const ms = (name: string, fallback: number) => tokenDurationMs(name, fallback);
+    const transition = ms("--motion-demo-transition", 350);
+    const delays = [1, 2, 3].map((n, i) => ms(`--motion-demo-hold-${n}`, [700, 800, 800][i]) + transition);
+    delays.push(ms("--motion-demo-hold-4", 1200));
     let inDissolve = false;
     const advance = () => {
       if (step === 4 && !inDissolve) {
         inDissolve = true;
         setDissolving(true);
-        timer = window.setTimeout(advance, ms("--motion-demo-dissolve"));
+        timer = window.setTimeout(advance, ms("--motion-demo-dissolve", 300));
         return;
       }
       if (step === 4) {

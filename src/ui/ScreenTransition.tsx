@@ -1,4 +1,5 @@
 import { Component, createRef, type ReactNode } from "react";
+import { tokenDurationMs } from "./cssDuration.ts";
 
 type Props = { screenKey: string; children: ReactNode };
 type State = { key: string; entering: boolean };
@@ -31,7 +32,7 @@ export class ScreenTransition extends Component<Props, State> {
     snapshot.inert = true;
     this.container.current.prepend(snapshot);
     this.outgoing = snapshot;
-    const duration = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--motion-screen-crossfade")) || 0;
+    const duration = tokenDurationMs("--motion-screen-crossfade", 0);
     this.removal = window.setTimeout(() => {
       snapshot.remove();
       if (this.outgoing === snapshot) this.outgoing = null;

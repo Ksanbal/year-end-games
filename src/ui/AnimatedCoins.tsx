@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { tokenDurationMs } from "./cssDuration.ts";
 
 function bezier(progress: number, x1: number, y1: number, x2: number, y2: number) {
   let low = 0;
@@ -18,7 +19,7 @@ export function useAnimatedCoins(from: number, to: number) {
   const [value, setValue] = useState(reduced ? to : from);
   useEffect(() => {
     if (reduced || from === to) { setValue(to); return; }
-    const duration = parseFloat(getComputedStyle(document.documentElement).getPropertyValue(to > from ? "--motion-coin-gain" : "--motion-coin-loss"));
+    const duration = tokenDurationMs(to > from ? "--motion-coin-gain" : "--motion-coin-loss");
     if (!duration) { setValue(to); return; }
     let frame = 0;
     const start = performance.now();
