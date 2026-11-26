@@ -1,19 +1,27 @@
 import type { CSSProperties } from "react";
-import { TEAM_NAME_WRAP_LINE_HEIGHT, teamNameAlignItems, useTeamNameFit, type TeamNameVAlign } from "./teamName.ts";
+import {
+  TEAM_NAME_WRAP_LINE_HEIGHT,
+  teamNameAlignItems,
+  useTeamNameFit,
+  type TeamNameFace,
+  type TeamNameVAlign,
+} from "./teamName.ts";
 
 export function TeamName(props: {
   name: string;
   width: number;
   startFontSize: number;
   startLineHeight?: number;
-  boxHeight: number;
+  boxHeight?: number;
   align?: "left" | "center" | "right";
   alignY?: TeamNameVAlign;
+  face?: TeamNameFace;
   color?: string;
   className?: string;
   style?: CSSProperties;
 }) {
-  const fit = useTeamNameFit(props.name, props.width, props.startFontSize);
+  const face = props.face ?? "display";
+  const fit = useTeamNameFit(props.name, props.width, props.startFontSize, face);
   const wrapped = fit.lines.length > 1;
   const lineHeight = wrapped ? TEAM_NAME_WRAP_LINE_HEIGHT : (props.startLineHeight ?? props.startFontSize);
   const align = props.align ?? "left";
@@ -27,12 +35,14 @@ export function TeamName(props: {
       data-font-size={String(fit.fontSize)}
       data-lines={String(fit.lines.length)}
       data-align-y={alignY}
+      data-face={face}
       style={{
         width: props.width,
         height: props.boxHeight,
         justifyContent: align === "center" ? "center" : align === "right" ? "flex-end" : "flex-start",
         textAlign: align,
         color: props.color,
+        fontWeight: face === "uiBold" ? 700 : undefined,
         ...props.style,
         alignItems: teamNameAlignItems(alignY, fit.lines.length),
       }}

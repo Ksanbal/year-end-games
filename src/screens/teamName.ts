@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from "react";
-import { measureDisplayWidth, whenFontsReady } from "../textMeasure.ts";
+import { measureDisplayWidth, measureUiBoldWidth, whenFontsReady } from "../textMeasure.ts";
 
 /** header.title. The smallest size before a name wraps to two lines. */
 export const TEAM_NAME_MIN_FONT_SIZE = 40;
@@ -12,6 +12,12 @@ export type TeamNameFit = {
   fontSize: number;
   lines: string[];
 };
+
+export type TeamNameFace = "display" | "uiBold";
+
+export function measureTeamNameWidth(face: TeamNameFace) {
+  return face === "uiBold" ? measureUiBoldWidth : measureDisplayWidth;
+}
 
 export function columnWidth(nameX: number, nextColumnX: number, gap = TEAM_NAME_COLUMN_GAP): number {
   return Math.max(0, nextColumnX - nameX - gap);
@@ -113,6 +119,7 @@ export function useTeamNameFit(
   name: string,
   cellWidth: number,
   startFontSize: number,
+  face: TeamNameFace = "display",
 ): TeamNameFit & { ready: boolean } {
   const [fit, setFit] = useState<TeamNameFit>({ fontSize: startFontSize, lines: [name] });
   const [ready, setReady] = useState(false);
@@ -123,14 +130,14 @@ export function useTeamNameFit(
     const run = async () => {
       await whenFontsReady();
       if (cancelled) return;
-      setFit(fitTeamName(name, cellWidth, startFontSize, measureDisplayWidth));
+      setFit(fitTeamName(name, cellWidth, startFontSize, measureTeamNameWidth(face)));
       setReady(true);
     };
     void run();
     return () => {
       cancelled = true;
     };
-  }, [name, cellWidth, startFontSize]);
+  }, [name, cellWidth, startFontSize, face]);
 
   return { ...fit, ready };
 }

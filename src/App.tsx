@@ -3,6 +3,7 @@ import { gameByRound } from "./games/catalog.ts";
 import { getGame, getSlot } from "./games/registry.ts";
 import { readJump } from "./jump.ts";
 import { FinalResult } from "./screens/FinalResult.tsx";
+import { GameIntro } from "./screens/GameIntro.tsx";
 import { Opening } from "./screens/Opening.tsx";
 import { Recovery } from "./screens/Recovery.tsx";
 import { RoundIntro } from "./screens/RoundIntro.tsx";
@@ -69,7 +70,9 @@ function GameScreen(props: {
 
   switch (phase.kind) {
     case "opening":
-      return <Opening onPickTeams={() => dispatch({ type: "START_SETUP" })} />;
+      return <Opening onPickTeams={() => dispatch({ type: "START_INTRO" })} />;
+    case "gameIntro":
+      return <GameIntro onPickTeams={() => dispatch({ type: "START_SETUP" })} />;
     case "teamSetup":
       return (
         <TeamSetup

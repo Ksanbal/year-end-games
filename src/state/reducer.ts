@@ -44,8 +44,11 @@ export function reduce(state: AppState, action: Action): AppState {
   switch (action.type) {
     case "HYDRATE":
       return action.state;
-    case "START_SETUP":
+    case "START_INTRO":
       if (state.phase.kind !== "opening") return state;
+      return { ...state, phase: { kind: "gameIntro" } };
+    case "START_SETUP":
+      if (state.phase.kind !== "gameIntro") return state;
       return { ...state, phase: { kind: "teamSetup" } };
     case "SET_TEAM_NAME": {
       if (state.phase.kind !== "teamSetup") return state;

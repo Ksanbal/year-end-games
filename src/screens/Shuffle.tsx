@@ -53,7 +53,7 @@ export function Shuffle(props: {
 
   return (
     <>
-      <Header title={headerGameTitle(props.round)} />
+      <Header title={headerGameTitle(props.round)} variant="plain" />
       <div
         className="text-display text-center"
         style={{ position: "absolute", left: 0, top: 190, width: 1920, height: 86, fontSize: 72, lineHeight: "86px" }}

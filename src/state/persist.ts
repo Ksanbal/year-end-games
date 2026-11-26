@@ -162,6 +162,7 @@ function parsePhase(value: unknown): Phase | null {
   if (!isRecord(value) || typeof value.kind !== "string") return null;
   switch (value.kind) {
     case "opening":
+    case "gameIntro":
     case "teamSetup":
     case "slotIntro":
     case "slotDone":

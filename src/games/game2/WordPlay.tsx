@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { copy } from "../../copy.ts";
 import { headerGameTitle } from "../catalog.ts";
 import type { GameContext } from "../types.ts";
 import type { TurnResult } from "../../state/types.ts";
@@ -158,10 +157,7 @@ export function WordPlay(props: {
 
   return (
     <>
-      <Header
-        title={headerGameTitle(props.gameId)}
-        meta={copy.turnProgressWithTeam(props.context.turnIndex + 1, props.context.names[props.context.team])}
-      />
+      <Header title={headerGameTitle(props.gameId)} variant="plain" />
       <div className="word-score">{scoreLabel(score)}</div>
       <div className="word-remain">{remainLabel(remainMs)}</div>
       {phase !== "timeup" ? <div className="word-limit">{limitLabel()}</div> : null}

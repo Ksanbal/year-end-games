@@ -24,7 +24,7 @@ export function RoundResultScreen(props: {
 
   return (
     <>
-      <Header title={headerGameTitle(props.round)} meta={copy.headerRoundResult} />
+      <Header title={headerGameTitle(props.round)} variant="plain" />
       <div
         className="text-display text-center"
         style={{ position: "absolute", left: 0, top: 160, width: 1920, height: 86, fontSize: 72, lineHeight: "86px" }}

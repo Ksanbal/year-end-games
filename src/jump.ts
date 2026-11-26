@@ -20,6 +20,8 @@ export function stateForScreen(code: string): Jump | null {
   switch (code) {
     case "00-0":
       return pack(code, initialState());
+    case "00-0a":
+      return pack(code, { ...initialState(), phase: { kind: "gameIntro" } });
     case "00-1":
       return pack(code, { ...initialState(), phase: { kind: "teamSetup" } });
     case "00-2":

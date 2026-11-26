@@ -75,10 +75,7 @@ export function TimerPlay(props: {
 
   return (
     <>
-      <Header
-        title={headerGameTitle(props.gameId)}
-        meta={copy.turnProgressWithTeam(props.context.turnIndex + 1, props.context.names[props.context.team])}
-      />
+      <Header title={headerGameTitle(props.gameId)} variant="plain" />
       <Card
         x={360}
         y={290}

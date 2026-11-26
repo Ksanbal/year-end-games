@@ -25,6 +25,7 @@ export type SlotOutcome =
 
 export type Phase =
   | { kind: "opening" }
+  | { kind: "gameIntro" }
   | { kind: "teamSetup" }
   | { kind: "roundIntro"; round: RoundNumber }
   | { kind: "shuffle"; round: RoundNumber; settled: boolean }
@@ -52,6 +53,7 @@ export type AppState = {
 };
 
 export type Action =
+  | { type: "START_INTRO" }
   | { type: "START_SETUP" }
   | { type: "SET_TEAM_NAME"; index: TeamIndex; name: string }
   | { type: "START_GAME" }

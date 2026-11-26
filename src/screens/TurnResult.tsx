@@ -6,7 +6,6 @@ import { Card } from "../ui/Card.tsx";
 import { Header } from "../ui/Header.tsx";
 import { PrimaryButton } from "../ui/PrimaryButton.tsx";
 import { TeamName } from "./TeamName.tsx";
-import { columnWidth } from "./teamName.ts";
 
 export function TurnResultScreen(props: {
   round: RoundNumber;
@@ -24,7 +23,7 @@ export function TurnResultScreen(props: {
 
   return (
     <>
-      <Header title={headerGameTitle(props.round)} meta={copy.turnProgress(props.turnIndex + 1)} />
+      <Header title={headerGameTitle(props.round)} variant="plain" />
       <div
         className="text-display text-center"
         style={{
@@ -95,21 +94,23 @@ function scoreSubtitle(round: RoundNumber, result: TurnResult): string | null {
   return null;
 }
 
+const TURN_ROW_INNER = 880;
+const TURN_LABEL_WIDTH = 240;
+const TURN_SCORE_WIDTH = 300;
+const TURN_NAME_WIDTH = TURN_ROW_INNER - TURN_LABEL_WIDTH - TURN_SCORE_WIDTH;
+
 function TurnRow(props: {
   turn: TurnIndex;
   team: TeamIndex;
   name: string;
   result: TurnResult | null;
 }) {
-  const top = 35 + props.turn * 90;
   return (
-    <>
+    <div className="turn-row" style={{ top: 35 + props.turn * 90 }}>
       <div
         className="text-ui"
         style={{
-          position: "absolute",
-          left: 60,
-          top: top + 3,
+          width: TURN_LABEL_WIDTH,
           fontSize: 32,
           fontWeight: 500,
           lineHeight: "38px",
@@ -120,20 +121,19 @@ function TurnRow(props: {
       </div>
       <TeamName
         name={props.name}
-        width={columnWidth(300, 640)}
+        width={TURN_NAME_WIDTH}
         startFontSize={36}
         startLineHeight={43}
-        boxHeight={90}
-        alignY="row"
-        className="text-display"
-        style={{ left: 300, top }}
+        face="uiBold"
+        className="text-ui"
+        style={{ position: "relative" }}
       />
       <div
         className="text-display"
-        style={{ position: "absolute", left: 640, top, width: 300, textAlign: "right", fontSize: 36, lineHeight: "43px" }}
+        style={{ width: TURN_SCORE_WIDTH, textAlign: "right", fontSize: 36, lineHeight: "43px" }}
       >
         {props.result ? formatTurnScore(props.result) : copy.waiting}
       </div>
-    </>
+    </div>
   );
 }

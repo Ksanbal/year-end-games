@@ -69,3 +69,61 @@
 .team-name-line {
   white-space: nowrap;
 }
+
+.turn-row {
+  position: absolute;
+  left: 60px;
+  width: 880px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+}
+
+.game-intro-title {
+  position: absolute;
+  left: 0;
+  top: 150;
+  width: 1920px;
+  height: 77px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: var(--color-text-primary);
+}
+
+.game-intro-row {
+  position: absolute;
+  left: 60px;
+  width: 880px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.game-intro-label {
+  width: 200px;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 38px;
+  color: var(--color-text-secondary);
+}
+
+.game-intro-name {
+  display: flex;
+  align-items: center;
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 48px;
+  color: var(--color-text-primary);
+}
+
+.game-intro-rule {
+  position: absolute;
+  left: 60px;
+  top: 419px;
+  width: 880px;
+  height: 2px;
+  background: #d5e2f7;
+}

@@ -51,6 +51,14 @@
   white-space: nowrap;
 }
 
+.app-header.is-plain {
+  height: 84px;
+}
+
+.app-header.is-plain .app-header-title {
+  color: var(--color-text-primary);
+}
+
 .app-header-meta {
   position: absolute;
   left: 1040px;
