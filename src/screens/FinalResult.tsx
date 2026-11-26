@@ -81,7 +81,7 @@ export function FinalResult(props: {
       <div className="text-ui" style={{ position: "absolute", left: 1440, top: 320, fontSize: 28, fontWeight: 700, lineHeight: "34px", color: "var(--color-text-secondary)" }}>
         {copy.destinysLever}
       </div>
-      <div className="text-ui" style={{ position: "absolute", left: 1660, top: 320, fontSize: 28, fontWeight: 700, lineHeight: "34px", color: "var(--color-text-secondary)" }}>
+      <div className="text-ui" style={{ position: "absolute", right: 150, top: 320, fontSize: 28, fontWeight: 700, lineHeight: "34px", color: "var(--color-text-secondary)" }}>
         {copy.colFinalCoins}
       </div>
       {standings.map((row, i) => (
@@ -170,7 +170,7 @@ function FinalRow(props: {
       </div>
       <div
         className="text-display"
-        style={{ position: "absolute", left: 1540, top: 34, fontSize: 52, lineHeight: "62px", color: "var(--color-text-accent)" }}
+        style={{ position: "absolute", right: 30, top: 34, fontSize: 52, lineHeight: "62px", color: "var(--color-text-accent)" }}
       >
         {props.standing.coins}
       </div>
