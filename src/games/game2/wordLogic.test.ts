@@ -6,6 +6,7 @@ import {
   formatRemain,
   isCorrect,
   pickProblem,
+  limitLabel,
   remainLabel,
   scoreLabel,
   syllables,
@@ -50,8 +51,10 @@ describe("pickProblem", () => {
 });
 
 describe("labels and limits", () => {
-  it("formats the remaining time like the 03-1 frame", () => {
-    expect(formatRemain(TIME_LIMIT_MS)).toBe("1:30");
+  it("formats the remaining time as minutes and seconds, starting from one minute", () => {
+    expect(TIME_LIMIT_MS).toBe(60_000);
+    expect(formatRemain(TIME_LIMIT_MS)).toBe("1:00");
+    expect(limitLabel()).toBe("제한 1:00");
     expect(remainLabel(52_000)).toBe("남은 시간 0:52");
     expect(remainLabel(12_000)).toBe("남은 시간 0:12");
     expect(remainLabel(0)).toBe("남은 시간 0:00");

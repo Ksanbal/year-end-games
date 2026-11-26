@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { TEAM_NAME_WRAP_LINE_HEIGHT, useTeamNameFit } from "./teamName.ts";
+import { TEAM_NAME_WRAP_LINE_HEIGHT, teamNameAlignItems, useTeamNameFit, type TeamNameVAlign } from "./teamName.ts";
 
 export function TeamName(props: {
   name: string;
@@ -8,6 +8,7 @@ export function TeamName(props: {
   startLineHeight?: number;
   boxHeight: number;
   align?: "left" | "center" | "right";
+  alignY?: TeamNameVAlign;
   color?: string;
   className?: string;
   style?: CSSProperties;
@@ -17,6 +18,7 @@ export function TeamName(props: {
   const lineHeight = wrapped ? TEAM_NAME_WRAP_LINE_HEIGHT : (props.startLineHeight ?? props.startFontSize);
   const align = props.align ?? "left";
   const className = ["team-name", fit.ready ? "" : "is-pending", props.className ?? ""].filter(Boolean).join(" ");
+  const alignY = props.alignY ?? "center";
 
   return (
     <div
@@ -24,6 +26,7 @@ export function TeamName(props: {
       data-team-name-ready={fit.ready ? "true" : "false"}
       data-font-size={String(fit.fontSize)}
       data-lines={String(fit.lines.length)}
+      data-align-y={alignY}
       style={{
         width: props.width,
         height: props.boxHeight,
@@ -31,6 +34,7 @@ export function TeamName(props: {
         textAlign: align,
         color: props.color,
         ...props.style,
+        alignItems: teamNameAlignItems(alignY, fit.lines.length),
       }}
     >
       <div

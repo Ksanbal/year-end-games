@@ -13,6 +13,7 @@ import {
   TIME_LIMIT_MS,
   dealCards,
   isCorrect,
+  limitLabel,
   pickProblem,
   readUsedAnswers,
   recordUsedAnswers,
@@ -23,7 +24,6 @@ import {
 import "./word.css";
 
 const gameCopy = {
-  limit: "제한 1:30",
   skip: "스킵",
   back: "←",
   wrong: "틀렸어요. 카드가 처음 자리로 돌아가요",
@@ -164,7 +164,7 @@ export function WordPlay(props: {
       />
       <div className="word-score">{scoreLabel(score)}</div>
       <div className="word-remain">{remainLabel(remainMs)}</div>
-      {phase !== "timeup" ? <div className="word-limit">{gameCopy.limit}</div> : null}
+      {phase !== "timeup" ? <div className="word-limit">{limitLabel()}</div> : null}
       {problem.meaning ? (
         <>
           <div className={meaningTight ? "word-meaning-label is-tight" : "word-meaning-label"}>{gameCopy.meaningLabel}</div>

@@ -134,3 +134,14 @@ export function useTeamNameFit(
 
   return { ...fit, ready };
 }
+
+export type TeamNameVAlign = "center" | "row";
+
+/**
+ * Table rows keep a single-line name at the top of the cell so it shares
+ * the label and score line. A wrapped name stays vertically centered in
+ * the row, which does not grow.
+ */
+export function teamNameAlignItems(vAlign: TeamNameVAlign, lineCount: number): "center" | "flex-start" {
+  return vAlign === "row" && lineCount < 2 ? "flex-start" : "center";
+}

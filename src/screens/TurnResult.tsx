@@ -124,6 +124,7 @@ function TurnRow(props: {
         startFontSize={36}
         startLineHeight={43}
         boxHeight={90}
+        alignY="row"
         className="text-display"
         style={{ left: 300, top }}
       />

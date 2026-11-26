@@ -1,4 +1,4 @@
-export const TIME_LIMIT_MS = 90_000;
+export const TIME_LIMIT_MS = 60_000;
 export const MAX_QUESTIONS = 20;
 
 export type WordProblem = {
@@ -39,6 +39,10 @@ export function formatRemain(ms: number): string {
 
 export function remainLabel(ms: number): string {
   return `남은 시간 ${formatRemain(ms)}`;
+}
+
+export function limitLabel(ms: number = TIME_LIMIT_MS): string {
+  return `제한 ${formatRemain(ms)}`;
 }
 
 export function scoreLabel(score: number): string {
