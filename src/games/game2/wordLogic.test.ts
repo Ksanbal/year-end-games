@@ -10,6 +10,17 @@ import {
   syllables,
 } from "./wordLogic.ts";
 import { COUNTRIES } from "./countries.ts";
+import { IDIOMS } from "../game3/idioms.ts";
+
+function seededRandom(seed: number): () => number {
+  return () => {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let value = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    value = (value + Math.imul(value ^ (value >>> 7), 61 | value)) ^ value;
+    return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+  };
+}
 
 describe("syllables", () => {
   it("splits a country name into Hangul syllables with no spaces", () => {
@@ -28,9 +39,49 @@ describe("isCorrect", () => {
 });
 
 describe("dealCards", () => {
+  it("does not deal the answer in order when a shuffle leaves it unchanged", () => {
+    for (const answer of ["스위스", "다다익선"]) {
+      let calls = 0;
+      const result = dealCards(answer, () => {
+        if (++calls > 64) throw new Error("shuffle did not terminate");
+        return 0.999999;
+      });
+      expect(result.impossible).toBe(false);
+      expect(result.cards.join("")).not.toBe(answer);
+      expect([...result.cards].sort()).toEqual([...syllables(answer)].sort());
+    }
+  });
+
   it("keeps every syllable, including duplicates", () => {
-    const cards = dealCards("스위스", () => 0);
+    const { cards } = dealCards("스위스", () => 0);
     expect([...cards].sort()).toEqual(["스", "스", "위"].sort());
+  });
+
+  it("deals a different permutation for every real problem across 100 seeds", () => {
+    for (const { answer } of [...COUNTRIES, ...IDIOMS]) {
+      for (let seed = 0; seed < 100; seed++) {
+        const { cards, impossible } = dealCards(answer, seededRandom(seed));
+        expect(impossible, `${answer}, seed ${seed}`).toBe(false);
+        expect(cards.join(""), `${answer}, seed ${seed}`).not.toBe(answer);
+        expect([...cards].sort(), `${answer}, seed ${seed}`).toEqual([...syllables(answer)].sort());
+      }
+    }
+  });
+
+  it("returns impossible answers unchanged without shuffling", () => {
+    for (const answer of ["", "가", "가가가", "ㅋㅋ"]) {
+      const result = dealCards(answer, () => {
+        throw new Error("impossible answers must not be shuffled");
+      });
+      expect(result).toEqual({ cards: syllables(answer), impossible: true });
+    }
+  });
+
+  it("finds no impossible answers in the real datasets", () => {
+    const impossibleAnswers = [...COUNTRIES, ...IDIOMS]
+      .filter(({ answer }) => dealCards(answer, () => 0.999999).impossible)
+      .map(({ answer }) => answer);
+    expect(impossibleAnswers).toEqual([]);
   });
 });
 

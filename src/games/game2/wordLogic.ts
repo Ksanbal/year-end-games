@@ -20,8 +20,23 @@ export function shuffleInPlace<T>(items: T[], random: () => number = Math.random
   return items;
 }
 
-export function dealCards(answer: string, random: () => number = Math.random): string[] {
-  return shuffleInPlace(syllables(answer), random);
+export type DealCardsResult = {
+  cards: string[];
+  impossible: boolean;
+};
+
+export function dealCards(answer: string, random: () => number = Math.random): DealCardsResult {
+  const cards = syllables(answer);
+  const differentIndex = cards.findIndex((card) => card !== cards[0]);
+  if (differentIndex === -1) return { cards, impossible: true };
+
+  for (let attempt = 0; attempt < 8; attempt++) {
+    shuffleInPlace(cards, random);
+    if (cards.join("") !== answer) return { cards, impossible: false };
+  }
+
+  [cards[0], cards[differentIndex]] = [cards[differentIndex]!, cards[0]!];
+  return { cards, impossible: false };
 }
 
 export function isCorrect(filled: readonly (string | null)[], answer: string): boolean {
