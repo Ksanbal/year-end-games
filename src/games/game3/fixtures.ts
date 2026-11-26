@@ -1,4 +1,5 @@
 import type { WordFixture } from "../game2/WordPlay.tsx";
+import { IDIOMS } from "./idioms.ts";
 
 const IDIOM = {
   answer: "고진감래",
@@ -17,6 +18,13 @@ export function idiomFixture(code: string | null): WordFixture | null {
   }
   if (code === "04-2") {
     return { problem: IDIOM, cards: CARDS, slots: ["진", "고", "감", "래"], score: 5, remainMs: 48_000, phase: "wrong" };
+  }
+  if (code === "04-2-long") {
+    const problem = IDIOMS.reduce((longest, item) =>
+      item.meaning.length > longest.meaning.length ? item : longest,
+    );
+    const cards = [...problem.answer];
+    return { problem, cards, slots: [...cards].reverse(), score: 5, remainMs: 48_000, phase: "wrong" };
   }
   if (code === "04-3") {
     return { problem: IDIOM, cards: CARDS, slots: ["고", "진", "감", "래"], score: 12, remainMs: 12_000, phase: "complete" };

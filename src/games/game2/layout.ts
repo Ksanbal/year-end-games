@@ -7,6 +7,8 @@ export const BACK_H = 140;
 export const BACK_GAP = 36;
 export const PANEL_PAD = 56;
 export const PANEL_H = 250;
+export const WRONG_H = 48;
+export const SKIP_TOP = 900;
 
 export type AnswerLayout = {
   panelX: number;
@@ -19,10 +21,15 @@ export type AnswerLayout = {
   backY: number;
   cardX: number;
   cardY: number;
+  wrongY: number;
 };
 
 /** offsetY is 0 for game 2, 70 for game 3 (meaning block). */
 export function answerLayout(count: number, offsetY: number): AnswerLayout {
+  // Game 3 shifts the slot panel down for the meaning, but the letter cards
+  // stay at 632 so the wrong-answer line fits between the cards and [스킵].
+  const cardY = offsetY > 0 ? 632 : 580;
+  const wrongY = cardY + CARD + (offsetY > 0 ? 16 : 40);
   if (count === 4) {
     return {
       panelX: 396,
@@ -34,7 +41,8 @@ export function answerLayout(count: number, offsetY: number): AnswerLayout {
       backX: 1280,
       backY: 335 + offsetY,
       cardX: 552,
-      cardY: 580 + offsetY,
+      cardY,
+      wrongY,
     };
   }
   const slotsWidth = count * SLOT + Math.max(0, count - 1) * SLOT_GAP;
@@ -52,6 +60,7 @@ export function answerLayout(count: number, offsetY: number): AnswerLayout {
     backX: slotX + slotsWidth + BACK_GAP,
     backY: 335 + offsetY,
     cardX: Math.round((1920 - cardsWidth) / 2),
-    cardY: 580 + offsetY,
+    cardY,
+    wrongY,
   };
 }
