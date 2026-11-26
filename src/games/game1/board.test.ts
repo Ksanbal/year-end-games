@@ -114,7 +114,7 @@ describe("reveal", () => {
     expect(done.board.filter((c) => c.mine && !c.opened)).toHaveLength(2);
   });
 
-  it("matches the adjacent numbers on the 02-1 frame", () => {
+  it("computes adjacent mine counts for the fixture layout", () => {
     const board = boardFromMines(FIGMA_MINES);
     expect(board[cellIndex(0, 0)]!.adjacent).toBe(1);
     expect(board[cellIndex(4, 0)]!.adjacent).toBe(1);
