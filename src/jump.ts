@@ -70,6 +70,10 @@ export function stateForScreen(code: string): Jump | null {
       return pack(code, exampleCampaign("final", false, "allTie"));
     case "10-3long":
       return pack(code, longAllTieCampaign());
+    case "10-3-6":
+      return pack(code, namedAllTieCampaign(SIX_CHAR_TEAM_NAMES));
+    case "10-3-7":
+      return pack(code, namedAllTieCampaign(SEVEN_CHAR_TEAM_NAMES));
     case "11-1":
       return pack(code, recoveryExample(), true);
     default:
@@ -231,9 +235,25 @@ export const LONG_TEAM_NAMES: [string, string, string] = [
   "가나다라마바사차",
 ];
 
-function longAllTieCampaign(): AppState {
+export const SIX_CHAR_TEAM_NAMES: [string, string, string] = [
+  "가나다라마바",
+  "가나다라마사",
+  "가나다라마아",
+];
+
+export const SEVEN_CHAR_TEAM_NAMES: [string, string, string] = [
+  "가나다라마바사",
+  "가나다라마바아",
+  "가나다라마바자",
+];
+
+function namedAllTieCampaign(teams: [string, string, string]): AppState {
   const base = exampleCampaign("final", false, "allTie");
-  return { ...base, teams: LONG_TEAM_NAMES };
+  return { ...base, teams };
+}
+
+function longAllTieCampaign(): AppState {
+  return namedAllTieCampaign(LONG_TEAM_NAMES);
 }
 
 function slotTurnExample(orderIndex: 0 | 1 | 2): AppState {

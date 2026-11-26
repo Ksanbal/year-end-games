@@ -6,7 +6,22 @@ import {
   FINAL_TITLE_MIN_FONT_SIZE,
   FINAL_TITLE_SAFE_WIDTH,
   fitFinalTitle,
+  fittedTitleWidth,
 } from "./finalTitle.ts";
+
+function expectFitsSafe(textWidthAtBase: number) {
+  const fit = fitFinalTitle(textWidthAtBase);
+  const width = fittedTitleWidth(textWidthAtBase, fit);
+  expect(fit.fontSize).toBeGreaterThanOrEqual(FINAL_TITLE_MIN_FONT_SIZE);
+  expect(fit.fontSize).toBeLessThanOrEqual(FINAL_TITLE_FONT_SIZE);
+  expect(width).toBeLessThanOrEqual(FINAL_TITLE_SAFE_WIDTH + 1e-6);
+  if (fit.showCoins) {
+    expect(fit.fontSize).toBeGreaterThanOrEqual(FINAL_TITLE_MIN_FONT_SIZE);
+  } else {
+    expect(fit.fontSize).toBe(FINAL_TITLE_MIN_FONT_SIZE);
+  }
+  return fit;
+}
 
 describe("fitFinalTitle", () => {
   it("keeps 80px and the coins for default two-team and three-team titles", () => {
@@ -24,14 +39,33 @@ describe("fitFinalTitle", () => {
     expect(1712).toBeLessThanOrEqual(FINAL_TITLE_SAFE_WIDTH);
   });
 
+  it("keeps 80px and the coins for a three-way tie with 5-character names", () => {
+    // Measured at Do Hyeon 80 on the live 10-3 probe.
+    const textWidth = 1513.7;
+    const fit = expectFitsSafe(textWidth);
+    expect(fit).toEqual({ fontSize: 80, showCoins: true });
+  });
+
+  it("shrinks the text, keeps the coins, and stays inside the safe width for 6- and 7-character three-way ties", () => {
+    // Measured at Do Hyeon 80 from the live probes (scaled width / (font/80)).
+    const six = 1561 * (80 / 73.5632);
+    const seven = 1578.7 * (80 / 67.101);
+    const sixFit = expectFitsSafe(six);
+    const sevenFit = expectFitsSafe(seven);
+    expect(sixFit.showCoins).toBe(true);
+    expect(sevenFit.showCoins).toBe(true);
+    expect(sixFit.fontSize).toBeLessThan(80);
+    expect(sevenFit.fontSize).toBeLessThan(80);
+    expect(sixFit.fontSize).toBeGreaterThanOrEqual(64);
+    expect(sevenFit.fontSize).toBeGreaterThanOrEqual(64);
+  });
+
   it("locks to 64px and hides the coins for three 8-character names", () => {
     const textWidth = 2094;
-    const fit = fitFinalTitle(textWidth);
+    const fit = expectFitsSafe(textWidth);
     expect(FINAL_TITLE_COIN_CLUSTER).toBe(216);
     expect(FINAL_TITLE_SAFE_WIDTH).toBe(1760);
     expect(textWidth + FINAL_TITLE_COIN_CLUSTER).toBe(2310);
-    const scaled = FINAL_TITLE_FONT_SIZE * (FINAL_TITLE_SAFE_WIDTH / 2310);
-    expect(scaled).toBeLessThan(FINAL_TITLE_MIN_FONT_SIZE);
     expect(fit).toEqual({ fontSize: 64, showCoins: false });
     const atMin = textWidth * (64 / 80);
     expect(atMin + FINAL_TITLE_COIN_CLUSTER).toBeGreaterThan(FINAL_TITLE_SAFE_WIDTH);

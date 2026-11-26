@@ -3,8 +3,10 @@ import path from "node:path";
 import puppeteer from "puppeteer-core";
 
 const PORT = process.env.PORT || "4182";
-const OUT = process.env.OUT || "/workspace/year-end-games/screenshots-fixes-r2";
-const SAFE = 1920 - 80 * 2;
+const OUT = process.env.OUT || "/workspace/year-end-games/screenshots-fixes-r3";
+const SAFE_LEFT = 80;
+const SAFE_RIGHT = 1840;
+const SAFE = SAFE_RIGHT - SAFE_LEFT;
 
 await mkdir(OUT, { recursive: true });
 
@@ -19,24 +21,38 @@ await page.setViewport({ width: 1920, height: 1080, deviceScaleFactor: 1 });
 const cases = [
   {
     code: "10-3all",
-    file: "10-3all.png",
+    file: "final-title-default-3tie.png",
     expectTitle: "최종 공동 1등 1팀 · 2팀 · 3팀",
     expectFont: 80,
     expectCoins: true,
   },
   {
-    code: "10-3long",
-    file: "10-3long.png",
-    expectTitle: "최종 공동 1등 가나다라마바사아 · 가나다라마바사자 · 가나다라마바사차",
-    expectFont: 64,
-    expectCoins: false,
-  },
-  {
     code: "10-3",
-    file: "10-3.png",
+    file: "final-title-default-2tie.png",
     expectTitle: "최종 공동 1등 1팀 · 2팀",
     expectFont: 80,
     expectCoins: true,
+  },
+  {
+    code: "10-3-6",
+    file: "final-title-6char-3tie.png",
+    expectTitle: "최종 공동 1등 가나다라마바 · 가나다라마사 · 가나다라마아",
+    expectFont: "shrink",
+    expectCoins: true,
+  },
+  {
+    code: "10-3-7",
+    file: "final-title-7char-3tie.png",
+    expectTitle: "최종 공동 1등 가나다라마바사 · 가나다라마바아 · 가나다라마바자",
+    expectFont: "shrink",
+    expectCoins: true,
+  },
+  {
+    code: "10-3long",
+    file: "final-title-8char-3tie.png",
+    expectTitle: "최종 공동 1등 가나다라마바사아 · 가나다라마바사자 · 가나다라마바사차",
+    expectFont: 64,
+    expectCoins: false,
   },
 ];
 
@@ -55,6 +71,10 @@ for (const item of cases) {
     const text = document.querySelector(".final-title-text");
     if (!row || !text) throw new Error("final title row missing");
     const style = getComputedStyle(row);
+    const coins = [...row.querySelectorAll(".coin")].map((el) => {
+      const r = el.getBoundingClientRect();
+      return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, width: r.width, height: r.height };
+    });
     return {
       title: text.textContent,
       fontSize: parseFloat(style.fontSize),
@@ -62,10 +82,11 @@ for (const item of cases) {
       whiteSpace: style.whiteSpace,
       textOverflow: style.textOverflow,
       showCoins: row.getAttribute("data-show-coins") === "true",
-      coinCount: row.querySelectorAll(".coin").length,
-      textWidth: text.offsetWidth,
+      coinCount: coins.length,
+      textWidth: text.getBoundingClientRect().width,
       rowWidth: row.scrollWidth,
-      clusterWidth: text.offsetWidth + (row.querySelectorAll(".coin").length === 2 ? 216 : 0),
+      clusterWidth: text.getBoundingClientRect().width + (coins.length === 2 ? 216 : 0),
+      coins,
     };
   });
 
@@ -76,7 +97,11 @@ for (const item of cases) {
   if (measured.title !== item.expectTitle) {
     failures.push(`title: got ${JSON.stringify(measured.title)}`);
   }
-  if (Math.abs(measured.fontSize - item.expectFont) > 0.5) {
+  if (item.expectFont === "shrink") {
+    if (measured.fontSize < 64 || measured.fontSize >= 80) {
+      failures.push(`fontSize: got ${measured.fontSize}, expected 64 <= size < 80`);
+    }
+  } else if (Math.abs(measured.fontSize - item.expectFont) > 0.5) {
     failures.push(`fontSize: got ${measured.fontSize}, expected ${item.expectFont}`);
   }
   if (measured.showCoins !== item.expectCoins || (measured.coinCount === 2) !== item.expectCoins) {
@@ -86,11 +111,13 @@ for (const item of cases) {
   if (measured.textOverflow && measured.textOverflow !== "clip") {
     failures.push(`text-overflow: ${measured.textOverflow}`);
   }
-  if (measured.clusterWidth > SAFE) {
+  if (measured.clusterWidth > SAFE + 0.5) {
     failures.push(`cluster ${measured.clusterWidth} exceeds safe width ${SAFE}`);
   }
-  if (item.expectFont === 80 && measured.clusterWidth > SAFE) {
-    failures.push("default title should not overflow");
+  for (const coin of measured.coins) {
+    if (coin.left < SAFE_LEFT - 0.5 || coin.right > SAFE_RIGHT + 0.5) {
+      failures.push(`coin ${coin.left.toFixed(1)}–${coin.right.toFixed(1)} outside ${SAFE_LEFT}–${SAFE_RIGHT}`);
+    }
   }
 
   results.push({ code: item.code, file, measured, failures });

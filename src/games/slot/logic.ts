@@ -69,10 +69,19 @@ const ZERO_COIN_SKIP: SlotView = {
   stops: ["dash", "dash", "dash"],
 };
 
+/** How long the zero-coin skip notice stays on screen before it advances by itself. */
+export const ZERO_COIN_AUTO_ADVANCE_MS = 1300;
+
 /** A team that already has 0 coins when its turn starts is skipped with no betting UI. */
 export function openingView(coins: number): SlotView {
   if (coins < 1) return ZERO_COIN_SKIP;
   return { kind: "betting", bet: defaultBet(coins), confirmAllIn: false };
+}
+
+
+/** Zero-coin auto-skip only. A voluntary skip (the team still had coins) waits for a tap. */
+export function shouldAutoAdvanceSkip(startCoins: number, outcome: SlotPlayOutcome): boolean {
+  return startCoins < 1 && outcome.kind === "skip";
 }
 
 export function isZeroCoinLoss(start: number, outcome: SlotPlayOutcome): boolean {

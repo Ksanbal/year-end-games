@@ -22,18 +22,19 @@ export type FinalTitleFit = {
 };
 
 /**
- * Overflow treatment for a joint-winner final title (open-item 18).
- * Shrinks the 80px title proportionally so the title plus coin cluster
- * fits the safe width. If that would go below 64px, lock to 64px and hide
- * the coins when the cluster still overflows. Swap this function if the
- * treatment changes. Widths are measured, not hardcoded.
+ * Overflow treatment for a final title (open-item 18).
+ * Shrinks the 80px title so the title plus the fixed 72px coin cluster
+ * fits the safe width. Coins do not scale. If shrinking would go below
+ * 64px, lock to 64px and hide the coins when the cluster still overflows.
+ * Widths are measured, not hardcoded.
  */
 export function fitFinalTitle(textWidthAtBase: number): FinalTitleFit {
   const withCoins = textWidthAtBase + FINAL_TITLE_COIN_CLUSTER;
   if (withCoins <= FINAL_TITLE_SAFE_WIDTH) {
     return { fontSize: FINAL_TITLE_FONT_SIZE, showCoins: true };
   }
-  const scaled = FINAL_TITLE_FONT_SIZE * (FINAL_TITLE_SAFE_WIDTH / withCoins);
+  const textBudget = FINAL_TITLE_SAFE_WIDTH - FINAL_TITLE_COIN_CLUSTER;
+  const scaled = FINAL_TITLE_FONT_SIZE * (textBudget / textWidthAtBase);
   if (scaled >= FINAL_TITLE_MIN_FONT_SIZE) {
     return { fontSize: scaled, showCoins: true };
   }
@@ -42,6 +43,12 @@ export function fitFinalTitle(textWidthAtBase: number): FinalTitleFit {
     fontSize: FINAL_TITLE_MIN_FONT_SIZE,
     showCoins: textAtMin + FINAL_TITLE_COIN_CLUSTER <= FINAL_TITLE_SAFE_WIDTH,
   };
+}
+
+/** Fitted title width, including the coin cluster when the coins stay visible. */
+export function fittedTitleWidth(textWidthAtBase: number, fit: FinalTitleFit): number {
+  const textWidth = textWidthAtBase * (fit.fontSize / FINAL_TITLE_FONT_SIZE);
+  return fit.showCoins ? textWidth + FINAL_TITLE_COIN_CLUSTER : textWidth;
 }
 
 export function measureTitleWidth(text: string, fontSize: number): number {

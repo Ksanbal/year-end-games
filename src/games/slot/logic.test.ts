@@ -13,7 +13,9 @@ import {
   isJackpot,
   isZeroCoinLoss,
   openingView,
+  shouldAutoAdvanceSkip,
   showEmptyCoin,
+  ZERO_COIN_AUTO_ADVANCE_MS,
   knobCenterY,
   leverPullPx,
   leverShouldSpin,
@@ -174,5 +176,14 @@ describe("zero-coin slot turn", () => {
     expect(displayCoins(170, { kind: "result", outcome: { kind: "lose", bet: 170 }, stops: ["seven", "cherry", "bell"] })).toBe(0);
     expect(showEmptyCoin(0)).toBe(true);
     expect(showEmptyCoin(1)).toBe(false);
+  });
+
+  it("auto-advances only the zero-coin skip notice, after a short pause", () => {
+    expect(ZERO_COIN_AUTO_ADVANCE_MS).toBeGreaterThanOrEqual(1200);
+    expect(ZERO_COIN_AUTO_ADVANCE_MS).toBeLessThanOrEqual(1500);
+    expect(shouldAutoAdvanceSkip(0, { kind: "skip" })).toBe(true);
+    expect(shouldAutoAdvanceSkip(120, { kind: "skip" })).toBe(false);
+    expect(shouldAutoAdvanceSkip(0, { kind: "lose", bet: 1 })).toBe(false);
+    expect(shouldAutoAdvanceSkip(0, { kind: "win", bet: 1 })).toBe(false);
   });
 });

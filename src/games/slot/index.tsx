@@ -26,8 +26,10 @@ import {
   openingView,
   outcomeForStops,
   rollStops,
+  shouldAutoAdvanceSkip,
   showEmptyCoin,
   topicParticle,
+  ZERO_COIN_AUTO_ADVANCE_MS,
   type ReelStops,
   type ReelSymbol,
   type SlotView,
@@ -261,10 +263,12 @@ function SlotPlay(props: {
       {view.kind === "spinning" ? <div className="slot-placed is-spin">{slotCopy.betPlaced(view.bet)}</div> : null}
       {view.kind === "result" ? (
         <Result
+          key={props.context.orderIndex}
           name={props.context.names[props.context.team]}
           startCoins={coins}
           view={view}
           lastTeam={lastTeam}
+          autoAdvance={!fixture && shouldAutoAdvanceSkip(coins, view.outcome)}
           showBurst={winEffect && !reducedMotion}
           onContinue={() => props.onFinish(view.outcome)}
         />
@@ -360,6 +364,7 @@ function Result(props: {
   startCoins: number;
   view: Extract<SlotView, { kind: "result" }>;
   lastTeam: boolean;
+  autoAdvance: boolean;
   showBurst: boolean;
   onContinue: () => void;
 }) {
@@ -368,6 +373,21 @@ function Result(props: {
   const button = props.lastTeam ? slotCopy.revealFinal : slotCopy.nextTeam;
   const width = props.lastTeam ? 500 : 400;
   const left = props.lastTeam ? 710 : 760;
+  const continued = useRef(false);
+  const onContinueRef = useRef(props.onContinue);
+  onContinueRef.current = props.onContinue;
+  const continueOnce = useCallback(() => {
+    if (continued.current) return;
+    continued.current = true;
+    onContinueRef.current();
+  }, []);
+
+  useEffect(() => {
+    if (!props.autoAdvance) return;
+    const timer = window.setTimeout(continueOnce, ZERO_COIN_AUTO_ADVANCE_MS);
+    return () => window.clearTimeout(timer);
+  }, [props.autoAdvance, continueOnce]);
+
   return (
     <>
       {outcome.kind === "win" ? (
@@ -400,7 +420,7 @@ function Result(props: {
       <PrimaryButton
         label={button}
         size={props.lastTeam ? "wideMd" : "md"}
-        onClick={props.onContinue}
+        onClick={continueOnce}
         style={{ left, top: 900, width }}
       />
     </>
