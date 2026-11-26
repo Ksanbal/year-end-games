@@ -23,9 +23,16 @@ export const REEL_STOP_STAGGER_MS = 1000;
 export const REEL_STOP_EASE_MS = 400;
 export const REEL_OVERSHOOT_PX = 24;
 export const REEL_STRIP_PITCH = 100;
+export const REEL_STRIP_LOOP = REEL_STRIP_PITCH * 3;
 export const REEL_SPIN_PX_PER_SEC = 1200;
 export const WIN_EFFECT_MS = 1500;
 export const WIN_PAYOUT_MULTIPLIER = 10;
+
+/** Keep a monotonically increasing spin offset inside one repeat of the reel strip. */
+export function wrapReelOffset(offset: number): number {
+  const loop = REEL_STRIP_LOOP;
+  return ((offset % loop) + loop) % loop;
+}
 
 export const BET_STEP_SMALL = 1;
 export const BET_STEP_LARGE = 10;

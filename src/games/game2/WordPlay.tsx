@@ -153,7 +153,7 @@ export function WordPlay(props: {
 
   return (
     <>
-      <Header title={headerGameTitle(props.gameId)} variant="plain" />
+      <Header title={headerGameTitle(props.gameId)} />
       <div className="word-remain">{remainLabel(remainMs)}</div>
       {problem.meaning ? (
         <>

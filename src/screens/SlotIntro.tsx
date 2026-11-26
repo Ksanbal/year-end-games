@@ -2,7 +2,6 @@ import { copy } from "../copy.ts";
 import type { TeamIndex } from "../state/types.ts";
 import { Card } from "../ui/Card.tsx";
 import { Coin } from "../ui/Coin.tsx";
-import { Header } from "../ui/Header.tsx";
 import { PrimaryButton } from "../ui/PrimaryButton.tsx";
 import { TeamName } from "./TeamName.tsx";
 import { columnWidth } from "./teamName.ts";
@@ -15,12 +14,11 @@ export function SlotIntro(props: {
 }) {
   return (
     <>
-      <Header title={copy.destinysLever} meta={copy.afterFiveRounds} />
-      <Coin size={86} left={640} top={191} />
-      <Coin size={86} left={1195} top={191} />
+      <Coin size={86} left={640} top={111} />
+      <Coin size={86} left={1195} top={111} />
       <div
         className="text-display text-center"
-        style={{ position: "absolute", left: 0, top: 170, width: 1920, height: 115, fontSize: 96, lineHeight: "115px" }}
+        style={{ position: "absolute", left: 0, top: 90, width: 1920, height: 115, fontSize: 96, lineHeight: "115px" }}
       >
         {copy.destinysLever}
       </div>
@@ -29,7 +27,7 @@ export function SlotIntro(props: {
         style={{
           position: "absolute",
           left: 0,
-          top: 300,
+          top: 220,
           width: 1920,
           height: 43,
           fontSize: 36,
@@ -41,7 +39,7 @@ export function SlotIntro(props: {
         {copy.slotIntroRule}
       </div>
       {props.order.map((team, i) => {
-        const y = 390 + i * 130;
+        const y = 310 + i * 130;
         const highlight = i === 0;
         return (
           <Card

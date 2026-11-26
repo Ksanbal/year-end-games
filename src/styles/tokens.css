@@ -97,7 +97,9 @@
   --motion-shuffle-duration: 120ms;
   --motion-shuffle-stagger: 80ms;
   --motion-shuffle-ease: ease-in-out;
+  --motion-confetti-duration: 1600ms;
 }
+
 
 @media (prefers-reduced-motion: reduce) {
   :root {

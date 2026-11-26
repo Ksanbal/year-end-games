@@ -47,7 +47,7 @@ function Game1Play({ onFinish }: Parameters<GameModule["Play"]>[0]) {
 
     return (
       <>
-        <Header title={headerGameTitle(1)} variant="plain" />
+        <Header title={headerGameTitle(1)} />
         {Array.from({ length: SIZE * SIZE }, (_, i) => {
           const col = i % SIZE;
           const row = Math.floor(i / SIZE);

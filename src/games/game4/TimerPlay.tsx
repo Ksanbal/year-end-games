@@ -37,7 +37,7 @@ export function TimerPlay(props: {
 
   useEffect(() => {
     if (frozen || phase !== "running") return;
-    startedAt.current = performance.now() - elapsedMs;
+    if (startedAt.current === null) startedAt.current = performance.now() - elapsedMs;
     let frame = 0;
     const tick = () => {
       const start = startedAt.current ?? performance.now();
@@ -58,6 +58,7 @@ export function TimerPlay(props: {
   function start() {
     if (phase !== "ready") return;
     setElapsedMs(0);
+    startedAt.current = performance.now();
     setPhase("running");
   }
 
@@ -75,7 +76,7 @@ export function TimerPlay(props: {
 
   return (
     <>
-      <Header title={headerGameTitle(props.gameId)} variant="plain" />
+      <Header title={headerGameTitle(props.gameId)} />
       <Card
         x={360}
         y={290}
@@ -97,7 +98,7 @@ export function TimerPlay(props: {
       {backdropLabel ? <div className="timer-card-label">{backdropLabel}</div> : null}
       {phase === "ready" ? (
         <PrimaryButton
-          label={copy.start}
+          label={copy.startCount}
           size="wideLg"
           onClick={start}
           style={{ left: 660, top: 760, width: 600, height: 180, borderRadius: 90, fontSize: 64, lineHeight: "77px" }}

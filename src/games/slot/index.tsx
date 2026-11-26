@@ -2,7 +2,6 @@ import { useAnimatedCoins } from "../../ui/AnimatedCoins.tsx";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { copy } from "../../copy.ts";
 import { minusSign } from "../../format.ts";
-import { Header } from "../../ui/Header.tsx";
 import { FlatButton } from "../../ui/FlatButton.tsx";
 import { PrimaryButton } from "../../ui/PrimaryButton.tsx";
 import { TeamName } from "../../screens/TeamName.tsx";
@@ -182,7 +181,8 @@ function SlotPlay(props: {
 
   return (
     <>
-      <Header title={copy.destinysLever} meta={slotCopy.teamTurn((props.context.orderIndex + 1) as 1 | 2 | 3)} />
+      <div className="slot-kicker">{copy.destinysLever}</div>
+      <div className="slot-kicker-meta">{slotCopy.teamTurn((props.context.orderIndex + 1) as 1 | 2 | 3)}</div>
       <TeamName
         name={props.context.names[props.context.team]}
         width={256}
@@ -190,7 +190,7 @@ function SlotPlay(props: {
         startLineHeight={58}
         boxHeight={58}
         className="text-display"
-        style={{ left: 80, top: 150, zIndex: 2 }}
+        style={{ left: 80, top: 110, zIndex: 2 }}
       />
       <div className="slot-owned">
         <Coin

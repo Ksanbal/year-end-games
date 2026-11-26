@@ -8,7 +8,7 @@ import { PrimaryButton } from "../ui/PrimaryButton.tsx";
 export function RoundIntro({ round, onStart }: { round: RoundNumber; onStart: () => void }) {
   return (
     <>
-      <Header title={copy.roundOfFive(round)} variant="plain" />
+      <Header title={copy.roundOfFive(round)} />
       <div
         className="text-display text-center"
         style={{
