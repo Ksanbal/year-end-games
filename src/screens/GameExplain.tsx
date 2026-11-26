@@ -86,7 +86,7 @@ function Tap({ className = "" }: { className?: string }) { return <span classNam
 function MineDemo({ frame }: { frame: Frame }) {
   return <div className="demo-mine">{Array.from({ length: 25 }, (_, i) => {
     const open = (i === 7 && frame >= 2) || (i === 16 && frame === 4);
-    return <div key={i} className={`mine-tile ${open ? "is-open is-n1" : "is-closed"}`} style={{ left: (i % 5) * 89, top: Math.floor(i / 5) * 89 }}><span className="demo-mine-number">1</span><Tap className={(frame === 1 && i === 7) || (frame === 3 && i === 16) ? "is-visible" : ""} /></div>;
+    return <div key={i} className={`mine-tile ${open ? "is-open" : "is-closed"}`} style={{ left: (i % 5) * 89, top: Math.floor(i / 5) * 89 }}><Tap className={(frame === 1 && i === 7) || (frame === 3 && i === 16) ? "is-visible" : ""} /></div>;
   })}</div>;
 }
 function WordDemo({ id, frame }: { id: 2 | 3; frame: Frame }) {

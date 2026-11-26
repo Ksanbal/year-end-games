@@ -62,7 +62,6 @@ function Game1Play({ onFinish }: Parameters<GameModule["Play"]>[0]) {
               y={y}
               opened={cell.opened}
               mine={cell.mine}
-              adjacent={cell.adjacent}
               exploded={exploded}
               disabled={locked || cell.opened}
               onOpen={() => open(i)}
@@ -87,7 +86,6 @@ function Tile(props: {
   y: number;
   opened: boolean;
   mine: boolean;
-  adjacent: number;
   exploded: boolean;
   disabled: boolean;
   onOpen: () => void;
@@ -110,10 +108,5 @@ function Tile(props: {
       </>
     );
   }
-  const tone = props.adjacent === 0 ? "is-n0" : props.adjacent === 1 ? "is-n1" : props.adjacent === 2 ? "is-n2" : "is-n-more";
-  return (
-    <div className={`mine-tile is-open ${tone}`} style={{ left: props.x, top: props.y }}>
-      {props.adjacent}
-    </div>
-  );
+  return <div className="mine-tile is-open" style={{ left: props.x, top: props.y }} />;
 }
