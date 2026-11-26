@@ -180,26 +180,6 @@
 .slot-strip-cell {
   position: relative;
   width: 320px;
-  height: 100px;
-}
-
-.slot-strip-cell .slot-sym-7,
-.slot-strip-cell .slot-sym-cherry,
-.slot-strip-cell .slot-sym-bell {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 90px;
-  height: 90px;
-  object-fit: contain;
-  opacity: 0.5;
-}
-
-.slot-strip-cell .slot-sym-7 {
-  width: 160px;
-  height: 84px;
-  left: 50%;
 }
 
 .slot-dash {

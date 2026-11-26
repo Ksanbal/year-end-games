@@ -21,9 +21,8 @@ export const REEL_SPIN_ALL_MS = 3000;
 export const REEL_STOP_STAGGER_MS = 1000;
 /** Default for the undefined stop easing. */
 export const REEL_STOP_EASE_MS = 400;
-export const REEL_OVERSHOOT_PX = 24;
-export const REEL_STRIP_PITCH = 100;
-export const REEL_STRIP_LOOP = REEL_STRIP_PITCH * 3;
+export const REEL_STRIP_PITCH = 280;
+export const REEL_STRIP_LOOP = REEL_STRIP_PITCH * SYMBOLS.length;
 export const REEL_SPIN_PX_PER_SEC = 1200;
 export const WIN_EFFECT_MS = 1500;
 export const WIN_PAYOUT_MULTIPLIER = 10;
@@ -32,6 +31,17 @@ export const WIN_PAYOUT_MULTIPLIER = 10;
 export function wrapReelOffset(offset: number): number {
   const loop = REEL_STRIP_LOOP;
   return ((offset % loop) + loop) % loop;
+}
+
+/** Downward travel brings earlier strip cells onto the payline. Work back
+ * from the selected cell using the distance still to travel before rest. */
+export function reelOffset(elapsed: number, index: 0 | 1 | 2, symbol: ReelSymbol): number {
+  const untilBrake = reelStopAt(index) - elapsed;
+  const brakeFraction = Math.max(0, Math.min(1, 1 + untilBrake / REEL_STOP_EASE_MS));
+  const cruiseMs = Math.max(0, untilBrake);
+  const remainingPx = REEL_SPIN_PX_PER_SEC / 1000 *
+    (cruiseMs + REEL_STOP_EASE_MS * brakeFraction ** 2 / 2);
+  return wrapReelOffset(-SYMBOLS.indexOf(symbol) * REEL_STRIP_PITCH - remainingPx);
 }
 
 export const BET_STEP_SMALL = 1;
