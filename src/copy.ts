@@ -29,6 +29,7 @@ export const copy = {
   scorePoints: (n: number) => `${n}점`,
   revealResults: "결과 공개",
   nextRound: "다음 라운드",
+  startDestinysLever: "운명의 레버 시작",
   roundResultTitle: (n: number) => `라운드 ${n} 결과`,
   headerRoundResult: "라운드 결과",
   colRank: "순위",

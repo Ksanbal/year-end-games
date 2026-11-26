@@ -2,7 +2,7 @@
 
 export const COIN_ASPECT = 1.12;
 export const COIN_LARGE_SIZES = [108, 86, 72] as const;
-export const COIN_SMALL_SIZES = [58, 52] as const;
+export const COIN_SMALL_SIZES = [58, 52, 36] as const;
 
 export type CoinAsset = {
   /** File stem, e.g. coin-gold-large-72. */

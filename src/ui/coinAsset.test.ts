@@ -13,7 +13,8 @@ describe("pickCoinAsset", () => {
   it("uses the small file whose designed size is closest, below 72", () => {
     expect(pickCoinAsset(58).name).toBe("coin-gold-small-58");
     expect(pickCoinAsset(52).name).toBe("coin-gold-small-52");
-    expect(pickCoinAsset(40).name).toBe("coin-gold-small-52");
+    expect(pickCoinAsset(36).name).toBe("coin-gold-small-36");
+    expect(pickCoinAsset(40).name).toBe("coin-gold-small-36");
     expect(pickCoinAsset(55).name).toBe("coin-gold-small-58");
   });
 

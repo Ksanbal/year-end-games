@@ -44,6 +44,8 @@ export function stateForScreen(code: string): Jump | null {
       return pack(code, revealed([7, 12, 4]));
     case "08-2":
       return pack(code, revealed([9, 9, 4], [2, 1, 0]));
+    case "08-3":
+      return pack(code, { ...exampleCampaign("intro"), phase: { kind: "roundResult", round: 5 } });
     case "09-0":
       return pack(code, exampleCampaign("intro"));
     case "09-1":

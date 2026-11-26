@@ -36,8 +36,24 @@ export function AllInButton(props: {
           <span className="slot-allin-shine" />
         </span>
         <span className="slot-allin-label">{slotCopy.allIn}</span>
-        <img className="slot-allin-coin is-left" src="/assets/allin-coin.svg" alt="" />
-        <img className="slot-allin-coin is-right" src="/assets/allin-coin.svg" alt="" />
+        <img
+          className="slot-allin-coin is-left"
+          alt=""
+          src="/coins/coin-gold-small-36@2x.png"
+          srcSet="/coins/coin-gold-small-36@2x.png 2x, /coins/coin-gold-small-36@3x.png 3x"
+          width={36}
+          height={40.32}
+          draggable={false}
+        />
+        <img
+          className="slot-allin-coin is-right"
+          alt=""
+          src="/coins/coin-gold-small-36@2x.png"
+          srcSet="/coins/coin-gold-small-36@2x.png 2x, /coins/coin-gold-small-36@3x.png 3x"
+          width={36}
+          height={40.32}
+          draggable={false}
+        />
         <img className="slot-allin-star is-1" src="/assets/allin-sparkle.svg" alt="" />
         <img className="slot-allin-star is-2" src="/assets/allin-sparkle.svg" alt="" />
         <img className="slot-allin-star is-3" src="/assets/allin-sparkle.svg" alt="" />
