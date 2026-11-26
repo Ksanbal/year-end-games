@@ -12,12 +12,10 @@ import {
   TIME_LIMIT_MS,
   dealCards,
   isCorrect,
-  limitLabel,
   pickProblem,
   readUsedAnswers,
   recordUsedAnswers,
   remainLabel,
-  scoreLabel,
   type WordProblem,
 } from "./wordLogic.ts";
 import "./word.css";
@@ -153,18 +151,14 @@ export function WordPlay(props: {
     props.onFinish({ kind: "score", score });
   }
 
-  const meaningTight = (problem.meaning?.length ?? 0) > 40;
-
   return (
     <>
       <Header title={headerGameTitle(props.gameId)} variant="plain" />
-      <div className="word-score">{scoreLabel(score)}</div>
       <div className="word-remain">{remainLabel(remainMs)}</div>
-      {phase !== "timeup" ? <div className="word-limit">{limitLabel()}</div> : null}
       {problem.meaning ? (
         <>
-          <div className={meaningTight ? "word-meaning-label is-tight" : "word-meaning-label"}>{gameCopy.meaningLabel}</div>
-          <div className={meaningTight ? "word-meaning is-tight" : "word-meaning"}>{problem.meaning}</div>
+          <div className="word-meaning-label">{gameCopy.meaningLabel}</div>
+          <div className="word-meaning">{problem.meaning}</div>
         </>
       ) : null}
       <Card

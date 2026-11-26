@@ -41,14 +41,6 @@ export function remainLabel(ms: number): string {
   return `남은 시간 ${formatRemain(ms)}`;
 }
 
-export function limitLabel(ms: number = TIME_LIMIT_MS): string {
-  return `제한 ${formatRemain(ms)}`;
-}
-
-export function scoreLabel(score: number): string {
-  return `맞힌 문제 ${score}`;
-}
-
 export function pickProblem<T extends WordProblem>(
   pool: readonly T[],
   usedAnswers: ReadonlySet<string>,

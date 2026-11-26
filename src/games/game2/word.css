@@ -1,83 +1,60 @@
-.word-score {
-  position: absolute;
-  left: 80px;
-  top: 160px;
-  height: 43px;
-  font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: 36px;
-  line-height: 43px;
-  color: var(--color-text-secondary);
-  white-space: nowrap;
+:root {
+  /* Muse r17 WordPlay. Retune here if later frames change. */
+  --word-remain-top: 36px;
+  --word-remain-right: 80px;
+  --word-remain-width: 500px;
+  --word-meaning-label-size: 30px;
+  --word-meaning-label-line-height: 36px;
+  --word-meaning-label-top: 236px;
+  --word-meaning-size: 44px;
+  --word-meaning-line-height: 53px;
+  --word-meaning-top: 280px;
+  --word-meaning-left: 260px;
+  --word-meaning-width: 1400px;
 }
 
 .word-remain {
   position: absolute;
-  left: 1340px;
-  top: 160px;
-  width: 500px;
+  top: var(--word-remain-top);
+  right: var(--word-remain-right);
+  width: var(--word-remain-width);
   height: 48px;
+  z-index: 2;
   font-family: var(--font-display);
   font-size: 40px;
   line-height: 48px;
   text-align: right;
   color: var(--color-text-primary);
   white-space: nowrap;
-}
-
-.word-limit {
-  position: absolute;
-  left: 1340px;
-  top: 215px;
-  width: 500px;
-  height: 34px;
-  font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: 28px;
-  line-height: 34px;
-  text-align: right;
-  color: var(--color-text-secondary);
+  pointer-events: none;
 }
 
 .word-meaning-label {
   position: absolute;
   left: 0;
-  top: 248px;
+  top: var(--word-meaning-label-top);
   width: 1920px;
-  height: 36px;
+  height: var(--word-meaning-label-line-height);
   font-family: var(--font-ui);
   font-weight: 700;
-  font-size: 30px;
-  line-height: 36px;
+  font-size: var(--word-meaning-label-size);
+  line-height: var(--word-meaning-label-line-height);
   text-align: center;
   color: var(--color-text-secondary);
 }
 
 .word-meaning {
   position: absolute;
-  left: 260px;
-  top: 292px;
-  width: 1400px;
-  font-family: var(--font-ui);
-  font-weight: 500;
-  font-size: 32px;
-  line-height: 38px;
+  left: var(--word-meaning-left);
+  top: var(--word-meaning-top);
+  width: var(--word-meaning-width);
+  font-family: var(--font-display);
+  font-size: var(--word-meaning-size);
+  line-height: var(--word-meaning-line-height);
   text-align: center;
   color: var(--color-text-primary);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  white-space: nowrap;
   overflow: hidden;
-}
-
-.word-meaning.is-tight {
-  font-size: 28px;
-  line-height: 34px;
-  top: 276px;
-}
-
-.word-meaning-label.is-tight {
-  top: 236px;
 }
 
 .word-slots,

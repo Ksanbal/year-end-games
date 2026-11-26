@@ -16,6 +16,13 @@ export function idiomFixture(code: string | null): WordFixture | null {
   if (code === "04-1") {
     return { problem: IDIOM, cards: CARDS, slots: ["고", "진", null, null], score: 5, remainMs: 52_000, phase: "playing" };
   }
+  if (code === "04-1-long") {
+    const problem = IDIOMS.find((item) => item.answer === "구사일생") ?? IDIOMS.reduce((longest, item) =>
+      item.meaning.length > longest.meaning.length ? item : longest,
+    );
+    const cards = [...problem.answer];
+    return { problem, cards, slots: [cards[0] ?? null, cards[1] ?? null, null, null], score: 5, remainMs: 52_000, phase: "playing" };
+  }
   if (code === "04-2") {
     return { problem: IDIOM, cards: CARDS, slots: ["진", "고", "감", "래"], score: 5, remainMs: 48_000, phase: "wrong" };
   }

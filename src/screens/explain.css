@@ -19,8 +19,8 @@
 .demo-word.is-idiom { transform:scale(.8); transform-origin:top center; top:24px; }
 .demo-word.is-idiom .demo-word-panel { top:96px; }
 .demo-word.is-idiom .demo-word-cards { top:328px; }
-.demo-meaning { text-align:center; font: 700 30px/38px var(--font-display); color:var(--color-text-primary); }
-.demo-meaning small { font:700 24px/30px var(--font-ui); color:var(--color-text-secondary); }
+.demo-meaning { text-align:center; font: 400 36.14px/43.54px var(--font-display); color:var(--color-text-primary); position:relative; top:-9.88px; }
+.demo-meaning small { font:700 24.64px/29.57px var(--font-ui); color:var(--color-text-secondary); }
 .demo-clock { position:absolute; left:64px; top:0; width:792px; height:224px; border:4px solid #1b2a4a; border-radius:24px; box-shadow:0 8px 0 #9cc6ee; display:grid; place-items:center; font:700 128px/1 var(--font-timer); color:#1b2a4a; }
 .demo-clock.is-hidden { background:#23396b; color:white; font:40px/1 var(--font-display); }
 .demo-timer-button { position:absolute; left:262px; top:315px; width:396px; height:120px; display:grid; place-items:center; color:white; font:44px/1 var(--font-display); background:linear-gradient(#c9392e,#a92e25); border-radius:60px; box-shadow:0 8px 0 #7e1f17, 0 18px 24px #1b2a4a59; }

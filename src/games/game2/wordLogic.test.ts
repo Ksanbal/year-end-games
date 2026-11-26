@@ -6,9 +6,7 @@ import {
   formatRemain,
   isCorrect,
   pickProblem,
-  limitLabel,
   remainLabel,
-  scoreLabel,
   syllables,
 } from "./wordLogic.ts";
 import { COUNTRIES } from "./countries.ts";
@@ -54,15 +52,10 @@ describe("labels and limits", () => {
   it("formats the remaining time as minutes and seconds, starting from one minute", () => {
     expect(TIME_LIMIT_MS).toBe(60_000);
     expect(formatRemain(TIME_LIMIT_MS)).toBe("1:00");
-    expect(limitLabel()).toBe("제한 1:00");
+    expect(remainLabel(TIME_LIMIT_MS)).toBe("남은 시간 1:00");
     expect(remainLabel(52_000)).toBe("남은 시간 0:52");
     expect(remainLabel(12_000)).toBe("남은 시간 0:12");
     expect(remainLabel(0)).toBe("남은 시간 0:00");
-  });
-
-  it("formats the running score like the 03-1 frame", () => {
-    expect(scoreLabel(5)).toBe("맞힌 문제 5");
-    expect(scoreLabel(12)).toBe("맞힌 문제 12");
   });
 
   it("stops a turn after 20 problems, counting skips", () => {
