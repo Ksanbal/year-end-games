@@ -18,12 +18,18 @@
 .screen {
   position: absolute;
   inset: 0;
-  animation: screen-fade 250ms ease-out;
+  animation: screen-enter var(--motion-screen-duration) var(--motion-screen-ease);
 }
 
-@keyframes screen-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
+@keyframes screen-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-screen-offset));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -127,3 +127,50 @@
   height: 2px;
   background: #d5e2f7;
 }
+
+.shuffle-card {
+  position: absolute;
+  top: 390px;
+  width: 480px;
+  height: 300px;
+}
+
+.shuffle-card.is-settled {
+  animation: shuffle-reveal var(--motion-shuffle-duration) var(--motion-shuffle-ease) both;
+  animation-delay: calc(var(--shuffle-index, 0) * var(--motion-shuffle-stagger));
+}
+
+.shuffle-reel {
+  position: absolute;
+  inset: 0;
+  animation: shuffle-tick var(--motion-shuffle-duration) var(--motion-shuffle-ease);
+}
+
+@keyframes shuffle-tick {
+  from {
+    transform: translateY(-28px);
+    opacity: 0.55;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes shuffle-reveal {
+  from {
+    transform: translateY(20px) scale(0.96);
+    opacity: 0.4;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shuffle-card.is-settled,
+  .shuffle-reel {
+    animation: none;
+  }
+}
